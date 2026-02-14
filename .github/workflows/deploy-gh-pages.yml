@@ -35,6 +35,7 @@ jobs:
       - name: Build documentation
         run: |
           sphinx-build -ab html source/ build/
+          touch build/.nojekyll
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
