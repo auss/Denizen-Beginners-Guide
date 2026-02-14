@@ -1,159 +1,158 @@
-A Kill Quest (PARTIAL)
-------------
+Zadanie typu Kill Quest (CZĘŚCIOWY OPIS)
+----------------------------------------
 
-**TODO: Notice about required section reading before starting this.**
+**TODO: Informacja o wymaganych sekcjach do przeczytania przed rozpoczęciem.**
 
-**TODO: Write-up guiding players from start to finish through writing an NPC-driven kill quest.**
+**TODO: Opis prowadzący graczy od początku do końca przez proces pisania zadania opartego na NPC polegającego na zabiciu potworów.**
 
-### Historical Version
+### Wersja historyczna
 
-You can still find the [old tutorial video here](https://one.denizenscript.com/denizen/vids/Putting%20It%20Together:%20A%20Kill%20Quest), however be warned that some of its techniques are outdated, notably the flag tags. Read through the list of [Updates Since The Tutorial Videos](/guides/troubleshooting/updates-since-videos) if you choose to watch the video.
+Nadal możesz znaleźć [stary film instruktażowy tutaj](https://one.denizenscript.com/denizen/vids/Putting%20It%20Together:%20A%20Kill%20Quest), jednak ostrzegamy, że niektóre z przedstawionych tam technik są nieaktualne, zwłaszcza tagi flag. Przeczytaj listę [Aktualizacji od czasu filmów instruktażowych](/guides/troubleshooting/updates-since-videos), jeśli zdecydujesz się obejrzeć ten film.
 
-### Sample Script
+### Przykładowy skrypt
 
-This guide has not yet been written, however, here is a script with in-file explanation comments that demonstrates one possible implementation of an NPC-driven kill quest.
+Ten przewodnik nie został jeszcze napisany, jednak poniżej znajduje się skrypt z komentarzami wyjaśniającymi wewnątrz pliku, który demonstruje jedną z możliwych implementacji zadania opartego na NPC.
 
-This sample assumes you have a **modern Denizen configuration file**. That is, your `plugins/Denizen/config.yml` was generated after June 2021 (Release 1743 or later). If your config is older but you wish to use this script, you can either
-- A: Delete your `config.yml` file and restart your server so Denizen can regenerate it.
-- or B: go into your `config.yml` in your text editor, find the line `Queue speed: 0.5s` under `Interact:`, and change the `0.5s` to `instant`, then `/denizen reload config`
+Ten przykład zakłada, że posiadasz **nowoczesny plik konfiguracyjny Denizen**. Oznacza to, że Twój plik `plugins/Denizen/config.yml` został wygenerowany po czerwcu 2021 roku (Release 1743 lub nowszy). Jeśli Twoja konfiguracja jest starsza, a chcesz użyć tego skryptu, możesz:
+- A: Usunąć plik `config.yml` i zrestartować serwer, aby Denizen wygenerował go ponownie.
+- B: Wejść do pliku `config.yml` w edytorze tekstu, znaleźć linię `Queue speed: 0.5s` pod `Interact:` i zmienić `0.5s` na `instant`, a następnie wpisać `/denizen reload config`.
 
-This script is designed such that you could copy/paste and load it in to your server, and assign it to an NPC with `/npc assign --set npc_killquest` or `/ex assignment set npc_killquest`, and it will all work. You can then customize it and/or use it as a reference to learn from.
+Ten skrypt jest zaprojektowany tak, abyś mógł go skopiować, załadować na serwer i przypisać do NPC za pomocą `/npc assign --set npc_killquest` lub `/ex assignment set npc_killquest`. Możesz go następnie dostosować lub użyć jako punktu odniesienia do nauki.
 
-This may be easier to read within [the script editor](/guides/first-steps/script-editor) than on this webpage.
+Skrypt może być łatwiejszy do czytania w [edytorze skryptów](/guides/first-steps/script-editor) niż na tej stronie.
 
 ```dscript_green
-# Core assignment script to be given to the NPC
+# Główny skrypt przypisania dla NPC
 npc_killquest:
     type: assignment
     actions:
         on assignment:
-        # Enable both triggers that will be used
+        # Włącz oba wyzwalacze, które będą używane
         - trigger name:click state:true
         - trigger name:chat state:true
     interact scripts:
-    # And link the interact script below
+    # Powiąż poniższy skrypt interakcji
     - npc_killquest_interact
 
-# Alternate chat format for the NPC if you don't like default 'chat'
-# if you make multiple NPCs with this script as a template, remember that you only need the format scripts *once* (unless you have it different per NPC)
+# Alternatywny format czatu dla NPC, jeśli nie lubisz domyślnego 'chat'
+# jeśli tworzysz wielu NPC na bazie tego skryptu, pamiętaj, że skrypty formatowania są potrzebne tylko *raz* (chyba że chcesz inny format dla każdego NPC)
 cchat:
     type: format
-    format: <&b><npc.name> <&f>to you<&co> <&2><[text]>
+    format: <&b><npc.name> <&f>do ciebie<&co> <&2><[text]>
 
-# A clean but simple format for instructions given to the player by the script rather than by the NPC
-# (The Out-Of-Character clarification of what the NPC said In-Character).
+# Czytelny, prosty format instrukcji przekazywanych graczowi przez skrypt, a nie przez NPC
+# (Wyjaśnienie Out-Of-Character tego, co NPC powiedział In-Character).
 instruction_format:
     type: format
-    # Light Gray + Italic
-    # Can also be written like <gray><italic>
+    # Jasnoszary + Kursywa
+    # Można też zapisać jako <gray><italic>
     format: <&7><&o>[<[text]><&7><&o>]
 
 npc_killquest_interact:
     type: interact
     steps:
-        # Default step: waiting for player to interact
+        # Krok domyślny: oczekiwanie na interakcję gracza
         waiting*:
-            # The player's initial interaction with this NPC is always just right clicking it
+            # Początkowa interakcja gracza z tym NPC to zawsze kliknięcie prawym przyciskiem myszy
             click trigger:
                 script:
-                # Example of doing engage per-player with a flag
-                # Engaging is a way to prevent players from spamming interactions with an NPC and glitching the scripts out as a result.
-                # It just forces the player to wait on their next interaction until the current one is finished.
-                # It works by using a has_flag check at the start of each interaction to stop early, and adding/removing before/after slow interactions like the narrates with waits below.
+                # Przykład blokowania interakcji (engage) dla konkretnego gracza za pomocą flagi
+                # 'Engaging' to sposób na powstrzymanie graczy przed spamowaniem interakcji z NPC i psuciem skryptów.
+                # Zmusza to gracza do poczekania na kolejną interakcję, dopóki obecna się nie zakończy.
+                # Działa poprzez użycie sprawdzenia has_flag na początku każdej interakcji, aby przerwać skrypt wcześniej, oraz dodawanie/usuwanie flagi przed/po wolnych interakcjach (jak wiadomości z wait).
                 - if <player.has_flag[npc_engaged]>:
                     - stop
-                # Check for a cooldown before dealing with engage so we don't have to disengage inside the if
+                # Sprawdź czas odnowienia (cooldown) przed zajęciem się blokadą interakcji, aby nie musieć jej zdejmować wewnątrz if
                 - if <player.has_flag[kill_zombie_quest_cooldown]>:
-                    # While a cooldown *could* be a step or a `cooldown` command, having it as a flag allows you to track and display the cooldown timer clearly, which players will appreciate.
-                    - narrate format:instruction_format "You can repeat this quest in <player.flag_expiration[kill_zombie_quest_cooldown].from_now.formatted>."
-                    # If we put the script *after* an engage, the disengage would go here - just before any 'stop' command.
+                    # Choć cooldown *mógłby* być krokiem lub poleceniem `cooldown`, użycie flagi pozwala śledzić i wyświetlać licznik czasu, co gracze docenią.
+                    - narrate format:instruction_format "Możesz powtórzyć to zadanie za <player.flag_expiration[kill_zombie_quest_cooldown].from_now.formatted>."
                     - stop
-                # Add the engage flag for one minute - either it will be cleared via the flag command, or if something bugs, it will clear on its own after a minute
+                # Dodaj flagę blokady na jedną minutę - zostanie wyczyszczona poleceniem flag lub wygaśnie sama po minucie, jeśli coś pójdzie nie tak
                 - flag player npc_engaged expire:1m
-                # Alternately, instead of the player flags, you can use engage commands to engage per-NPC,
-                # which is simpler to do (it's all in the one short command) but gets in the way of other players often
+                # Alternatywnie, zamiast flag gracza, możesz użyć poleceń engage dla konkretnego NPC,
+                # co jest prostsze, ale często przeszkadza innym graczom
                 #- engage
-                - narrate format:cchat "Hello there. Would you care for a special prize?"
+                - narrate format:cchat "Witaj. Czy reflektujesz na specjalną nagrodę?"
                 - wait 5t
-                - narrate format:cchat "If so, you can kill 5 zombies for me."
+                - narrate format:cchat "Jeśli tak, możesz zabić dla mnie 5 zombie."
                 - wait 5t
-                - narrate format:cchat "Will you accept this request?"
+                - narrate format:cchat "Czy przyjmiesz to zlecenie?"
                 - wait 5t
-                # The player can type 'yes' or 'no' into chat normally, OR click the word to automatically say it
-                - narrate format:instruction_format "Type <&b><&o><element[Yes].click_chat[yes]><&7><&o> or <&b><&o><element[No].click_chat[no]>"
-                # Zap to the step that contains the chat trigger. Add a five minute limit so if the player runs away and comes back, the NPC isn't still expecting a response.
+                # Gracz może wpisać 'tak' lub 'nie' na czacie, LUB kliknąć słowo, aby automatycznie je wypowiedzieć
+                - narrate format:instruction_format "Wpisz <&b><&o><element[Tak].click_chat[tak]><&7><&o> lub <&b><&o><element[Nie].click_chat[nie]>"
+                # Przejdź (zap) do kroku zawierającego wyzwalacz czatu. Dodaj limit 5 minut, aby NPC nie czekał wiecznie na odpowiedź, jeśli gracz ucieknie.
                 - zap accept_question 5m
                 - flag player npc_engaged:!
                 #- disengage
-        # Second step: only active while waiting for a response to the question given in the click trigger
+        # Drugi krok: aktywny tylko podczas oczekiwania na odpowiedź na pytanie z wyzwalacza kliknięcia
         accept_question:
             chat trigger:
                 1:
-                    # Simple main chat trigger: if the player says yes, they start the quest
-                    trigger: "/Yes/ I accept the quest"
+                    # Główny wyzwalacz czatu: jeśli gracz powie tak, zaczyna zadanie
+                    trigger: "/Tak/ akceptuję zadanie"
                     script:
                     - if <player.has_flag[npc_engaged]>:
                         - stop
                     - flag player npc_engaged expire:1m
                     #- engage
-                    - narrate format:cchat "Okay great!"
+                    - narrate format:cchat "Świetnie!"
                     - wait 5t
-                    - narrate format:instruction_format "Kill 5 zombies!"
-                    # Start a counter flag at zero (no zombies killed yet).
+                    - narrate format:instruction_format "Zabij 5 zombie!"
+                    # Uruchom licznik we fladze ustawiony na zero.
                     - flag player kill_zombie_quest_count:0
-                    # Jump to the step for finishing the quest and lock it in (no timeout).
+                    # Przejdź do kroku kończącego zadanie i zablokuj go tam (bez limitu czasu).
                     - zap finish_quest
                     - flag player npc_engaged:!
                     #- disengage
                 2:
-                    # Even though it's not really needed, add a 'no' response that just zaps back
-                    trigger: "/No/ I don't"
+                    # Nawet jeśli nie jest to wymagane, dodaj odpowiedź 'nie', która po prostu cofa do początku
+                    trigger: "/Nie/ nie chcę"
                     script:
                     - if <player.has_flag[npc_engaged]>:
                         - stop
-                    # More frequently shown messages can get annoying to players who have to see them constantly.
-                    # Adding randomness to some messages is a little touch that makes scripts just that little bit nicer for players
+                    # Często powtarzające się wiadomości mogą irytować. Dodanie losowości czyni skrypty przyjemniejszymi.
                     - random:
-                        - narrate format:cchat "Okay screw off!"
-                        - narrate format:cchat "Okay then."
-                        - narrate format:cchat "Screw you then!"
-                    # They refused, so hop back to the default step and wait.
+                        - narrate format:cchat "Dobra, spadaj!"
+                        - narrate format:cchat "No to nie."
+                        - narrate format:cchat "To radź sobie sam!"
+                    # Odmówili, więc wróć do domyślnego kroku i czekaj.
                     - zap *
-        # 3rd step: only allowed interaction is click, they're stuck here til they finish the quest
+        # Trzeci krok: jedyna dozwolona interakcja to kliknięcie, gracz utknął tu do czasu ukończenia zadania
         finish_quest:
             click trigger:
                 script:
-                # This step doesn't have delayed interactions, so no engage needed.
-                # If the quest is marked as completed, give rewards.
+                # Ten krok nie posiada opóźnień, więc blokada interaction (engage) nie jest potrzebna.
+                # Jeśli zadanie jest oznaczone jako ukończone, daj nagrody.
                 - if <player.has_flag[kill_zombie_quest_complete]>:
-                    - narrate format:cchat "Great work! Here's your reward!"
+                    - narrate format:cchat "Dobra robota! Oto Twoja nagroda!"
                     - give diamond
-                    # Then remove the 'complete' flag and set the cooldown
+                    # Następnie usuń flagę ukończenia i ustaw czas odnowienia
                     - flag player kill_zombie_quest_complete:!
                     - flag player kill_zombie_quest_cooldown expire:24h
-                    # And zap back to the default step so they can retry the quest after the cooldown is done.
+                    # I wróć do domyślnego kroku, aby mogli powtórzyć zadanie po upływie czasu.
                     - zap *
                 - else:
-                    # Otherwise, just give idle waiting chatter.
+                    # W przeciwnym razie wyświetlaj losowe wiadomości o oczekiwaniu.
                     - random:
-                        - narrate format:cchat "You killed those zombies yet?"
-                        - narrate format:cchat "I'm still waiting on the zombies."
-                        - narrate format:cchat "Are you gonna kill those zombies or what?"
+                        - narrate format:cchat "Zabiłeś już te zombie?"
+                        - narrate format:cchat "Wciąż czekam na te zombie."
+                        - narrate format:cchat "Zabijesz te zombie czy co?"
 
 killquest_zombie_world:
     type: world
     events:
-        # Listen to the event of a player killing zombies
-        # Only listen when the counter flag is present
+        # Nasłuchuj zdarzenia zabicia zombie przez gracza
+        # Nasłuchuj tylko, gdy flaga licznika jest obecna
         after player kills zombie flagged:kill_zombie_quest_count:
-        # After the kill, bump the player's kill counter
+        # Po zabiciu zwiększ licznik gracza
         - flag player kill_zombie_quest_count:++
-        # When it hits five, you're done!
+        # Gdy licznik osiągnie 5, zadanie skończone!
         - if <player.flag[kill_zombie_quest_count]> == 5:
-            - narrate format:instruction_format "Zombie Quest Complete: Return to the NPC"
-            # So remove the counter (to avoid it continuing to count up) and add a new flag indicating the quest is complete
+            - narrate format:instruction_format "Zadanie z zombie ukończone: wróć do NPC"
+            # Usuń licznik i dodaj flagę informującą o ukończeniu
             - flag player kill_zombie_quest_count:!
-            # Alternatively to the flag, using '- zap npc_killquest_interact quest_completed' and a corresponding new step would also work.
-            # The flag + if/else was chosen mostly for the sake of having examples of different methodologies.
+            # Alternatywą dla flagi mogłoby być użycie '- zap npc_killquest_interact quest_completed' i nowego kroku.
+            # Flaga + if/else została wybrana dla pokazania różnych metodologii.
             - flag player kill_zombie_quest_complete
+```
 ```

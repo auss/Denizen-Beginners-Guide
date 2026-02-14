@@ -1,34 +1,34 @@
-Fancier Sticks: Making Custom Items (PLACEHOLDER ONLY)
+Bardziej ozdobne patyki: Tworzenie własnych przedmiotów (TYLKO PLACEHOLDER)
 -----------------------------------
 
-**TODO: Write-up that introduces item script containers, and the general ideas of making custom items, mentioning recipes, name/lore, mechanisms, item flags, etc.**
+**TODO: Opis wprowadzający do kontenerów skryptów przedmiotów oraz ogólne koncepcje tworzenia własnych przedmiotów, z uwzględnieniem receptur, nazw/opisów (lore), mechanizmów, flag przedmiotów itp.**
 
-### Placeholder
+### Placeholder (Miejsce na treść)
 
-Until this page is written, you can view the [old tutorial video here](https://one.denizenscript.com/denizen/vids/Custom%20Items).
+Dopóki ta strona nie zostanie napisana, możesz obejrzeć [stary film instruktażowy tutaj](https://one.denizenscript.com/denizen/vids/Custom%20Items).
 
-### Sample Script
+### Przykładowy skrypt
 
-Here's a quick sample of a modern item script.
+Oto szybki przykład nowoczesnego skryptu przedmiotu.
 
 ```dscript_green
 my_item:
     type: item
     material: stick
-    display name: <&[item]>Fancy stick!
+    display name: <&[item]>Ozdobny patyk!
     lore:
-    - <&[lore]>So fancy.
+    - <&[lore]>Taki ozdobny.
 ```
 
-You can get this item in-game by typing `/ex give my_item`
+Możesz otrzymać ten przedmiot w grze, wpisując `/ex give my_item`
 
-Note that the above sample uses the `item` and `lore` custom color codes defined in your `Denizen/config.yml`
+Zauważ, że powyższy przykład używa własnych kodów kolorów `item` oraz `lore` zdefiniowanych w Twoim pliku `Denizen/config.yml`.
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read a lot more about the custom items, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się znacznie więcej o własnych przedmiotach, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-Note: most users, especially those learning from the Denizen for the first time, should just continue on to the next guides page. These references might be of interest to later come back to after you've learned Denizen as far as this guide teaches.
+Uwaga: większość użytkowników, zwłaszcza tych uczących się Denizen po raz pierwszy, powinna po prostu przejść do następnej strony przewodnika. Referencje te mogą być interesujące do późniejszego powrotu, gdy już nauczysz się Denizen w stopniu, jaki przewiduje ten przewodnik.
 
-- [Item script containers doc](https://meta.denizenscript.com/Docs/Languages/item%20script%20containers)
-- [Book script containers doc](https://meta.denizenscript.com/Docs/Languages/book%20script%20containers)
+- [Dokumentacja kontenerów skryptów przedmiotów](https://meta.denizenscript.com/Docs/Languages/item%20script%20containers)
+- [Dokumentacja kontenerów skryptów książek](https://meta.denizenscript.com/Docs/Languages/book%20script%20containers)

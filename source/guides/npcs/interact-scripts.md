@@ -1,15 +1,15 @@
-What Do I Do: Interact Scripts (PARTIAL)
-------------------------------
+Co mam robić: Skrypty interakcji (Interact Scripts) (CZĘŚCIOWY OPIS)
+----------------------------------------------------------------------
 
-**TODO: Write-up explaining the basics of interact scripts, including listing the 4 basic triggers, the concept of steps (and the zap command), and how to enable an interact script on the relevant assignment script. Demonstrate a click trigger.**
+**TODO: Opis wyjaśniający podstawy skryptów interakcji, w tym listę 4 podstawowych wyzwalaczy (triggers), koncepcję kroków (steps) i polecenia zap, oraz sposób aktywacji skryptu interakcji w odpowiednim skrypcie przypisania (assignment script). Zademonstruj wyzwalacz kliknięcia (click trigger).**
 
-### Placeholder
+### Placeholder (Miejsce na treść)
 
-Until this page is written, you can view the [old tutorial video here](https://one.denizenscript.com/denizen/vids/Your%20First%20Interact%20Script%20And%20Chat%20Trigger).
+Dopóki ta strona nie zostanie napisana, możesz obejrzeć [stary film instruktażowy tutaj](https://one.denizenscript.com/denizen/vids/Your%20First%20Interact%20Script%20And%20Chat%20Trigger).
 
-### Sample Script
+### Przykładowy skrypt
 
-Here's a quick sample of a modern interact script with two basic steps.
+Oto szybki przykład nowoczesnego skryptu interakcji z dwoma podstawowymi krokami.
 
 ```dscript_green
 my_assignment:
@@ -26,23 +26,23 @@ my_interact:
         1:
             click trigger:
                 script:
-                - chat "Hello, <player.name>!"
+                - chat "Witaj, <player.name>!"
                 - zap 2
         2:
             click trigger:
                 script:
-                - chat "Hello part 2, <player.name>!"
+                - chat "Witaj część 2, <player.name>!"
                 - zap *
 ```
 
-This script can be assigned to your selected NPC via `/ex assignment set script:my_assignment`
+Ten skrypt można przypisać do wybranego przez Ciebie NPC za pomocą polecenia `/ex assignment set script:my_assignment`
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read a lot more about interact scripts, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się znacznie więcej o skryptach interakcji, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-Note: most users, especially those learning from the Denizen for the first time, should just continue on to the next guides page. These references might be of interest to later come back to after you've learned Denizen as far as this guide teaches.
+Uwaga: większość użytkowników, zwłaszcza tych uczących się Denizen po raz pierwszy, powinna po prostu przejść do następnej strony przewodnika. Referencje te mogą być interesujące do późniejszego powrotu, gdy już nauczysz się Denizen w stopniu, jaki przewiduje ten przewodnik.
 
-- [Interact script containers doc](https://meta.denizenscript.com/Docs/Languages/interact%20script%20containers)
-- [Trigger command doc](https://meta.denizenscript.com/Docs/Commands/trigger)
-- [Interact script triggers language doc](https://meta.denizenscript.com/Docs/Languages/Interact%20Script%20Triggers)
+- [Dokumentacja kontenerów skryptów interakcji](https://meta.denizenscript.com/Docs/Languages/interact%20script%20containers)
+- [Dokumentacja polecenia Trigger](https://meta.denizenscript.com/Docs/Commands/trigger)
+- [Dokumentacja języka Interact Script Triggers](https://meta.denizenscript.com/Docs/Languages/Interact%20Script%20Triggers)

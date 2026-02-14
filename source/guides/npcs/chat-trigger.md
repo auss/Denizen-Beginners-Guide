@@ -1,15 +1,15 @@
-Chat Triggers (PARTIAL)
--------------
+Wyzwalacze czatu (Chat Triggers) (CZĘŚCIOWY OPIS)
+-----------------------------------------------
 
-**TODO: Write-up explaining chat triggers, including both standard triggers and dynamic regex triggers (particularly a catch-all). Remind the user to activate it with `trigger` in `on assignment`.**
+**TODO: Opis wyjaśniający wyzwalacze czatu, w tym zarówno standardowe wyzwalacze, jak i dynamiczne wyzwalacze regex (szczególnie catch-all). Przypomnij użytkownikowi o aktywacji wyzwalacza za pomocą `trigger` w `on assignment`.**
 
-### Placeholder
+### Placeholder (Miejsce na treść)
 
-Until this page is written, you can view the [old tutorial video here](https://one.denizenscript.com/denizen/vids/Your%20First%20Interact%20Script%20And%20Chat%20Trigger).
+Dopóki ta strona nie zostanie napisana, możesz obejrzeć [stary film instruktażowy tutaj](https://one.denizenscript.com/denizen/vids/Your%20First%20Interact%20Script%20And%20Chat%20Trigger).
 
-### Sample Script
+### Przykładowy skrypt
 
-Here's a quick sample of a modern interact script with two basic chat triggers.
+Oto szybki przykład nowoczesnego skryptu interakcji z dwoma podstawowymi wyzwalaczami czatu.
 
 ```dscript_green
 my_assignment:
@@ -26,21 +26,21 @@ my_interact:
         1:
             chat trigger:
                 1:
-                    trigger: /Hello/ friendly NPC!
+                    trigger: /Witaj/ przyjazny NPC!
                     script:
-                    - chat "Hello, <player.name>!"
+                    - chat "Witaj, <player.name>!"
                 2:
-                    trigger: /Goodbye/ friendly NPC!
+                    trigger: /Żegnaj/ przyjazny NPC!
                     script:
-                    - chat "Farewell, <player.name>!"
+                    - chat "Bywaj, <player.name>!"
 ```
 
-This script can be assigned to your selected NPC via `/ex assignment set my_assignment`
+Ten skrypt można przypisać do wybranego przez Ciebie NPC za pomocą polecenia `/ex assignment set my_assignment`
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read a lot more about chat triggers, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się znacznie więcej o wyzwalaczach czatu, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-Note: most users, especially those learning from the Denizen for the first time, should just continue on to the next guides page. These references might be of interest to later come back to after you've learned Denizen as far as this guide teaches.
+Uwaga: większość użytkowników, zwłaszcza tych uczących się Denizen po raz pierwszy, powinna po prostu przejść do następnej strony przewodnika. Referencje te mogą być interesujące do późniejszego powrotu, gdy już nauczysz się Denizen w stopniu, jaki przewiduje ten przewodnik.
 
-- [Chat triggers language doc](https://meta.denizenscript.com/Docs/Languages/chat%20triggers)
+- [Dokumentacja języka Chat Triggers](https://meta.denizenscript.com/Docs/Languages/chat%20triggers)

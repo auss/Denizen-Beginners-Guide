@@ -1,15 +1,15 @@
-Who Am I: Assignment Scripts (PARTIAL)
-----------------------------
+Kim jestem: Skrypty przypisania (Assignment Scripts) (CZĘŚCIOWY OPIS)
+----------------------------------------------------------------------
 
-**TODO: Write-up explaining the basics of assignment scripts, including the `on assignment` action.**
+**TODO: Opis wyjaśniający podstawy skryptów przypisania, w tym akcję `on assignment`.**
 
-### Placeholder
+### Placeholder (Miejsce na treść)
 
-Until this page is written, you can view the [old tutorial video here](https://one.denizenscript.com/denizen/vids/NPCs%20And%20You:%20Your%20First%20Assignment%20Script).
+Dopóki ta strona nie zostanie napisana, możesz obejrzeć [stary film instruktażowy tutaj](https://one.denizenscript.com/denizen/vids/NPCs%20And%20You:%20Your%20First%20Assignment%20Script).
 
-### Sample Script
+### Przykładowy skrypt
 
-Here's a quick sample of a modern assignment script.
+Oto szybki przykład nowoczesnego skryptu przypisania.
 
 ```dscript_green
 my_assignment:
@@ -18,17 +18,17 @@ my_assignment:
         on assignment:
         - trigger name:click state:true
         on click:
-        - chat "Hello <player.name>!"
+        - chat "Witaj <player.name>!"
 ```
 
-This script can be assigned to your selected NPC via `/ex assignment set script:my_assignment`
+Ten skrypt można przypisać do wybranego przez Ciebie NPC za pomocą polecenia `/ex assignment set script:my_assignment`
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read a lot more about assignment scripts, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się znacznie więcej o skryptach przypisania, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-Note: most users, especially those learning from the Denizen for the first time, should just continue on to the next guides page. These references might be of interest to later come back to after you've learned Denizen as far as this guide teaches.
+Uwaga: większość użytkowników, zwłaszcza tych uczących się Denizen po raz pierwszy, powinna po prostu przejść do następnej strony przewodnika. Referencje te mogą być interesujące do późniejszego powrotu, gdy już nauczysz się Denizen w stopniu, jaki przewiduje ten przewodnik.
 
-- [Assignment script containers doc](https://meta.denizenscript.com/Docs/Languages/assignment%20script%20containers)
-- [On Assignment action doc](https://meta.denizenscript.com/Docs/Actions/assignment)
-- [List of all assignment script actions](https://meta.denizenscript.com/Docs/Actions)
+- [Dokumentacja kontenerów skryptów przypisania](https://meta.denizenscript.com/Docs/Languages/assignment%20script%20containers)
+- [Dokumentacja akcji On Assignment](https://meta.denizenscript.com/Docs/Actions/assignment)
+- [Lista wszystkich akcji skryptów przypisania](https://meta.denizenscript.com/Docs/Actions)

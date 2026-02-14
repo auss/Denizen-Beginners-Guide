@@ -1,43 +1,43 @@
-Updates Since the Tutorial Videos
----------------------------------
+Aktualizacje od czasu filmów instruktażowych
+---------------------------------------------
 
-Denizen has had quite a number of updates over the years since the original tutorial videos were published <span class="parens">(5-6 years ago)</span>! This guide page documents the changes that you should know about for best practices.
+Denizen przeszedł wiele aktualizacji od czasu opublikowania oryginalnych filmów instruktażowych <span class="parens">(5-6 lat temu)</span>! Ta strona dokumentuje zmiany, o których powinieneś wiedzieć, aby stosować najlepsze praktyki.
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### Editor of Choice
+### Wybór edytora
 
-In the tutorial videos, Notepad++ was displayed as the script editor to use. This was basically just a slightly better text editor. Since then, we've gotten an actual proper script editor, based on an extension to VS Code.
+W filmach instruktażowych jako edytor skryptów prezentowany był Notepad++. Był to zasadniczo tylko nieco lepszy edytor tekstowy. Od tego czasu zyskaliśmy prawdziwy, dedykowany edytor skryptów, oparty na rozszerzeniu do VS Code.
 
-For more information, refer to the page on [Setting Up The Script Editor](/guides/first-steps/script-editor).
+Więcej informacji znajdziesz na stronie [Konfiguracja edytora skryptów](/guides/first-steps/script-editor).
 
-Note that as part of this, the `.yml` file extension is no longer used. Instead, use `.dsc`.
+Pamiętaj, że w związku z tym nie używa się już rozszerzenia `.yml` dla skryptów. Zamiast tego używaj `.dsc`.
 
-### We're on Discord Now
+### Jesteśmy teraz na Discordzie
 
-The tutorial videos showcase some interactions with a bot on IRC - if you've tried to reach this IRC, you've already seen the messages that we moved to Discord. You're probably also aware of that if you got to this guide.
+Filmy instruktażowe pokazują interakcje z botem na IRC – jeśli próbowałeś się tam połączyć, widziałeś już wiadomości o przenosinach na Discorda. Prawdopodobnie wiesz o tym również, jeśli trafiłeś do tego przewodnika.
 
-But, just in case you haven't yet seen it - we're on Discord, so [join us there!](https://discord.gg/Q6pZGSR). We provide human support and bot-assisted searches/script-checking/etc. there.
+Ale na wszelki wypadek, gdybyś jeszcze o tym nie wiedział – jesteśmy na Discordzie, więc [dołącz do nas!](https://discord.gg/Q6pZGSR). Zapewniamy tam wsparcie ludzi oraz boty pomagające w przeszukiwaniu dokumentacji, sprawdzaniu skryptów itp.
 
-### Colon Syntax
+### Składnia z dwukropkiem (Colon Syntax)
 
-Braced syntax has been replaced with colon syntax. As documented on the page for [The If Command](/guides/basics/if-command), colon syntax allows you to use multiple commands within commands like `if` and `foreach`. Unlike braced syntax, no closing character is needed - when you return to the prior level of spacing, the script will continue as normal.
+Składnia z klamrami (braced syntax) została zastąpiona składnią z dwukropkiem. Jak udokumentowano na stronie [Polecenie If](/guides/basics/if-command), składnia z dwukropkiem pozwala na użycie wielu poleceń wewnątrz poleceń takich jak `if` czy `foreach`. W przeciwieństwie do składni z klamrami, nie jest potrzebny żaden znak zamykający – gdy wrócisz do poprzedniego poziomu wcięcia, skrypt będzie toczył się normalnie dalej.
 
-If you've written scripts using braced syntax, you can quickly convert them to colon syntax by deleting all closing brace characters (`}`), replacing the opening brace character (`{`) with a colon, and removing any extra spaces between the colon and the last other character in the line.
+Jeśli napisałeś skrypty używając klamer, możesz je szybko przekonwertować na składnię z dwukropkiem, usuwając wszystkie klamry zamykające (`}`), zastępując klamry otwierające (`{`) dwukropkiem i usuwając ewentualne zbędne spacje między dwukropkiem a ostatnim znakiem w linii.
 
-For example, here's a script converted from braced syntax to colon syntax:
+Oto przykład skryptu przekonwertowanego ze składni klamrowej na dwukropkową:
 
 ```dscript_red
 old_brace_syntax:
     type: task
     script:
     - if <player.has_flag[test]> {
-        - narrate "This is an example of braced syntax!"
+        - narrate "To jest przykład składni klamrowej!"
         }
-    - narrate "This narrate will always run!"
+    - narrate "Ta narracja zawsze się uruchomi!"
 ```
 
 ```dscript_green
@@ -45,32 +45,31 @@ new_colon_syntax:
     type: task
     script:
     - if <player.has_flag[test]>:
-        - narrate "This is an example of colon syntax!"
-    - narrate "This narrate will always run!"
+        - narrate "To jest przykład składni z dwukropkiem!"
+    - narrate "Ta narracja zawsze się uruchomi!"
 ```
 
-Colon syntax is easier to write, looks cleaner, and as an added bonus, Denizen even parses it more efficiently!
+Składnia z dwukropkiem jest łatwiejsza do pisania, wygląda czystziej, a jako dodatkowy bonus, Denizen przetwarza ją wydajniej!
 
-### Definition Syntax
+### Składnia definicji
 
-The `define` command has had two significant changes - first, the syntax has changed for the definition tag itself, and second, the define command now supports [data actions](https://meta.denizenscript.com/Docs/Languages/data%20actions).
+Polecenie `define` przeszło dwie istotne zmiany – po pierwsze, zmieniła się składnia samego tagu definicji, a po drugie, polecenie define wspiera teraz [akcje na danych (data actions)](https://meta.denizenscript.com/Docs/Languages/data%20actions).
 
-The videos taught two different forms of definition syntax: First, the 'ancient style' percent syntax (like `%this%`), and second, the 'old style' tag syntax (like `<def[this]>`).
-Definition tags no longer look like that, but instead looks like `<[this]>` <span class="parens">(for a definition named `this`, of course)</span>. For additional details on how to use and modify definitions, please see the [Definitions](/guides/basics/definitions) page.
+Filmy uczyły dwóch różnych form składni definicji: po pierwsze, „antycznego stylu” z procentami (np. `%this%`), a po drugie, „starego stylu” z tagami (np. `<def[this]>`). Tag definicji nie wygląda już w ten sposób, lecz ma postać `<[this]>` <span class="parens">(dla definicji o nazwie `this`)</span>. Dodatkowe szczegóły na temat używania i modyfikowania definicji znajdziesz na stronie [Definicje](/guides/basics/definitions).
 
-Note that `%name%` is considered ancient and completely unsupported, and should never be used. `<def[name]>` however is considered an older/alternative syntax for the modern `<[name]>` <span class="parens">(it's the same tag-base syntax, except the empty-name tag is now available in place of a tag named `def`)</span>.
+Zauważ, że zapis `%nazwa%` jest uważany za antyczny i całkowicie niewspierany – nigdy go nie używaj. Zapis `<def[nazwa]>` jest natomiast traktowany jako starsza/alternatywna składnia dla nowoczesnego `<[nazwa]>` <span class="parens">(jest to ta sama składnia bazowa tagu, tylko tag bez nazwy jest teraz dostępny w miejsce tagu o nazwie `def`)</span>.
 
-Here's an example of the old syntax updated to the new syntax:
+Oto przykład starej składni zaktualizowanej do nowej:
 
 ```dscript_red
 old_definition_syntax:
     type: task
     script:
     - define name <player.name>
-    # Ancient
-    - narrate "Hello, %name%!"
-    # Old
-    - narrate "Hello, <def[name]>!"
+    # Antyczne
+    - narrate "Witaj, %name%!"
+    # Stare
+    - narrate "Witaj, <def[name]>!"
 ```
 
 ```dscript_green
@@ -78,73 +77,73 @@ new_definition_syntax:
     type: task
     script:
     - define name <player.name>
-    - narrate "Hello, <[name]>!"
+    - narrate "Witaj, <[name]>!"
 ```
 
-### Changes To The While Command
+### Zmiany w poleceniu While
 
-In the past, the `while` command previously only accepted one argument, so it was necessary to use tags like `<player.health.is[>=].to[10]>]>` to evaluate expressions.
+W przeszłości polecenie `while` przyjmowało tylko jeden argument, więc konieczne było używanie tagów takich jak `<player.health.is[>=].to[10]>]>` do ewaluacji wyrażeń.
 
-This limitation no longer exists - the `while` command now supports operators, the same as the `if` command.
+To ograniczenie już nie istnieje – polecenie `while` wspiera teraz operatory, tak samo jak polecenie `if`.
 
-The following is an example of a task script using the `while` command that will wait for a player's health to drop below 10, then narrate a warning to them, with both old and modern syntax:
+Poniżej znajduje się przykład skryptu zadania używającego polecenia `while`, który będzie czekać, aż zdrowie gracza spadnie poniżej 10, a następnie wyświetli mu ostrzeżenie – w wersji starej i nowoczesnej:
 
 ```dscript_red
 old_while_syntax:
     type: task
     script:
-    - narrate "Challenge: don't lose too much health!"
+    - narrate "Wyzwanie: nie trać zbyt dużo zdrowia!"
     - while <player.health.is[>=].to[10]>:
         - wait 1s
-    - narrate "Your health got too low! You lose!"
+    - narrate "Twoje zdrowie jest zbyt niskie! Przegrywasz!"
 ```
 
 ```dscript_green
 new_while_syntax:
     type: task
     script:
-    - narrate "Challenge: don't lose too much health!"
+    - narrate "Wyzwanie: nie trać zbyt dużo zdrowia!"
     - while <player.health> >= 10:
         - wait 1s
-    - narrate "Your health got too low! You lose!"
+    - narrate "Twoje zdrowie jest zbyt niskie! Przegrywasz!"
 ```
 
-Note that this specific waiting-until-something style of logic has as well been replaced by a specialized command, `waituntil`, which can be used like so:
+Zauważ, że ten konkretny styl logiki typu „czekaj-aż-coś-się-stanie” został zastąpiony przez wyspecjalizowane polecenie `waituntil`, którego można użyć w ten sposób:
 
 ```dscript_green
 waituntil_example:
     type: task
     script:
-    - narrate "Challenge: don't lose too much health!"
+    - narrate "Wyzwanie: nie trać zbyt dużo zdrowia!"
     - waituntil rate:1s <player.health> < 10
-    - narrate "Your health got too low! You lose!"
+    - narrate "Twoje zdrowie jest zbyt niskie! Przegrywasz!"
 ```
 
-### Assignment Script Updates
+### Aktualizacje skryptów przypisania (Assignment Scripts)
 
-Historically, multiple interact scripts were used on NPCs with conditions to determine which script would run. Denizen now features steps in interact scripts and the `zap` command, so only one interact script is needed (and supported). The numbers next to the interact scripts entry of an assignment script, accordingly, are no longer necessary and should be removed.
+Historycznie na NPC używano wielu skryptów interakcji (interact scripts) wraz z warunkami określającymi, który skrypt ma się uruchomić. Denizen posiada teraz kroki (steps) w skryptach interakcji oraz polecenie `zap`, więc potrzebny (i wspierany) jest tylko jeden skrypt interakcji. Liczby obok wpisu interact scripts w skrypcie przypisania nie są już potrzebne i powinny zostać usunięte.
 
-Here are examples of old and updated syntax:
+Oto przykłady starej i zaktualizowanej składni:
 
 ```dscript_red
 old_assignment_script:
     type: assignment
     interact scripts:
-    - 10 my_cool_npc_interaction
+    - 10 moja_fajna_interakcja_npc
 ```
 
 ```dscript_green
 new_assignment_script:
     type: assignment
     interact scripts:
-    - my_cool_npc_interaction
+    - moja_fajna_interakcja_npc
 ```
 
-### Stop Is The New Queue Clear
+### Stop to nowe Queue Clear
 
-`queue clear` was once used to stop a queue while it was running. That command has been updated to `stop`.
+Polecenie `queue clear` było niegdyś używane do zatrzymania działającej kolejki. Polecenie to zostało zaktualizowane do `stop`.
 
-The replacement is simple:
+Zamiana jest prosta:
 
 ```dscript_red
 old_queue_clear:
@@ -152,7 +151,7 @@ old_queue_clear:
     script:
     - if <player.has_flag[buff]>:
         - queue clear
-    - narrate "You don't have the necessary buff!"
+    - narrate "Nie posiadasz wymaganego wzmocnienia!"
 ```
 
 ```dscript_green
@@ -161,21 +160,21 @@ new_stop:
     script:
     - if <player.has_flag[buff]>:
         - stop
-    - narrate "You don't have the necessary buff!"
+    - narrate "Nie posiadasz wymaganego wzmocnienia!"
 ```
 
-### Use .has_flag[] To Check Flag Existence
+### Używaj .has_flag[] do sprawdzania istnienia flagi
 
-In the past, including [the Kill Quest](/guides/put-it-together/kill-quest) tutorial video, `.flag[]` was used to check both the value of a flag and whether the flag existed.
+W przeszłości, również w filmie o [Zadaniu typu Kill Quest](/guides/put-it-together/kill-quest), tag `.flag[]` był używany zarówno do sprawdzania wartości flagi, jak i tego, czy flaga w ogóle istnieje.
 
-Now, the correct way to check whether a flag exists is to use `.has_flag[]`. `.flag[]` is now only for reading the value of a flag, and should only be used where the flag is known to exist <span class="parens">(or with a fallback)</span>. Here is an example:
+Obecnie poprawnym sposobem sprawdzenia istnienia flagi jest użycie `.has_flag[]`. Tag `.flag[]` służy teraz wyłącznie do odczytu wartości flagi i powinien być używany tylko tam, gdzie mamy pewność, że flaga istnieje <span class="parens">(lub z użyciem fallbacka)</span>. Oto przykład:
 
 ```dscript_red
 old_flag:
     type: task
     script:
     - if <player.flag[VIP]>:
-        - narrate "Your VIP level is <player.flag[VIP]>!"
+        - narrate "Twój poziom VIP to <player.flag[VIP]>!"
 ```
 
 ```dscript_green
@@ -183,40 +182,40 @@ new_has_flag:
     type: task
     script:
     - if <player.has_flag[VIP]>:
-        - narrate "Your VIP level is <player.flag[VIP]>!"
+        - narrate "Twój poziom VIP to <player.flag[VIP]>!"
 ```
 
-### The Flag Rewrite
+### Przepisanie systemu flag
 
-In addition to the `has_flag` tag, a later total internal rewrite of the flag system has taken place (December 2020).
+Oprócz tagu `has_flag`, w późniejszym czasie nastąpiło całkowite wewnętrzne przepisanie systemu flag (grudzień 2020).
 
-The most relevant change from the videos in this regard is that the tag `<player.flag[NAME].expiration>` seen in the kill quest video should be changed to `<player.flag_expiration[NAME].from_now>`.
+Najistotniejszą zmianą względem filmów w tym zakresie jest to, że tag `<player.flag[NAZWA].expiration>` widoczny w filmie o kill queście powinien zostać zmieniony na `<player.flag_expiration[NAZWA].from_now>`.
 
-Due to the significant general changes to the flag system, more modern documentation for flags should be used than the old videos, so refer to [The Flags Page](/guides/basics/flags).
+Ze względu na znaczące ogólne zmiany w systemie flag, należy korzystać z nowszej dokumentacji niż stare filmy – sprawdź stronę [Flagi](/guides/basics/flags).
 
-### Event Cancellation Is A Little More Advanced Now
+### Anulowanie zdarzeń (Event Cancellation) jest teraz bardziej zaawansowane
 
-In the tutorial video for [Inventory GUIs](/guides/put-it-together/inventory-guis), it is taught to cancel the generic clicks event, and run actions in response to the more specific event.
+W filmie instruktażowym dotyczącym [GUI w ekwipunku](/guides/put-it-together/inventory-guis) uczy się anulowania ogólnego zdarzenia kliknięcia i uruchamiania akcji w odpowiedzi na bardziej szczegółowe zdarzenie.
 
-While this is still correct, it is missing a necessary component to work well in modern Denizen.
+Choć jest to wciąż poprawne, brakuje w tym podejściu elementu niezbędnego do dobrego działania w nowoczesnym Denizen.
 
-In the past, events would just all fire, and if an event got cancelled that just means the underlying action wouldn't be performed. In modern Denizen, the system more intelligently knows to not fire more script events after the event was cancelled. While this [can be simply disabled for the relevant events](https://meta.denizenscript.com/Docs/Languages/Script%20Event%20Cancellation) a better solution is to instead guarantee that the generic event that cancels it will run *last*. This is as easy as adding a high-valued `priority` to the cancelling event line.
+W przeszłości zdarzenia po prostu wszystkie się odpalały, a anulowanie zdarzenia oznaczało jedynie, że bazowa akcja nie zostanie wykonana. W nowoczesnym Denizen system inteligentniej rozpoznaje, aby nie odpalać kolejnych zdarzeń skryptowych po tym, jak zdarzenie zostało anulowane. Choć [można to po prostu wyłączyć dla odpowiednich zdarzeń](https://meta.denizenscript.com/Docs/Languages/Script%20Event%20Cancellation), lepszym rozwiązaniem jest zagwarantowanie, że ogólne zdarzenie, które je anuluje, uruchomi się jako *ostatnie*. Jest to tak proste, jak dodanie wysokiej wartości `priority` (priorytet) do linii anulującego zdarzenia.
 
-So, where previously you had `on player clicks in my_inventory:` you now instead have `on player clicks in my_inventory priority:100:`, and a similar change to the `drags` event line. Event priorities run in numerical order, with a default of `0`. So all the specific events, with their default priority, will run first, and then only after they're done, the generic cancellation events <span class="parens">(now at priority `100`)</span> will fire last.
+Zatem tam, gdzie wcześniej miałeś `on player clicks in moj_ekwipunek:`, teraz masz zamiast tego `on player clicks in moj_ekwipunek priority:100:`, i podobną zmianę w linii zdarzenia `drags`. Priorytety zdarzeń działają w kolejności numerycznej, gdzie domyślny priorytet to `0`. Wszystkie specyficzne zdarzenia, z ich domyślnym priorytetem, uruchomią się najpierw, a dopiero po ich zakończeniu, ogólne zdarzenia anulujące <span class="parens">(teraz z priorytetem `100`)</span> odpalą się jako ostatnie.
 
-### Tags With Carets Aren't Used Anymore
+### Tagi z daszkami (Carets) nie są już używane
 
-The videos demonstrated the tag `<^npc>` as a way to get the NPC from a queue prior to the `npc:` argument being used, and mentioned `<^player>` as a matching concept. These are considered outdated/irrelevant now, as you can and should instead just use `define`
+Filmy demonstrowały tag `<^npc>` jako sposób na pobranie NPC z kolejki przed użyciem argumentu `npc:`, oraz wspominały o `<^player>` jako o analogicznej koncepcji. Są one obecnie uważane za przestarzałe/nieistotne, ponieważ zamiast nich możesz i powinieneś po prostu używać `define`.
 
 ```dscript_blue
 better_npc_handler:
     type: task
     script:
-    - narrate "Let's pass NPCs backwards"
+    - narrate "Przekażmy NPC wstecz"
     - define npc <npc>
     - run my_other_task def:<[npc]> npc:<[some_other_npc]>
 ```
 
-In the above example, the `define` command and the tag `<[npc]>` are used to replace what would have otherwise been the `<^npc>` tag.
+W powyższym przykładzie polecenie `define` oraz tag `<[npc]>` zastępują to, co w przeciwnym razie byłoby tagiem `<^npc>`.
 
-(This was removed due to a combination of been extremely rarely used, and having very complex internals weighing down the script engine even when not in use).
+(Zostało to usunięte z powodu połączenia faktu bycia niezwykle rzadko używanym oraz posiadania bardzo złożonych mechanizmów wewnętrznych obciążających silnik skryptowy nawet wtedy, gdy nie są używane).

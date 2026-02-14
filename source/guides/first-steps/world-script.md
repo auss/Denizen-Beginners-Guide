@@ -1,155 +1,155 @@
-Your First World Script
------------------------
+Twój pierwszy skrypt świata (World Script)
+------------------------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### It Runs On Its Own!
+### Działa samo!
 
-So, you've learned [how to use '/ex' to run a single Denizen command](/guides/first-steps/ex-command) and [how to make a 'task' script to run a series of commands together](/guides/first-steps/task-script). Those are pretty useful tools, but they require you sit there and type commands in to make it happen. Isn't the point of a script engine supposed to be that it automatically triggers when needed, to make custom stuff on your server? It would be ridiculous to just sit on a server typing `/ex` commands whenever a player needs something!
+Nauczyłeś się już, [jak używać „/ex” do uruchamiania pojedynczego polecenia Denizen](/guides/first-steps/ex-command) oraz [jak tworzyć skrypty „task”, aby uruchamiać serię poleceń razem](/guides/first-steps/task-script). To bardzo przydatne narzędzia, ale wymagają one od Ciebie siedzenia i wpisywania poleceń, aby coś się stało. Czy sensem silnika skryptowego nie powinno być automatyczne uruchamianie się, gdy jest to potrzebne, aby tworzyć własne rzeczy na serwerze? Byłoby absurdalne siedzieć na serwerze i wpisywać polecenia `/ex` za każdym razem, gdy gracz czegoś potrzebuje!
 
-### Introducing: The World Script
+### Przedstawiamy: Skrypt świata (World Script)
 
-Let's take a look at the primary way we make automatically triggered scripts: `world` script containers!
+Przyjrzyjmy się głównemu sposobowi tworzenia automatycznie wyzwalanych skryptów: kontenerom skryptów typu `world`!
 
-A world script contains `events`. An event is basically: a thing that happens in the world. For example, when a player breaks a block, there's an event for that. Most events are named pretty clearly and simply - for example, the previously mentioned event would be `player breaks block`. Note that all events start with either the word `on` or `after`, and what follows is usually English phrasing of the event based on that. Some more examples of event names: `on player places block`, `after entity dies`, `on creeper powered`, `after lightning strikes`, ... <span class="parens">(the distinction between `on` and `after` is explained farther down this page)</span>.
+Skrypt świata zawiera `events` (zdarzenia). Zdarzenie to zasadniczo rzecz, która dzieje się w świecie. Na przykład, gdy gracz niszczy blok, istnieje dla tego zdarzenie. Większość zdarzeń nazywa się dość jasno i prosto – na przykład wspomniane zdarzenie to `player breaks block`. Zauważ, że wszystkie zdarzenia zaczynają się od słowa `on` lub `after`, a po nich następuje zwykle angielska fraza opisująca zdarzenie. Kilka przykładów nazw zdarzeń: `on player places block`, `after entity dies`, `on creeper powered`, `after lightning strikes`... <span class="parens">(różnica między `on` a `after` została wyjaśniona w dalszej części tej strony)</span>.
 
-### Let's See A Real World Script!
+### Zobaczmy prawdziwy skrypt świata!
 
 ```dscript_green
 my_world_script:
     type: world
     events:
         after player breaks block:
-        - narrate "Whoa <player.name>, you broke a block!"
+        - narrate "Łohoho <player.name>, zniszczyłeś blok!"
 ```
 
-Go ahead and put that into a script file, use `/ex reload` to load it in, then break any block. You'll see the message appear in chat when you do so.
+Śmiało, umieść to w pliku skryptu, użyj `/ex reload`, aby go załadować, a następnie zniszcz dowolny blok. Zobaczysz wiadomość na czacie.
 
 ![](images/brokeablock.png)
 
-Some things to note in this example:
-- The `type` for these scripts is now `world`.
-- Instead of `script:` from before, we now have `events:`, which contains within it the actual event name.
-- The event itself <span class="parens">(`after player breaks block`)</span> is indented another 4 spaces past where `events:` is, which makes the event part of the `events` block rather than part of the script's base level keys.
-- The player that broke the block is automatically the contextually linked player. So, the narrate shows to that player, and `<player.name>` will be that players name.
+Kilka rzeczy, na które warto zwrócić uwagę w tym przykładzie:
+- Typ (`type`) tych skryptów to teraz `world`.
+- Zamiast `script:` z poprzednich przykładów, mamy teraz `events:`, który zawiera w sobie właściwą nazwę zdarzenia.
+- Samo zdarzenie <span class="parens">(`after player breaks block`)</span> jest wcięte o kolejne 4 spacje za `events:`, co czyni je częścią bloku zdarzeń, a nie kluczem na poziomie podstawowym skryptu.
+- Gracz, który zniszczył blok, jest automatycznie przypisanym graczem w tym kontekście. Zatem polecenie narrate wyświetli się temu graczowi, a `<player.name>` będzie jego imieniem.
 
-An event will run every time the thing happens in the world. Every single time any player breaks any block, that script will run. If 5 players all break a block at the same time, that script will run 5 times - once for each player, each time linking to the specific player that broke the block that the script is reacting to. If one player gets an efficiency 5 shovel and destroys 10 dirt blocks in under a second... yep, the event will run 10 times, with that one player linked each time.
+Zdarzenie zostanie uruchomione za każdym razem, gdy dana rzecz wydarzy się w świecie. Za każdym razem, gdy jakikolwiek gracz zniszczy jakikolwiek blok, ten skrypt się uruchomi. Jeśli 5 graczy zniszczy blok w tym samym czasie, skrypt uruchomi się 5 razy – raz dla każdego gracza, za każdym razem łącząc się z konkretnym graczem, który zniszczył blok. Jeśli jeden gracz weźmie łopatę z wydajnością 5 i zniszczy 10 bloków ziemi w mniej niż sekundę... tak, zdarzenie uruchomi się 10 razy, za każdym razem z tym samym graczem.
 
-### Okay, But What Block Did They Break?
+### Dobra, ale jaki blok zniszczyli?
 
-So, you know that they broke a block when that script runs, but you're of course wondering how you know what type of block was broken <span class="parens">(after all, breaking a block of dirt and breaking a block of diamond ore probably shouldn't be handled the exact same way)</span>. There are two ways of doing this.
+Wiesz już, że zniszczyli blok, gdy ten skrypt się uruchamia, ale na pewno zastanawiasz się, jak dowiedzieć się, jaki typ bloku został zniszczony <span class="parens">(w końcu zniszczenie bloku ziemi i bloku rudy diamentu prawdopodobnie nie powinno być obsługiwane w ten sam sposób)</span>. Istnieją na to dwa sposoby.
 
-#### Context Tags
+#### Tagi kontekstowe (Context Tags)
 
-The first way to know what type of block was broken is `context` tags. Context tags are tags that, as the name implies, give the details about the context of when/where/why a script is running. In an event, context tags contain everything you need to know about the event that happened.
+Pierwszym sposobem na dowiedzenie się, jaki typ bloku został zniszczony, są tagi `context`. Tagi kontekstowe, jak sama nazwa wskazuje, dostarczają szczegółów na temat kontekstu uruchomienia skryptu (kiedy/gdzie/dlaczego). W zdarzeniu tagi kontekstowe zawierają wszystko, co musisz wiedzieć o tym, co się stało.
 
-`<context.material>` is available in the `on player breaks block` event as a way to get a material. This returns a MaterialTag, and the tag `<MaterialTag.name>` gets the name of a material, so let's stick these tags together to form `<context.material.name>`.
+W zdarzeniu `on player breaks block` dostępny jest tag `<context.material>`, który pozwala pobrać materiał. Zwraca on `MaterialTag`, a tag `<MaterialTag.name>` pobiera nazwę materiału. Połączmy je więc, tworząc `<context.material.name>`.
 
-Try putting that tag into the narrate line, like `- narrate "Whoa <player.name>, you broke a <context.material.name>!"`, and then reloading and breaking a few blocks. You should see the name of each block type you broke, as you break them.
+Spróbuj wstawić ten tag do linii z narrate, np. `- narrate "Łohoho <player.name>, zniszczyłeś blok typu <context.material.name>!"`, a następnie przeładuj skrypty i zniszcz kilka bloków. Powinieneś widzieć nazwę każdego typu bloku, który niszczysz.
 
 ![](images/brokeastone.png)
 
-Note that context tags are always base tags, and are never sub-tags <span class="parens">(though, of course, you can tack a sub-tag onto the end of a context tag whenever needed)</span>.
+Zauważ, że tagi kontekstowe są zawsze tagami bazowymi i nigdy nie są sub-tagami <span class="parens">(chociaż oczywiście możesz dołączyć sub-tag na końcu tagu kontekstowego, kiedy tylko potrzebujesz)</span>.
 
-Note also that context tags, naturally, only exist within their relevant context. The `on entity dies` event doesn't have `<context.material>`, as that's not part of that event. Similarly, a task script or an `/ex` command won't have any contexts at all, as they're not part of any event.
+Zauważ również, że tagi kontekstowe, naturalnie, istnieją tylko w swoim odpowiednim kontekście. Zdarzenie `on entity dies` nie posiada tagu `<context.material>`, ponieważ nie jest on częścią tego zdarzenia. Podobnie skrypt zadania (task script) lub polecenie `/ex` nie będą miały żadnych kontekstów, ponieważ nie są częścią żadnego zdarzenia.
 
-#### More Specific Event Lines
+#### Bardziej szczegółowe linie zdarzeń
 
-Event names allow extra specification to be added, as either an input filling or an event switch.
+Nazwy zdarzeń pozwalają na dodanie dodatkowych specyfikacji, takich jak wypełnienie parametru lub przełącznik zdarzenia (event switch).
 
-The breaks block event is documented as: `player breaks block` or `player breaks <material>`. The second version here gives us a `<material>` input option. In this context, the `<>` means "fill in your specific value here". So, try changing your script's event line to be `after player breaks stone:`, then reload and try breaking a few different block types, including stone. You will see that the narrate only happens when you break stone. If you break dirt or anything else, nothing will happen.
+Zdarzenie niszczenia bloku jest udokumentowane jako: `player breaks block` lub `player breaks <material>`. Ta druga wersja daje nam opcję wpisania konkretnego materiału. W tym kontekście `<>` oznacza „wpisz tutaj swoją konkretną wartość”. Spróbuj więc zmienić linię zdarzenia w swoim skrypcie na `after player breaks stone:`, przeładuj i spróbuj zniszczyć kilka różnych typów bloków, w tym kamień (stone). Zobaczysz, że narracja pojawia się tylko wtedy, gdy zniszczysz kamień. Jeśli zniszczysz ziemię lub cokolwiek innego, nic się nie stanie.
 
-Event switches are additional options on an event aside from just the basic name input. The breaks block event has a few switches available, including one documented as `with:<item> to only process the event when the player is breaking the block with a specified item`.
+Przełączniki zdarzeń (event switches) to dodatkowe opcje zdarzenia poza podstawowym wejściem nazwy. Zdarzenie niszczenia bloku ma dostępnych kilka przełączników, w tym jeden udokumentowany jako `with:<item>`, służący do przetwarzania zdarzenia tylko wtedy, gdy gracz niszczy blok określonym przedmiotem.
 
-To put this to use, you can do, for example: `after player breaks stone with:diamond_pickaxe:` to make the script only run when the player specifically uses a diamond pickaxe while breaking the stone - if you try it with an iron pickaxe or anything else instead, the script simply won't run.
+Aby to wykorzystać, możesz napisać np.: `after player breaks stone with:diamond_pickaxe:`, co sprawi, że skrypt uruchomi się tylko wtedy, gdy gracz użyje diamentowego kilofa do zniszczenia kamienia – jeśli spróbujesz zrobić to żelaznym kilofem lub czymkolwiek innym, skrypt po prostu się nie uruchomi.
 
-#### Event Lines Are Static
+#### Linie zdarzeń są statyczne
 
-Note that event lines can never contain tags - they must always be valid plain text. In a [later section](/guides/basics/if-command) you will learn how to change whether the script runs based on more dynamic tag-based checks.
+Zauważ, że linie zdarzeń nigdy nie mogą zawierać tagów – muszą zawsze być poprawnym, czystym tekstem. W [dalszej sekcji](/guides/basics/if-command) dowiesz się, jak zmieniać działanie skryptu w oparciu o bardziej dynamiczne sprawdzenia oparte na tagach.
 
-There is, however, a bit of limited dynamicness available. For example, consider the `with:diamond_pickaxe` switch we used above. What if we want *any* pickaxe to count? We can use `with:*_pickaxe` for this. The `*` symbol means "anything here". Similarly, if we want only diamond or iron, we can use `with:diamond_pickaxe|iron_pickaxe`. The `|` symbol means "either one of these counts". You can also apply this to the input portions of an event line. For example, if you want to react to players breaking wood logs, but don't want to have a different event for each and every type of log, you can simply use `after player breaks *_log:`.
+Istnieje jednak pewna ograniczona dynamika. Rozważmy przełącznik `with:diamond_pickaxe`, którego użyliśmy powyżej. Co jeśli chcemy, aby liczył się *dowolny* kilof? Możemy do tego użyć `with:*_pickaxe`. Symbol `*` oznacza „cokolwiek w tym miejscu”. Podobnie, jeśli chcemy tylko diamentowy lub żelazny, możemy użyć `with:diamond_pickaxe|iron_pickaxe`. Symbol `|` oznacza „którykolwiek z nich się liczy”. Możesz to również zastosować do części wejściowych linii zdarzenia. Na przykład, jeśli chcesz reagować na graczy niszczących kłody drewna, ale nie chcesz pisać osobnego zdarzenia dla każdego typu drewna, możesz po prostu użyć `after player breaks *_log:`.
 
-### Okay But Stop Breaking My Blocks Please
+### Dobra, ale przestańcie niszczyć moje bloki, proszę
 
-So, you can make a script run when an event happens. You can also check the specific details of the event when it happens. But how do you *do anything* about the event? What, do we have to just `- narrate "*shakes fist* stop breaking my blocks!"`?
+Możesz więc uruchomić skrypt, gdy wystąpi zdarzenie. Możesz również sprawdzić szczegóły zdarzenia. Ale jak *coś zrobić* ze zdarzeniem? Czy musimy tylko pisać `- narrate "*wygraża pięścią* przestań niszczyć moje bloki!"`?
 
-Enter the `determine` command. The determine command is how you *determine the outcome* of an event. When not put to use, the event simply happens however it normally would. When you use determine, you can change anything about the event <span class="parens">(within the reasonable limits of being an alteration to the event - if you want an unrelated change to the world to take place in response to the event, use the applicable command that produces that change)</span>.
+Tutaj wchodzi polecenie `determine`. Polecenie determine służy do *określania wyniku* zdarzenia (determination). Jeśli go nie użyjesz, zdarzenie po prostu dzieje się tak, jak zwykle. Kiedy użyjesz determine, możesz zmienić dowolną rzecz dotyczącą zdarzenia <span class="parens">(w rozsądnych granicach modyfikacji zdarzenia – jeśli chcesz, aby w odpowiedzi na zdarzenie nastąpiła niepowiązana zmiana w świecie, użyj odpowiedniego polecenia, które tę zmianę wywołuje)</span>.
 
-The most commonly available determination, that almost all events support, is `- determine cancelled`. This *cancels* the event - that is, the event will either not take place at all, or immediately undo itself. In the case of the `breaks block` event, this will make it so the block never breaks <span class="parens">(players watching will see nothing happen, however, the player that attempted to break a block will see it flash broken and then pop right back in - this is a consequence of clientside prediction and is unfortunately unavoidable without a client mod)</span>.
+Najczęściej dostępną determinacją, którą wspierają prawie wszystkie zdarzenia, jest `- determine cancelled`. To *anuluje* zdarzenie – oznacza to, że zdarzenie albo w ogóle się nie odbędzie, albo natychmiast zostanie cofnięte. W przypadku zdarzenia `breaks block` sprawi to, że blok nigdy nie zostanie zniszczony <span class="parens">(obserwujący gracze zobaczą, że nic się nie dzieje, jednak gracz, który próbował zniszczyć blok, zobaczy, jak na chwilę znika i natychmiast powraca – jest to konsekwencja przewidywania po stronie klienta i niestety jest nieuniknione bez modyfikacji klienta)</span>.
 
-So, let's try it! After the narrate line in our test script, add the determine. If you've applied all the suggested changes thus far, your script should now look like this:
+Wypróbujmy to! Po linii narrate w naszym skrypcie testowym dodaj determine. Jeśli wprowadziłeś wszystkie sugerowane dotychczas zmiany, Twój skrypt powinien teraz wyglądać tak:
 
 ```dscript_red
 my_world_script:
     type: world
     events:
         after player breaks stone with:diamond_pickaxe:
-        - narrate "Whoa <player.name>, you broke a <context.material.name>!"
+        - narrate "Łohoho <player.name>, zniszczyłeś blok typu <context.material.name>!"
         - determine cancelled
 ```
 
-Wait... that didn't work. What went wrong?
+Zaraz... to nie zadziałało. Co poszło nie tak?
 
-#### We Have Events Now And Then
+#### Mamy zdarzenia „teraz” i „wtedy”
 
-This is where the difference between `after` and `on` comes into play. `after` means to run the script *after* the event happens and is already done. `on` means to run the script *before* the event happens and can be changed. Effectively, when `after` is used, the event is a *past* event, and when `on` is used, the event is a *future* event. You can only use `determine` within `on`, not `after`, for a pretty simple reason: You can't change the past!
+Tutaj właśnie ujawnia się różnica między `after` a `on`. `after` oznacza uruchomienie skryptu *po tym*, jak zdarzenie już się wydarzyło i zakończyło. `on` oznacza uruchomienie skryptu *zanim* zdarzenie się wydarzy i kiedy można je jeszcze zmienić. Skutecznie, gdy używamy `after`, zdarzenie jest wydarzeniem *przeszłym*, a gdy używamy `on`, jest wydarzeniem *przyszłym*. Możesz użyć `determine` tylko wewnątrz `on`, a nie `after`, z bardzo prostego powodu: nie możesz zmienić przeszłości!
 
-So, change the `after` in our example script to `on`.
+Zmień więc `after` w naszym przykładowym skrypcie na `on`.
 
 ```dscript_green
 my_world_script:
     type: world
     events:
         on player breaks stone with:diamond_pickaxe:
-        - narrate "Whoa <player.name>, you broke a <context.material.name>!"
+        - narrate "Łohoho <player.name>, zniszczyłeś blok typu <context.material.name>!"
         - determine cancelled
 ```
 
-This script theoretically means if you break a stone with a diamond pickaxe, you will be stopped. If you break a different block, or don't use a diamond pick, things will work normally.
+Ten skrypt teoretycznie oznacza, że jeśli zniszczysz kamień diamentowym kilofem, zostaniesz powstrzymany. Jeśli zniszczysz inny blok lub nie użyjesz diamentowego kilofa, wszystko zadziała normalnie.
 
 ![](images/breakingthemstones.gif)
 
-Note that a determine command is considered by default the end of a script. if you want to use a determine command but then continue running commands in the script <span class="parens">(for example, to apply multiple different determinations to change multiple parts of an event)</span>, you must use the `passively` argument, like `- determine passively cancelled`.
+Zauważ, że polecenie determine jest domyślnie uważane za koniec skryptu. Jeśli chcesz użyć polecenia determine, ale potem kontynuować wykonywanie poleceń w skrypcie <span class="parens">(na przykład, aby zastosować kilka różnych determinacji do zmiany wielu części zdarzenia)</span>, musisz użyć argumentu `passively`, np. `- determine passively cancelled`.
 
-#### Making A Difference In This World
+#### Zmienianie świata na lepsze
 
-If you want to change an event, rather than simply cancelling it outright, most events have specific determination options available. The breaks block has the determination option `nothing` to make no items drop when the block is broken in survival mode, and the option of inputting an item or list of items to make the block instead drop those listed items when broken.
+Jeśli chcesz zmienić zdarzenie, zamiast po prostu je anulować, większość zdarzeń ma dostępne specyficzne opcje determinacji. Niszczenie bloku ma opcję determinacji `nothing`, aby żadne przedmioty nie wypadły po zniszczeniu bloku w trybie przetrwania, oraz opcję podania przedmiotu lub listy przedmiotów, aby blok po zniszczeniu upuścił właśnie te wymienione rzeczy.
 
-As an example of how you might use this, you can use the tag `<MaterialTag.item>` to get an item from any material, and combined with the `<context.material>` context tag available, get the resulting line: `- determine <context.material.item>`. You now have free silk touch powers! Every block now drops its exact raw form - so if you mine a diamond ore block for example, you'll receive the diamond ore block, instead of diamonds <span class="parens">(note that you will have to change the event line back to `block` instead of `stone`, or specify `diamond_ore` or anything like that)</span>.
+Jako przykład tego, jak możesz to wykorzystać: możesz użyć tagu `<MaterialTag.item>`, aby pobrać przedmiot z dowolnego materiału, i w połączeniu z dostępnym tagiem kontekstowym `<context.material>` stworzyć linię: `- determine <context.material.item>`. Właśnie zyskałeś darmową moc „jedwabnego dotyku” (silk touch)! Każdy blok upuszcza teraz swoją dokładnie surową formę – więc jeśli na przykład wykopiesz blok rudy diamentu, otrzymasz blok rudy diamentu zamiast samych diamentów <span class="parens">(pamiętaj, że będziesz musiał zmienić linię zdarzenia z powrotem na `block` zamiast `stone`, albo określić `diamond_ore` lub cokolwiek podobnego)</span>.
 
-### A Whole Big Bunch of Events
+#### Całe mnóstwo zdarzeń
 
-As an additional note to be aware of: any one world script can contain several events. That might look something like this:
+Dodatkowa uwaga, o której warto wiedzieć: jeden skrypt świata może zawierać kilka zdarzeń. Może to wyglądać mniej więcej tak:
 
 ```dscript_green
 my_world_script:
     type: world
     events:
         after player breaks block:
-        - narrate "Whoa <player.name>, you broke a <context.material.name>!"
+        - narrate "Łohoho <player.name>, zniszczyłeś blok typu <context.material.name>!"
         on player breaks stone with:diamond_pickaxe:
         - determine cancelled
         after player places stone:
-        - narrate "Why are you putting that stone there? Better not break it with a diamond pickaxe!"
+        - narrate "Dlaczego kładziesz tam ten kamień? Lepiej nie niszcz go diamentowym kilofem!"
 ```
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read a lot more about world events, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się znacznie więcej o zdarzeniach świata, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-Note: most users, especially those learning from the Denizen for the first time, should just continue on to the next guides page. These references might be of interest to later come back to after you've learned Denizen as far as this guide teaches.
+Uwaga: większość użytkowników, zwłaszcza tych uczących się Denizen po raz pierwszy, powinna po prostu przejść do następnej strony przewodnika. Referencje te mogą być interesujące do późniejszego powrotu, gdy już nauczysz się Denizen w stopniu, jaki przewiduje ten przewodnik.
 
-- [Switches language doc](https://meta.denizenscript.com/Docs/Languages/script%20event%20switches)
-- [Player switches language doc](https://meta.denizenscript.com/Docs/Languages/player%20event%20switches)
-- [Advanced matching language doc](https://meta.denizenscript.com/Docs/Languages/advanced%20script%20event%20matching)
-- [Cancellation language doc](https://meta.denizenscript.com/Docs/Languages/script%20event%20cancellation)
-- [Special contexts language doc](https://meta.denizenscript.com/Docs/Languages/script%20event%20special%20contexts)
-- [After vs On language doc](https://meta.denizenscript.com/Docs/Languages/script%20event%20after%20vs%20on)
-- [Safety in events language doc](https://meta.denizenscript.com/Docs/Languages/safety%20in%20events)
-- [Priority language doc](https://meta.denizenscript.com/Docs/Languages/script%20event%20priority)
-- [Bukkit priority language doc](https://meta.denizenscript.com/Docs/Languages/bukkit%20event%20priority)
-- [World script containers doc](https://meta.denizenscript.com/Docs/Languages/world%20script%20containers)
-- [List of all world events](https://meta.denizenscript.com/Docs/Events/)
+- [Dokumentacja języka Switches](https://meta.denizenscript.com/Docs/Languages/script%20event%20switches)
+- [Dokumentacja języka Player switches](https://meta.denizenscript.com/Docs/Languages/player%20event%20switches)
+- [Dokumentacja języka Advanced matching](https://meta.denizenscript.com/Docs/Languages/advanced%20script%20event%20matching)
+- [Dokumentacja języka Cancellation](https://meta.denizenscript.com/Docs/Languages/script%20event%20cancellation)
+- [Dokumentacja języka Special contexts](https://meta.denizenscript.com/Docs/Languages/script%20event%20special%20contexts)
+- [Dokumentacja języka After vs On](https://meta.denizenscript.com/Docs/Languages/script%20event%20after%20vs%20on)
+- [Dokumentacja języka Safety in events](https://meta.denizenscript.com/Docs/Languages/safety%20in%20events)
+- [Dokumentacja języka Priority](https://meta.denizenscript.com/Docs/Languages/script%20event%20priority)
+- [Dokumentacja języka Bukkit priority](https://meta.denizenscript.com/Docs/Languages/bukkit%20event%20priority)
+- [Dokumentacja kontenerów skryptów świata](https://meta.denizenscript.com/Docs/Languages/world%20script%20containers)
+- [Lista wszystkich zdarzeń świata](https://meta.denizenscript.com/Docs/Events/)

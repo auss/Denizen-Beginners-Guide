@@ -1,56 +1,56 @@
-An Item Quest (PARTIAL)
--------------
+Zadanie na przedmiot (Item Quest) (CZĘŚCIOWY OPIS)
+----------------------------------------------
 
-**TODO: Notice about required section reading before starting this.**
+**TODO: Informacja o wymaganych sekcjach do przeczytania przed rozpoczęciem.**
 
-**TODO: Write-up guiding players from start to finish through writing an NPC-driven get-me-an-item quest.**
+**TODO: Opis prowadzący graczy od początku do końca przez proces pisania zadania opartego na NPC polegającego na przyniesieniu przedmiotu.**
 
-### Sample Script
+### Przykładowy skrypt
 
-This guide has not yet been written, however, here is a script with in-file explanation comments that demonstrates one possible implementation of an NPC-driven item quest.
+Ten przewodnik nie został jeszcze napisany, jednak poniżej znajduje się skrypt z komentarzami wyjaśniającymi wewnątrz pliku, który demonstruje jedną z możliwych implementacji zadania polegającego na przyniesieniu przedmiotu.
 
-This sample assumes you have a **modern Denizen configuration file**. That is, your `plugins/Denizen/config.yml` was generated after November 2021 (Release 1750 or later). If your config is older but you wish to use this script, you can either
-- A: Delete your `config.yml` file and restart your server so Denizen can regenerate it.
-- or B: go into your `config.yml` in your text editor, find the line `Queue speed: 0.5s` under `Interact:`, and change the `0.5s` to `instant`, then `/denizen reload config`
+Ten przykład zakłada, że posiadasz **nowoczesny plik konfiguracyjny Denizen**. Oznacza to, że Twój plik `plugins/Denizen/config.yml` został wygenerowany po listopadzie 2021 roku (Release 1750 lub nowszy). Jeśli Twoja konfiguracja jest starsza, a chcesz użyć tego skryptu, możesz:
+- A: Usunąć plik `config.yml` i zrestartować serwer, aby Denizen wygenerował go ponownie.
+- B: Wejść do pliku `config.yml` w edytorze tekstu, znaleźć linię `Queue speed: 0.5s` pod `Interact:` i zmienić `0.5s` na `instant`, a następnie wpisać `/denizen reload config`.
 
-This script is designed such that you could copy/paste and load it in to your server, and assign it to NPCs with the commands listed at its top, and it will all work. You can then customize it and/or use it as a reference to learn from.
+Ten skrypt jest zaprojektowany tak, abyś mógł go skopiować, załadować na serwer i przypisać do NPC za pomocą poleceń wymienionych na jego początku. Możesz go następnie dostosować lub użyć jako punktu odniesienia do nauki.
 
-This may be easier to read within [the script editor](/guides/first-steps/script-editor) than on this webpage.
+Skrypt może być łatwiejszy do czytania w [edytorze skryptów](/guides/first-steps/script-editor) niż na tej stronie.
 
-Here's a [Script Pastebin Link](https://paste.denizenscript.com/View/89670) for the sample script below.
+Oto [Link do Pastebina ze skryptem](https://paste.denizenscript.com/View/89670) dla poniższego przykładu.
 
 ```dscript_green
-# | To use this script:
+# | Aby użyć tego skryptu:
 # /npc create Questy McQuestface
 # /npc assignment --set item_questgiver_assign
-# Then go to the destination area
+# Następnie udaj się do miejsca docelowego
 # /npc create Thiefy McThiefface
 # /npc assignment --set item_quest_goal_assign
-# For beginner usage, you can simply copy/paste and fill in the details (item name, chat messages, etc)
-# If using multiple times, be sure to rename each script container appropriately
-# If you're testing the script and want to manually reset your cooldown, you can use:
+# Początkujący użytkownicy mogą po prostu skopiować/wkleić i uzupełnić szczegóły (nazwa przedmiotu, wiadomości itp.)
+# Jeśli używasz skryptu wielokrotnie, pamiętaj o odpowiedniej zmianie nazw kontenerów
+# Jeśli testujesz skrypt i chcesz ręcznie zresetować czas odnowienia, użyj:
 # /ex zap item_questgiver_interact *
-# Don't forget to add 'debug: false' on each container when you're done testing.
+# Nie zapomnij dodać 'debug: false' do każdego kontenera po zakończeniu testów.
 
 
 
-# First, we define a custom item for the quest to use
+# Najpierw definiujemy własny przedmiot dla zadania
 my_item_quest_item:
     type: item
-    # Probably make it something the player wouldn't steal
+    # Najlepiej wybrać coś, czego gracz nie chciałby ukraść
     material: golden_hoe
-    # Make it look important
-    display name: <&b><bold>Priceless Heirloom
+    # Niech wygląda na coś ważnego
+    display name: <&b><bold>Bezcenne Dziedzictwo
     lore:
-    - <&7>Questy McQuestface's priceless family heirloom.
-    - <&6>[Must Return To Quest Town]
-    # We can give a useless enchantment and hide it to add a glow effect to the item
+    - <&7>Bezcenne dziedzictwo rodzinne Questy'ego McQuestface'a.
+    - <&6>[Musi powrócić do Miasta Zadań]
+    # Możemy dodać bezużyteczne zaklęcie i ukryć je, aby dodać efekt świecenia przedmiotowi
     enchantments:
     - lure:1
     mechanisms:
         hides: all
 
-# Now, we make an assignment and interact script for the quest giver - the one that needs an item brought back
+# Teraz tworzymy skrypt przypisania i interakcji dla zleceniodawcy zadania - tego, który potrzebuje przedmiotu
 item_questgiver_assign:
     type: assignment
     actions:
@@ -64,92 +64,90 @@ item_questgiver_assign:
 item_questgiver_interact:
     type: interact
     steps:
-        # The default step will be offering the quest to any passers by
+        # Domyślny krok to oferowanie zadania przechodniom
         default*:
-            # First: when players walk close, say hi
+            # Najpierw: gdy gracz podejdzie blisko, przywitaj się
             proximity trigger:
                 entry:
                     script:
-                    - chat "Hey! Over here! I need help!"
+                    - chat "Hej! Tutaj! Potrzebuję pomocy!"
             click trigger:
                 script:
-                - chat "Hi <player.name>! Can you help me? I lost my valuable item!"
-                # Use click_chat to make chat triggers easier, and on_hover to make it clear that the text is clickable
-                - narrate "<&7>[<element[<&b>Yes I accept].click_chat[yes].on_hover[Click to start quest]> or <element[<&b>No not right now].click_chat[no].on_hover[Click to refuse quest]>]"
-                # Jump to the possible acceptance step, with a duration limit to be safe (if the player does nothing for 5 minutes, reset to default step again)
+                - chat "Witaj <player.name>! Czy możesz mi pomóc? Zgubiłem mój cenny przedmiot!"
+                # Użyj click_chat, aby ułatwić wybór odpowiedzi, oraz on_hover, aby było jasne, że tekst można kliknąć
+                - narrate "<&7>[<element[<&b>Tak, akceptuję].click_chat[tak].on_hover[Kliknij, aby rozpocząć zadanie]> lub <element[<&b>Nie, nie teraz].click_chat[nie].on_hover[Kliknij, aby odmówić]>]"
+                # Przejdź do kroku akceptacji z limitem czasowym (jeśli gracz nic nie zrobi przez 5 minut, wróć do kroku domyślnego)
                 - zap wait_for_accept 5m
-        # After clicking the NPC, this step is used to allow the player to accept or refuse the quest
+        # Po kliknięciu NPC, ten krok pozwala graczowi zaakceptować lub odrzucić zadanie
         wait_for_accept:
-            # If the player doesn't speak and just clicks the NPC again...
+            # Jeśli gracz nic nie powie i po prostu kliknie NPC ponownie...
             click trigger:
                 script:
-                - chat "... Well? Yes or no?!"
-                # Copy/paste the narrate.
-                # In some cases it might be better to move this into a task script or a data key for reuse, but copy/pasta is quick and easy for just one duplicate.
-                - narrate "<&7>[<element[<&b>Yes I accept].click_chat[yes].on_hover[Click to start quest]> or <element[<&b>No not right now].click_chat[no].on_hover[Click to refuse quest]>]"
+                - chat "... I co? Tak czy nie?!"
+                - narrate "<&7>[<element[<&b>Tak, akceptuję].click_chat[tak].on_hover[Kliknij, aby rozpocząć zadanie]> lub <element[<&b>Nie, nie teraz].click_chat[nie].on_hover[Kliknij, aby odmówić]>]"
             chat trigger:
                 1:
-                    # If the player says yes...
-                    trigger: /Yes/ I accept
+                    # Jeśli gracz powie tak...
+                    trigger: /Tak/ akceptuję
                     script:
-                    # Tell the player the quest
-                    - chat "Great! Thiefy McThiefface has my item over in Destination Townshiplandplaceville."
-                    - chat "It's a priceless family heirloom and I need it returned! I'll reward you well!"
-                    - narrate "<&7>[Quest <&b><bold>Priceless Example Quest Of Generations<&7> accepted. Travel to Destination Townshiplandplaceville and speak to Thiefy McThiefface.]"
-                    # Jump the goal NPC's script to correct step for when the quest is active
+                    # Wyjaśnij zadanie
+                    - chat "Świetnie! Thiefy McThiefface ma mój przedmiot w Miejscowości Docelowej."
+                    - chat "To bezcenne dziedzictwo rodzinne i muszę je odzyskać! Dobrze cię nagrodzę!"
+                    - narrate "<&7>[Zadanie <&b><bold>Bezcenne Dziedzictwo Pokoleń<&7> zaakceptowane. Udaj się do Miejscowości Docelowej i porozmawiaj z Thiefym McThiefface.]"
+                    # Przestaw skrypt docelowego NPC na odpowiedni krok
                     - zap item_quest_goal_interact can_give_item
-                    # Jump this NPC to the waiting step
+                    # Przestaw tego NPC na krok oczekiwania na powrót
                     - zap wait_for_return
                 2:
-                    # But also the player can refuse...
-                    trigger: /No/ not right now
+                    # Ale gracz może też odmówić...
+                    trigger: /Nie/ nie teraz
                     script:
-                    - chat "Okay. Maybe somebody more cool and heroic than you will do my quest for me."
-                    - narrate "<&7>[Quest refused]"
+                    - chat "No dobrze. Może ktoś bardziej bohaterski od ciebie wykona to zadanie."
+                    - narrate "<&7>[Zadanie odrzucone]"
                     - zap *
-            # If the player walks away after clicking the NPC, reset to default step
+            # Jeśli gracz odejdzie po kliknięciu NPC, zresetuj do kroku domyślnego
             proximity trigger:
                 exit:
                     script:
-                    - chat "Wow! Rude! Not even a simple 'no'? :("
-                    - narrate "<&7>[Quest refused]"
+                    - chat "Wow! Niegrzecznie! Nawet zwykłego 'nie'? :("
+                    - narrate "<&7>[Zadanie odrzucone]"
                     - zap *
-        # This step handles when the player has the quest, but has not yet returned the item
+        # Ten krok obsługuje sytuację, gdy gracz ma zadanie, ale jeszcze nie zwrócił przedmiotu
         wait_for_return:
             click trigger:
-                # If the player has the item,
+                # Jeśli gracz ma przedmiot,
                 1:
                     trigger: my_item_quest_item
                     script:
-                    # Thank the player and take the item
-                    - chat "Wow! My heirloom!"
+                    # Podziękuj i zabierz przedmiot
+                    - chat "Ojej! Moje dziedzictwo!"
                     - take item:my_item_quest_item
-                    - narrate "<&7>[<&b><bold>Priceless Family Heirloom<&7> removed]"
-                    - chat "Thank you adventurer! Here's your reward!"
-                    # Maybe show some pretty effects to make the player feel special
-                    - toast "Quest Complete: <&b><bold>Priceless Example Quest Of Generations" icon:my_item_quest_item
-                    # Give a reward - xp in this case, maybe instead give money or something like that
+                    - narrate "<&7>[<&b><bold>Bezcenne Dziedzictwo Rodzinne<&7> usunięte]"
+                    - chat "Dziękuję podróżniku! Oto Twoja nagroda!"
+                    # Można dodać ładny efekt, aby gracz poczuł się doceniony
+                    - toast "Zadanie ukończone: <&b><bold>Bezcenne Dziedzictwo Pokoleń" icon:my_item_quest_item
+                    # Daj nagrodę - w tym przypadku XP, można też dać pieniądze itp.
                     - give xp quantity:1000
-                    - narrate "<&7>[Got <&b>1000 XP<&7>]"
-                    # Jump to the idle 'on_cooldown' step for a cooldown duration. When the duration is up, the player will automatically reset to the default step.
-                    - narrate "<&7>[Quest <&b><bold>Priceless Example Quest Of Generations<&7> complete. May be repeated in 3 days.]"
+                    - narrate "<&7>[Otrzymano <&b>1000 XP<&7>]"
+                    # Przejdź do kroku 'on_cooldown' na określony czas. Po jego upływie gracz wróci do kroku domyślnego.
+                    - narrate "<&7>[Zadanie <&b><bold>Bezcenne Dziedzictwo Pokoleń<&7> ukończone. Można powtórzyć za 3 dni.]"
                     - zap on_cooldown 3d
-                    # TODO: You should consider what happens if the player simply loses the item. Do you prevent this via world script events (player drops item / clicks in inventory), or add a backup time limit, or...?
+                    # TODO: Rozważ, co się stanie, gdy gracz zgubi przedmiot. Możesz temu zapobiec skryptem world (wyrzucanie/klikanie w ekwipunku) lub dodać zapasowy limit czasu...
                 2:
-                    # If the player lacks the item,
+                    # Jeśli gracz nie ma przedmiotu,
                     script:
-                    - chat "Well? Where is it!?"
-                    # Remind the player of their quest
-                    - narrate "<&7>[Travel to Destination Townshiplandplaceville and speak to Thiefy McThiefface.]"
-        # This step is idly waited on for the cooldown duration of the quest
+                    - chat "No i co? Gdzie on jest!?"
+                    # Przypomnij o zadaniu
+                    - narrate "<&7>[Udaj się do Miejscowości Docelowej i porozmawiaj z Thiefym McThiefface.]"
+        # Ten krok to oczekiwanie na odnowienie zadania
         on_cooldown:
             click trigger:
                 script:
-                # Tell the player they're still on cooldown so they don't get confused
-                - narrate "Thanks for returning my item :D"
-                - narrate "<&7>[You may repeat this quest after <&b><script.step_expiration.from_now.formatted><&7>]"
+                # Poinformuj gracza o czasie oczekiwania
+                - narrate "Dzięki za zwrócenie mojego przedmiotu :D"
+                - narrate "<&7>[Możesz powtórzyć to zadanie za <&b><script.step_expiration.from_now.formatted><&7>]"
 
-# Now an assignment and interact for the destination - the NPC that has the item to be retrieved
+# Skrypt przypisania i interakcji dla celu podróży - NPC, który ma przedmiot do odzyskania
 item_quest_goal_assign:
     type: assignment
     actions:
@@ -162,45 +160,41 @@ item_quest_goal_assign:
 item_quest_goal_interact:
     type: interact
     steps:
-        # The default step: if you're not on the quest, begone!
+        # Krok domyślny: jeśli nie masz zadania, precz!
         default*:
             click trigger:
                 script:
-                - chat "Who are you? What do you want?"
-        # This step is for players that are on the quest already, to initially speak with the NPC
+                - chat "Kim jesteś? Czego chcesz?"
+        # Ten krok jest dla graczy z aktywnym zadaniem
         can_give_item:
             click trigger:
                 script:
-                # Give the player some interaction options
-                - chat "Questy McQuestface sent you, didn't he?"
-                - narrate "<&7>[<element[<&b>Yes, give me his item back now!].click_chat[yes].on_hover[Click here to advance quest]> or <element[<&b>No I don't know what you're talking about].click_chat[no].on_hover[Don't click this]><&7>]"
-                # Note for caution: if you put a cooldown on this, it would revert to the default step, which is bad, so don't do that.
+                # Daj graczowi opcje interakcji
+                - chat "Questy McQuestface cię przysłał, prawda?"
+                - narrate "<&7>[<element[<&b>Tak, oddawaj jego przedmiot!].click_chat[tak].on_hover[Kliknij, aby kontynuować zadanie]> lub <element[<&b>Nie, nie wiem o czym mówisz].click_chat[nie].on_hover[Nie klikaj tego]><&7>]"
                 - zap give_item
-        # This step is to talk to the NPC and get the item
+        # Krok rozmowy z NPC w celu odebrania przedmiotu
         give_item:
             click trigger:
                 script:
-                # This part, same idea as the wait_for_accept click trigger in the previous interact script above
-                - narrate "<&7>[<element[<&b>Yes, give me his item back now!].click_chat[yes].on_hover[Click here to advance quest]> or <element[<&b>No I don't know what you're talking about].click_chat[no].on_hover[Don't click this]><&7>]"
+                - narrate "<&7>[<element[<&b>Tak, oddawaj jego przedmiot!].click_chat[tak].on_hover[Kliknij, aby kontynuować zadanie]> lub <element[<&b>Nie, nie wiem o czym mówisz].click_chat[nie].on_hover[Nie klikaj tego]><&7>]"
             chat trigger:
                 1:
-                    trigger: /Yes/ I can take it back
+                    trigger: /Tak/ mogę go zabrać
                     script:
-                    - chat "Oh dang okay fine take it i didn't even want it anyway"
+                    - chat "O rany, no dobra, bierz go, i tak go nie chciałem"
                     - give my_item_quest_item
-                    - narrate "<&7>[Return the <&b><bold>Priceless Family Heirloom<&7> to Questy McQuestface]"
-                    # Jump to a waiting step in case the player tries to interact with this NPC more
-                    # This can have a cooldown - after it's up, they go back to the default step, which is idly waiting
+                    - narrate "<&7>[Zwróć <&b><bold>Bezcenne Dziedzictwo Rodzinne<&7> do Questy'ego McQuestface'a]"
+                    # Przejdź do kroku oczekiwania w razie dalszych interakcji
                     - zap please_return_it 1h
                 2:
-                    # It can sometimes be nice to have a 'no' button even if it doesn't do anything useful
-                    trigger: /No/ I don't know what you're talking about
+                    trigger: /Nie/ nie wiem o czym mówisz
                     script:
-                    - chat "... oh okay go away then"
+                    - chat "... o, no dobra, to idź sobie"
                     - zap can_give_item
-        # This step is for players that already took the item but are trying to interact with the NPC more
+        # Krok dla graczy, którzy już zabrali przedmiot
         please_return_it:
             click trigger:
                 script:
-                - chat "Well?! You got your heirloom! Go away!"
+                - chat "No co?! Masz już to swoje dziedzictwo! Idź sobie!"
 ```

@@ -1,28 +1,28 @@
-Working With and Building Denizen
----------------------------------
+Praca z Denizen i jego budowanie
+--------------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### Prerequisites
+### Wymagania wstępne
 
-Make sure you have the following tools installed on your machine:
+Upewnij się, że masz zainstalowane następujące narzędzia:
 
-- Some form of git. We recommend [GitHub Desktop](https://desktop.github.com/) <span class="parens">(if you're using Linux, don't worry, there's probably a package for your distro)</span>.
-- [IntelliJ IDEA](https://www.jetbrains.com/idea/). This editor is specifically designed for Java projects and will handle dependencies on its own.
+- Git. Polecamy [GitHub Desktop](https://desktop.github.com/) <span class="parens">(jeśli używasz Linuxa, prawdopodobnie znajdziesz odpowiedni pakiet dla swojej dystrybucji)</span>.
+- [IntelliJ IDEA](https://www.jetbrains.com/idea/). Ten edytor jest specjalnie zaprojektowany dla projektów w Javie i sam zajmie się obsługą zależności.
 
-### Building Spigot
+### Budowanie Spigota
 
-To build Denizen, you'll also need to build the supported versions of Spigot, which you can find on the [project README](https://github.com/DenizenScript/Denizen#readme). To do this, Spigot provides a tool called [BuildTools](https://www.spigotmc.org/wiki/buildtools/). This cannot be substituted with prebuilt jars or forks, as it must be built into your local maven repo.
+Aby zbudować Denizen, będziesz musiał również zbudować wspierane wersje Spigota, które znajdziesz w [pliku README projektu](https://github.com/DenizenScript/Denizen#readme). Spigot udostępnia do tego narzędzie zwane [BuildTools](https://www.spigotmc.org/wiki/buildtools/). Nie można go zastąpić gotowymi plikami jar ani forkami, ponieważ biblioteki muszą zostać zbudowane bezpośrednio w Twoim lokalnym repozytorium Maven.
 
-Follow the setup instructions and then run the BuildTools jar for each version supported by Denizen. This should be a command like `java -jar BuildTools.jar --rev 1.21.1 --remapped`.
+Postępuj zgodnie z instrukcjami konfiguracji, a następnie uruchom plik jar BuildTools dla każdej wersji wspieranej przez Denizen. Powinno to być polecenie typu: `java -jar BuildTools.jar --rev 1.21.1 --remapped`.
 
-### Building Denizen
+### Budowanie Denizen
 
-1. Clone the Denizen repository: https://github.com/DenizenScript/Denizen
-2. Open the cloned folder with IntelliJ.
-3. Open the Maven tab, select `denizen-parent`, and click "Run Maven Build" <span class="parens">(the green arrow)</span>.
+1. Sklonuj repozytorium Denizen: https://github.com/DenizenScript/Denizen
+2. Otwórz sklonowany folder w IntelliJ.
+3. Otwórz kartę Maven, wybierz `denizen-parent` i kliknij „Run Maven Build” <span class="parens">(zielona strzałka)</span>.
 
-After building, the jar will be available in the `target` folder. You can stick this into your test server's plugins folder and all of Denizen should be available. You can repeat step 3 to build the project after making any desired changes.
+Po zbudowaniu plik jar będzie dostępny w folderze `target`. Możesz go włożyć do folderu plugins swojego serwera testowego. Możesz powtarzać krok 3, aby budować projekt po wprowadzeniu jakichkolwiek zmian w kodzie.

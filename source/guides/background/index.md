@@ -1,9 +1,9 @@
-Background
+Wprowadzenie
 ----------
 
-This section will explain the basic idea of what Denizen is, and show you some of what Denizen can do.
+Ta sekcja wyjaśni podstawową ideę tego, czym jest Denizen i pokaże Ci niektóre z rzeczy, które Denizen potrafi.
 
-If you already get the idea of what it *can* do, and want to dive straight in to learning *how* to do things, you can jump ahead to the [Your First Steps](/guides/first-steps/index) section.
+Jeśli już rozumiesz, co *można* z nim zrobić i chcesz przejść od razu do nauki *tego, jak* to robić, możesz przejść do sekcji [Twoje pierwsze kroki](/guides/first-steps/index).
 
 ``` toctree::
     :maxdepth: 1

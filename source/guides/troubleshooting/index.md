@@ -1,5 +1,5 @@
-Troubleshooting
----------------
+Rozwiązywanie problemów
+-----------------------
 
 ``` toctree::
     :maxdepth: 1

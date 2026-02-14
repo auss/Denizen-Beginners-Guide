@@ -1,71 +1,71 @@
-Setting Up Your Script Editor
+Konfiguracja edytora skryptów
 -----------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### The Editor
+### Edytor
 
 ![](images/scripteditor.png)
 
-The officially recommended way to edit Denizen scripts is using VS Code, with the Denizen extension!
+Oficjalnie zalecanym sposobem edycji skryptów Denizen jest użycie VS Code z rozszerzeniem Denizen!
 
-### Installation
+### Instalacja
 
-- First, download and install [VS Code](https://code.visualstudio.com/). Note that this is NOT "Visual Studio" despite half of its name being that. <span class="parens">(The naming is rather confusing, unfortunately. Microsoft's doing...)</span>
-- Second, after VS Code is installed, you can install the [Denizen extension](https://marketplace.visualstudio.com/items?itemName=DenizenScript.denizenscript) by clicking the green "Install" button on the linked page.
-- <span class="parens">(The extension will also automatically install [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0). Some users have reported needing to restart their PC for this install to fully complete.)</span>
+- Po pierwsze, pobierz i zainstaluj [VS Code](https://code.visualstudio.com/). Pamiętaj, że to NIE jest to samo co „Visual Studio”, mimo podobnej nazwy. <span class="parens">(Nazewnictwo jest niestety dość mylące. To sprawka Microsoftu...)</span>
+- Po drugie, po zainstalowaniu VS Code możesz zainstalować [rozszerzenie Denizen](https://marketplace.visualstudio.com/items?itemName=DenizenScript.denizenscript), klikając zielony przycisk „Install” na podlinkowanej stronie.
+- <span class="parens">(Rozszerzenie automatycznie zainstaluje również środowisko [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0). Niektórzy użytkownicy zgłaszali konieczność ponownego uruchomienia komputera, aby ta instalacja została w pełni ukończona)</span>.
 
-### Usage
+### Sposób użycia
 
-- Open your scripts folder with VS Code - that's `plugins/Denizen/scripts/` within your server directory <span class="parens">(the folder itself, not individual files - you can see the file tree on the left side of the editor)</span>.
-- The Denizen extension will automatically be active on any files that have the `.dsc` file extension. <span class="parens">(note: historically, the `.yml` extension was used for scripts. This is no longer a recommended file extension, and `.yml` files will not have Denizen script highlighting. You must use `.dsc`).
-- For the most part, just start editing your script files the same way you would edit any text file within VS Code.
+- Otwórz folder ze skryptami w VS Code – znajduje się on w `plugins/Denizen/scripts/` w katalogu Twojego serwera <span class="parens">(otwórz sam folder, a nie pojedyncze pliki – dzięki temu zobaczysz drzewo plików po lewej stronie edytora)</span>.
+- Rozszerzenie Denizen będzie automatycznie aktywne dla wszystkich plików z rozszerzeniem `.dsc`. <span class="parens">(Uwaga: historycznie dla skryptów używano rozszerzenia `.yml`. Nie jest ono już zalecane, a pliki `.yml` nie będą miały podświetlania składni Denizen. Musisz używać `.dsc`)</span>.
+- W większości przypadków po prostu zacznij edytować pliki skryptów w taki sam sposób, w jaki edytowałbyś dowolny plik tekstowy w VS Code.
 
-### Guide Following
+### Korzystanie z przewodnika
 
-If you're following the guide for the first time, just get the editor installed per the instructions above and move on to the next page. The rest of this page is for users who want to learn more about the script editor's capabilities.
+Jeśli korzystasz z przewodnika po raz pierwszy, po prostu zainstaluj edytor zgodnie z powyższymi instrukcjami i przejdź do następnej strony. Reszta tej strony jest dla użytkowników, którzy chcą dowiedzieć się więcej o możliwościach edytora skryptów.
 
-### Features
+### Funkcje
 
-- While viewing a `.dsc` file, syntax will automatically be highlighted appropriately for Denizen scripts.
+- Podczas przeglądania pliku `.dsc` składnia będzie automatycznie odpowiednio podświetlana dla skryptów Denizen.
 
 <br>
 
-- As you write scripts, the extension will check for errors and highlight them when found. They will also be listed in VS Code's "problems" list.
+- Podczas pisania skryptów rozszerzenie będzie sprawdzać błędy i podświetlać je, gdy zostaną znalezione. Zostaną one również wymienione na liście „Problems” (Problemy) w VS Code.
 
 ![](images/error-checking.png)
 
 <br>
 
-- If you type the name of a container like `task` at the start of a line, you can use tab-complete to insert a snippet of the container.
+- Jeśli wpiszesz nazwę kontenera, taką jak `task`, na początku linii, możesz użyć autouzupełniania (tab-complete), aby wstawić szkielet (snippet) tego kontenera.
 
 ![](images/snippet_demo.gif)
 
 <br>
 
-- At any time you can hover your mouse over any command, tag, event, container type, ... to view a preview of meta-documentation for that value.
+- W dowolnym momencie możesz najechać myszą na dowolne polecenie, tag, zdarzenie, typ kontenera..., aby wyświetlić podgląd meta-dokumentacji dla tej wartości.
 
 ![](images/hover_meta_doc.png)
 
 <br>
 
-- While typing commands/tags/etc. you will be shown tab completion options for all the valid tags/commands/etc and their meta docs.
+- Podczas wpisywania poleceń/tagów/itp. wyświetlane będą opcje autouzupełniania dla wszystkich prawidłowych tagów/poleceń/itp. wraz z ich dokumentacją.
 
 ![](images/docs_as_you_type.gif)
 
-Note: if you only see the tab complete without full docs, click the little arrow on the right.
+Uwaga: jeśli widzisz tylko autouzupełnianie bez pełnej dokumentacji, kliknij małą strzałkę po prawej stronie.
 
 ![](images/expand_meta_docs.png)
 
 <br>
 
-- In a few places, you will also be shown tab completion options for core data types like materials, entity types, etc.
+- W kilku miejscach zobaczysz również opcje autouzupełniania dla podstawowych typów danych, takich jak materiały, typy encji itp.
 
 ![](images/item_tab_complete.png)
 
 <br>
 
-- If you open VS Code's settings window and search `Denizen`, you will have a variety of options to enable/disable various features, change syntax highlighting colors, etc.
+- Jeśli otworzysz okno ustawień VS Code i wyszukasz `Denizen`, znajdziesz szereg opcji umożliwiających włączenie/wyłączenie różnych funkcji, zmianę kolorów podświetlania składni itp.

@@ -1,56 +1,56 @@
-How Sample Scripts Are Formatted In This Guide
-----------------------------------------------
+Jak sformatowane są przykładowe skrypty w tym przewodniku
+---------------------------------------------------------
 
-When you see a sample script anywhere in this guide, it wil be categorized into one of three color-coded types: Good, Needs-Change, or Bad.
+Kiedy zobaczysz przykładowy skrypt w dowolnym miejscu tego przewodnika, będzie on zakwalifikowany do jednego z trzech typów oznaczonych kolorami: Dobre, Wymagające zmiany lub Złe.
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### Good Scripts
+### Dobre skrypty
 
 ```dscript_green
 my_good_script:
     type: task
     script:
-    - narrate "This script can be dropped in!"
+    - narrate "Ten skrypt można po prostu wkleić!"
 ```
 
-Good scripts have a green outline. These scripts are good enough to be put into a server as-is and will work (though won't necessarily have much use).
+Dobre skrypty mają zieloną obwódkę. Skrypty te nadają się do wstawienia na serwer w obecnej formie i będą działać (choć niekoniecznie będą miały wielkie zastosowanie).
 
-### Needs-Change Scripts
+### Skrypty wymagające zmian
 
 ```dscript_blue
 my_changeable_script:
     type: task
     script:
-    - narrate "You'll have to fill this in"
-    - wait (Put your delay here)
-    - (put more commands here)
+    - narrate "Będziesz musiał to uzupełnić"
+    - wait (Wpisz tutaj swoje opóźnienie)
+    - (tutaj wpisz więcej poleceń)
 ```
 
-Scripts that are good but need changes to work have a blue outline. These scripts usually demonstrate a syntax or contain only part of a script. If you want to try one, you'll have to fill in the missing pieces before loading it in.
+Skrypty, które są dobre, ale wymagają zmian do działania, mają niebieską obwódkę. Zazwyczaj prezentują one konkretną składnię lub zawierają tylko fragment skryptu. Jeśli chcesz taki wypróbować, będziesz musiał uzupełnić brakujące elementy przed załadowaniem go.
 
-### Imperfect Scripts
+### Nieidealne skrypty
 
 ```dscript_yellow
 my_imperfect_script:
     type: task
     script:
-    - narrate "ur flag is <player.flag[waffle]> unless <player.has_flag[waffle]> is false oopsie"
+    - narrate "twoja flaga to <player.flag[waffle]>, chyba że <player.has_flag[waffle]> to fałsz, ojej"
 ```
 
-Imperfect scripts have a yellow outline. These scripts are valid for learning material but shouldn't be used as-is.
+Nieidealne skrypty mają żółtą obwódkę. Są one poprawne jako materiał do nauki, ale nie powinny być używane w takiej formie.
 
-### Bad Scripts
+### Złe skrypty
 
 ```dscript_red
 my_bad_script:
     type: tusk
     scrapt:
     - delete system32
-    - narrote 'This ain't work""
+    - narrote 'To nie zadziala""
 ```
 
-Scripts that are bad and should not be used have a red outline. These scripts usually demonstrate common mistakes or pitfalls, and are presented only as examples of what **NOT** to do. These scripts may contain typos, errors, misformatting, bad logic, or even just simply outdated syntaxes.
+Skrypty, które są złe i nie powinny być używane, mają czerwoną obwódkę. Zazwyczaj prezentują one powszechne błędy lub pułapki i są przedstawiane wyłącznie jako przykłady tego, czego **NIE** robić. Skrypty te mogą zawierać literówki, błędy, złe formatowanie, błędną logikę lub po prostu przestarzałą składnię.

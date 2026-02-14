@@ -1,32 +1,32 @@
-An Inventory GUI Menu
+Menu GUI w ekwipunku
 ---------------------
 
-This page will guide you through creating a basic Inventory GUI Menu in Denizen. It is expected that you've already gone through the [First Steps](/guides/first-steps/index) section and the [Basics](/guides/basics/index) section, as this page will use tools taught in those earlier sections.
+Ta strona poprowadzi Cię przez proces tworzenia podstawowego menu GUI w ekwipunku za pomocą Denizen. Zakłada się, że zapoznałeś się już z sekcjami [Pierwsze kroki](/guides/first-steps/index) oraz [Podstawy](/guides/basics/index), ponieważ na tej stronie używane będą narzędzia omówione wcześniej.
 
-In particular, this section will make use of: [the /ex command](/guides/first-steps/ex-command), [world scripts](/guides/first-steps/world-script), [meta documentation](/guides/basics/finding-tools), and [item scripts](/guides/basics/custom-items).
+W szczególności sekcja ta wykorzystuje: [polecenie /ex](/guides/first-steps/ex-command), [skrypty world](/guides/first-steps/world-script), [meta-dokumentację](/guides/basics/finding-tools) oraz [skrypty przedmiotów](/guides/basics/custom-items).
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### Introduction
+### Wstęp
 
-Inventory GUIs are among the most common ways to implement simple menu systems on Minecraft servers. They generally consist of the Minecraft chest interface, with some items in it that can be clicked on to activate options.
+GUI w ekwipunku to jeden z najczęstszych sposobów na implementację prostych systemów menu na serwerach Minecraft. Zazwyczaj opierają się one na interfejsie skrzyni, w której znajdują się przedmioty pełniące rolę przycisków – ich kliknięcie aktywuje określone opcje.
 
 ![](images/inv_gui_sample.png)
 
-An inventory GUI menu like this can be made in Denizen a few different ways, the easiest of which is to use the dedicated tool for the job: an [`inventory` script container](https://meta.denizenscript.com/Docs/Languages/inventory%20script%20containers).
+Takie menu można stworzyć w Denizen na kilka sposobów, z których najprostszym jest użycie dedykowanego narzędzia: [kontenera skryptu `inventory`](https://meta.denizenscript.com/Docs/Languages/inventory%20script%20containers).
 
-### Initial Example
+### Początkowy przykład
 
-Here's what the basis of a valid inventory script looks like:
+Oto jak wygląda podstawa poprawnego skryptu ekwipunku:
 
 ```dscript_blue
 my_inventory_script:
     type: inventory
     inventory: chest
-    title: <&9><bold>My Inventory GUI Sample
+    title: <&9><bold>Moje przykładowe menu GUI
     gui: true
     slots:
     - [] [] [] [] [] [] [] [] []
@@ -34,27 +34,27 @@ my_inventory_script:
     - [] [] [] [] [] [] [] [] []
 ```
 
-This is largely just the `inventory` script container as documented in the meta, with a special note to make sure you set `gui: true`.
+Jest to w dużej mierze standardowy kontener skryptu `inventory` opisany w meta-dokumentacji, ze specjalnym uwzględnieniem klucza `gui: true`.
 
-For `chest` based interfaces, slots are in rows of 9 items each. Note that each slot is contained by `[` and `]`, for example `[stone]` in the center slot of that example, and empty slots are simply `[]`. This could alternately be written as `[air]`.
+Dla interfejsów opartych na skrzyniach (`chest`), sloty są ułożone w rzędach po 9 przedmiotów każdy. Zauważ, że każdy slot jest ujęty w nawiasy `[` i `]`, na przykład `[stone]` w środkowym slocie tego przykładu, a puste sloty to po prostu `[]`. Można to również zapisać jako `[air]`.
 
-#### How Do I Open That?
+#### Jak to otworzyć?
 
-You can open your new inventory menu by using [`inventory` command](https://meta.denizenscript.com/Docs/Commands/inventory), with the sub-command `open`, and the `destination` parameter set to the inventory script.
+Możesz otworzyć swoje nowe menu, używając [polecenia `inventory`](https://meta.denizenscript.com/Docs/Commands/inventory) z podpoleceniem `open` oraz parametrem `destination` ustawionym na nazwę skryptu ekwipunku.
 
-In practice, using an `/ex` command, you'd write something like: `/ex inventory open d:my_inventory_script`.
+W praktyce, używając polecenia `/ex`, napisałbyś coś w stylu: `/ex inventory open d:my_inventory_script`.
 
-When you try this command in-game, it should immediately pop open a chest view, with 3 rows of 9 slots each, where the exact center slot contains 1 single stone. You should be able to click the stone, however clicking it currently does nothing, and you also cannot move the stone item, nor put any of your own items into your inventory. This restriction is all thanks to the `gui: true` key on the inventory script.
+Gdy wypróbujesz to polecenie w grze, powinno natychmiast wyskoczyć okno skrzyni z 3 rzędami po 9 slotów, gdzie w samym środku znajduje się jeden kamień. Powinieneś móc kliknąć ten kamień, jednak obecnie nic się nie stanie. Nie będziesz też mógł go wyciągnąć ani włożyć własnych przedmiotów do tego menu. To ograniczenie zawdzięczamy właśnie kluczowi `gui: true` w skrypcie.
 
-### But I Want Menu Buttons, Not Stones!
+### Ale ja chcę przyciski, a nie kamienie!
 
-Generally you want buttons in a menu, not just generic items... however, buttons are really just slightly more complicated items. As you should recall, the tool for the job of "more complicated items" is, of course, item scripts! Let's see a new example, using item scripts:
+Zazwyczaj w menu potrzebujesz przycisków, a nie tylko zwykłych przedmiotów... jednak przyciski to tak naprawdę po prostu nieco bardziej skomplikowane przedmioty. Jak powinieneś pamiętać, narzędziem do tworzenia „bardziej skomplikowanych przedmiotów” są skrypty przedmiotów (item scripts)! Zobaczmy nowy przykład z ich wykorzystaniem:
 
 ```dscript_green
 my_inventory_script:
     type: inventory
     inventory: chest
-    title: <&9><bold>My Inventory GUI Sample
+    title: <&9><bold>Moje przykładowe menu GUI
     gui: true
     slots:
     - [] [] [] [] [] [] [] [] []
@@ -64,62 +64,62 @@ my_inventory_script:
 big_button_item:
     type: item
     material: beacon
-    display name: <&2>The Big Button
+    display name: <&2>Wielki Przycisk
     lore:
-    - <&7>Click here to press the button.
+    - <&7>Kliknij tutaj, aby nacisnąć przycisk.
 
 my_inv_gui_cancel_item:
     type: item
     material: barrier
-    display name: <&c>Cancel
+    display name: <&c>Anuluj
     lore:
-    - <&7>Click here to not press the button.
+    - <&7>Kliknij tutaj, aby nie naciskać przycisku.
 ```
 
-When you use the `/ex` command to open this inventory script, you should now see an interface containing two unique buttons. However, they still do nothing.
+Gdy użyjesz polecenia `/ex`, aby otworzyć ten skrypt ekwipunku, powinieneś zobaczyć interfejs zawierający dwa unikalne przyciski. Jednak wciąż nic nie robią.
 
-### So How Do I Make The Buttons Do Things?
+### Więc jak sprawić, by przyciski coś robiły?
 
-To make the buttons actually do something, you need the find important tool for this job: a `world` script, using the [player clicks &lt;item&gt; in &lt;inventory&gt;](https://meta.denizenscript.com/Docs/Events/player%20clicks%20in%20inventory) event.
+Aby przyciski faktycznie zaczęły działać, potrzebujesz innego ważnego narzędzia: skryptu typu `world`, wykorzystującego zdarzenie [player clicks &lt;item&gt; in &lt;inventory&gt;](https://meta.denizenscript.com/Docs/Events/player%20clicks%20in%20inventory).
 
-This world event has two parameters to fill in: the item, and the inventory. You can probably guess how to fill these, right? Use the name of your inventory script <span class="parens">(in our example, `my_inventory_script`)</span> as the `<inventory>`, and use the name of your item script <span class="parens">(in our example, `big_button_item` and `my_inv_gui_cancel_item`)</span> as the `<item>`.
+To zdarzenie posiada dwa parametry do uzupełnienia: przedmiot (`item`) oraz ekwipunek (`inventory`). Zapewne domyślasz się, jak je wypełnić? Użyj nazwy swojego skryptu ekwipunku <span class="parens">(w naszym przykładzie `my_inventory_script`)</span> jako `<inventory>` oraz nazw swoich skryptów przedmiotów <span class="parens">(w przykładzie `big_button_item` oraz `my_inv_gui_cancel_item`)</span> jako `<item>`.
 
-Let's see a valid world script for the above inventory script:
+Zobaczmy poprawny skrypt typu `world` dla powyższego menu:
 
 ```dscript_green
 my_inventory_gui_world:
     type: world
     events:
         after player clicks big_button_item in my_inventory_script:
-        - narrate "<&[base]>Wow! You pressed the button!"
+        - narrate "<&[base]>Wow! Nacisnąłeś przycisk!"
         after player clicks my_inv_gui_cancel_item in my_inventory_script:
         - inventory close
 ```
 
-This world script example registers two events - one for each of the two 'button' items in the inventory. When you load this script in and open your inventory script, you'll be able to click the beacon item to get a narrated message, or the barrier item to close the inventory, using the `close` sub-command of the `inventory` command.
+Ten przykładowy skrypt rejestruje dwa zdarzenia – po jednym dla każdego z dwóch przycisków w ekwipunku. Kiedy załadujesz ten skrypt i otworzysz swoje menu, będziesz mógł kliknąć latarnię (beacon), aby otrzymać wiadomość, lub barierę, aby zamknąć menu za pomocą podpolecenia `close` polecenia `inventory`.
 
-### That's It?
+### To wszystko?
 
-Yep, it's that simple! That's just about all you need to build your own inventory GUI menus. Take some time to experiment with the different options available - how does the menu look with different items or in different arrangements? What if you change the number of rows, or use alternate interface like `hopper`? What if you have multiple inventory scripts, where a button in the first inventory menu triggers an `inventory open` for the second inventory menu?
+Tak, to takie proste! To w zasadzie wszystko, czego potrzebujesz, aby budować własne menu GUI w ekwipunku. Poświęć trochę czasu na eksperymentowanie z różnymi opcjami – jak wygląda menu z innymi przedmiotami lub w innym układzie? Co jeśli zmienisz liczbę rzędów lub użyjesz innego interfejsu, np. leja (`hopper`)? Co jeśli będziesz miał wiele skryptów ekwipunku, gdzie przycisk w pierwszym menu otwiera drugie?
 
-### Going Beyond
+### Idąc dalej
 
-To really give your inventory menus some flair, you can take things a step further and make use of [Resource Packs](/guides/non-denizen/resource-packs) to make completely unique visual appearances for buttons, or even the entire menu itself. One common trick is to an image of an entire custom interface background attached to a custom font character, which can then be used as the title of the inventory, to override the inventory's default appearance with the custom image.
+Aby nadać swoim menu wyjątkowego charakteru, możesz pójść o krok dalej i wykorzystać [Paczki zasobów (Resource Packs)](/guides/non-denizen/resource-packs), by stworzyć całkowicie unikalny wygląd przycisków, a nawet całego interfejsu. Jednym z częstych trików jest przypisanie obrazka całego tła interfejsu do niestandardowego znaku czcionki, który może być następnie użyty jako tytuł ekwipunku, nadpisując jego domyślny wygląd własną grafiką.
 
-### Other Methods
+### Inne metody
 
-In the introduction of this section, I mentioned there are many different ways to accomplish inventory GUI menus. Some examples of alternates include:
-- Replacing the `gui: true` with a generic `on player clicks in my_inventory_script:` + `- determine cancelled`, alongside the same for the `drags` event. This is how we used to do it before the `gui` option was added.
-- Replacing the `inventory` script container with a dynamically constructed generic inventory.
-- Replacing the `item` scripts with in-line defined items, like `stone[display=<&c>Button;lore=<&7>Click me!]`
-- Replacing the item inputs with dynamically generated items, for example a shop script that dynamically fills the inventory with the current stock.
-- Using `note`s of inventories to pre-build a single global/shared inventory menu that can be modified in real-time.
-- The list could go on. Perhaps even go outside the realms of inventories, using menus based on in-game chat, books, entities, or...
+We wstępie wspomniałem, że istnieje wiele sposobów na stworzenie menu GUI. Kilka alternatywnych przykładów to:
+- Zastąpienie `gui: true` ogólnym zdarzeniem `on player clicks in my_inventory_script:` + `- determine cancelled` oraz podobnym dla zdarzenia `drags`. Tak robiliśmy, zanim dodano opcję `gui`.
+- Zastąpienie kontenera skryptu `inventory` dynamicznie budowanym ekwipunkiem generycznym.
+- Zastąpienie skryptów przedmiotów przedmiotami definiowanymi bezpośrednio w linii, np. `stone[display=<&c>Przycisk;lore=<&7>Kliknij mnie!]`.
+- Zastąpienie stałych przedmiotów dynamicznie generowanymi, np. w skrypcie sklepu, który wypełnia ekwipunek aktualnym towarem.
+- Używanie zanotowanych (`note`) ekwipunków do wcześniejszego przygotowania pojedynczego globalnego/dzielonego menu, które można modyfikować w czasie rzeczywistym.
+- Lista mogłaby być znacznie dłuższa. Można nawet wyjść poza ramy ekwipunków, tworząc menu oparte na czacie, książkach, encjach lub...
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read some more about tools used for Inventory GUIs, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się więcej o narzędziach używanych do GUI w ekwipunku, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-- [Inventory script containers doc](https://meta.denizenscript.com/Docs/Languages/inventory%20script%20containers)
-- [player clicks item in inventory event doc](https://meta.denizenscript.com/Docs/Events/player%20clicks%20in%20inventory)
-- [Inventory command doc](https://meta.denizenscript.com/Docs/Commands/inventory)
+- [Dokumentacja kontenerów skryptów ekwipunku](https://meta.denizenscript.com/Docs/Languages/inventory%20script%20containers)
+- [Dokumentacja zdarzenia player clicks item in inventory](https://meta.denizenscript.com/Docs/Events/player%20clicks%20in%20inventory)
+- [Dokumentacja polecenia Inventory](https://meta.denizenscript.com/Docs/Commands/inventory)

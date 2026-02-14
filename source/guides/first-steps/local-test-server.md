@@ -1,60 +1,60 @@
-Setting Up A Local Test Server
-------------------------------
+Konfiguracja lokalnego serwera testowego
+------------------------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### You Need A Test Server
+### Potrzebujesz serwera testowego
 
-You're probably looking at this page thinking "I already have a server, why else would I be here?" ... Most people have *a server*, but most people **should** have *a production server, and a test server*. What's the difference?
+Prawdopodobnie patrzysz na tę stronę i myślisz: „Mam już serwer, po co innego miałbym tu być?”... Większość ludzi ma *serwer*, ale większość ludzi **powinna** mieć *serwer produkcyjny i serwer testowy*. Jaka jest różnica?
 
-- The **production server** is the one that players can join, which you probably don't want to crash or bug out unexpectedly.
-- The **test server** is one that only you and maybe one friend will ever be on at any time, which is fine to crash or otherwise break.
+- **Serwer produkcyjny** to ten, na który mogą wchodzić gracze i którego prawdopodobnie nie chcesz nieoczekiwanie zawiesić lub zepsuć błędami.
+- **Serwer testowy** to taki, na którym będziesz tylko Ty i ewentualnie jeden przyjaciel, i który można bez obaw zawiesić lub w inny sposób uszkodzić.
 
-When you're writing scripts, especially when you're new, it's quite possible to accidentally do something that crashes a server, or does something hilarious like making grass explode every time you break it... keep it to a test server, so you don't accidentally ruin any players' day with the experimentation.
+Kiedy piszesz skrypty, zwłaszcza gdy jesteś początkujący, całkiem możliwe jest przypadkowe zrobienie czegoś, co zawiesi serwer lub zrobi coś komicznego, jak sprawienie, że trawa eksploduje za każdym razem, gdy ją zniszczysz... ogranicz to do serwera testowego, abyś przypadkowo nie zrujnował dnia żadnemu graczowi swoimi eksperymentami.
 
-### You Should Probably Have It Local
+### Powinieneś mieć go lokalnie
 
-Some people already have a *remote* test server... that's actually more properly referred to as a 'staging server' - that is, a server where everything is set up like it would be a production server, but without players in the way. A test server is one you can delete, trash, empty, twist around, or whatever else on the slightest whim without anyone else being involved.
+Niektórzy ludzie mają już *zdalny* serwer testowy... to właściwie określa się mianem „serwera stagingowego” – czyli serwera, na którym wszystko jest skonfigurowane tak, jak na serwerze produkcyjnym, ale bez przeszkadzających graczy. Serwer testowy to taki, który możesz usunąć, zaśmiecić, opróżnić, powykręcać lub zrobić z nim cokolwiek innego pod wpływem najmniejszego kaprysu, bez angażowania kogokolwiek innego.
 
-The easiest and best way to do this is to just run a server on your local computer (don't worry, it's really easy).
+Najłatwiejszym i najlepszym sposobem na to jest po prostu uruchomienie serwera na własnym komputerze (nie martw się, to naprawdę proste).
 
-### How Do I Set Up A Local Server
+### Jak skonfigurować lokalny serwer
 
-It's pretty simple! Let's go through the steps...
+To całkiem proste! Przejdźmy przez kolejne kroki...
 
-**Fair warning** that this guide is focused on Windows PCs, as they are the most common (but will note differences for other OS's where applicable).
+**Uczciwe ostrzeżenie:** ten przewodnik koncentruje się na komputerach z systemem Windows, ponieważ są one najpopularniejsze (ale zaznaczymy różnice dla innych systemów operacyjnych tam, gdzie ma to zastosowanie).
 
-- **Step 0: Install Java.** You might not already have Java installed on your PC - if not, you'll need to have it installed. You can download [OpenJDK 21 from here](https://adoptium.net/?variant=openjdk21). <span class="parens">(for Linux/Mac, just google how to download OpenJDK 21 for your specific OS/Distro)</span>. When installing, make sure to enable the options "Add to PATH" and "Set JAVA_HOME variable". Note that the correct Java version to install depends on your Minecraft server version. Current versions use JDK 21, in recent previous versions JDK 17 was used, in the distance past Java 8 used to be the usual version.
+- **Krok 0: Zainstaluj Javę.** Możliwe, że nie masz jeszcze zainstalowanej Javy na swoim komputerze – jeśli tak, będziesz musiał ją zainstalować. Możesz pobrać [OpenJDK 21 stąd](https://adoptium.net/?variant=openjdk21). <span class="parens">(dla użytkowników Linux/Mac: po prostu sprawdź w Google, jak pobrać OpenJDK 21 dla Twojego konkretnego systemu/dystrybucji)</span>. Podczas instalacji upewnij się, że zaznaczyłeś opcje „Add to PATH” oraz „Set JAVA_HOME variable”. Pamiętaj, że poprawna wersja Javy do zainstalowania zależy od wersji Twojego serwera Minecraft. Obecne wersje używają JDK 21, w niedalekiej przeszłości używano JDK 17, a w odległej przeszłości standardem był Java 8.
 
 ![](images/javainstall.png)
 
-- **Step 1: Download a server jar.** Conventionally, this would be Spigot ... however, Spigot is a bit of a pain to get downloaded properly. You can read the [BuildTools Wiki Page](https://www.spigotmc.org/wiki/buildtools/) if you want to do that, but I recommend instead just using Paper, which is an easy click-to-download - [Download Paper here](https://papermc.io/downloads) - For reference, Paper is a fork of Spigot designed to run more efficiently, with the added benefit of being way easier to get started. 99% of the time, Paper and Spigot jars are effectively interchangeable without issue.
+- **Krok 1: Pobierz plik jar serwera.** Konwencjonalnie byłby to Spigot... jednak pobranie Spigota w poprawny sposób jest nieco uciążliwe. Możesz przeczytać [stronę Wiki BuildTools](https://www.spigotmc.org/wiki/buildtools/), jeśli chcesz to zrobić, ale zamiast tego polecam po prostu użyć Paper, który pobiera się jednym kliknięciem – [Pobierz Paper tutaj](https://papermc.io/downloads). Dla wyjaśnienia: Paper to fork Spigota zaprojektowany do wydajniejszego działania, z dodatkową zaletą w postaci znacznie łatwiejszego startu. W 99% przypadków pliki jar Paper i Spigot są w praktyce zamienne bez żadnych problemów.
 
-Note also that many users like to rename the jar to `paper.jar` <span class="parens">(ie, remove the version from the filename)</span> to avoid having to alter the launch script you'll make in step 3.
+Zauważ też, że wielu użytkowników lubi zmieniać nazwę pliku jar na `paper.jar` <span class="parens">(czyli usunąć wersję z nazwy pliku)</span>, aby uniknąć konieczności modyfikowania skryptu startowego, który utworzysz w kroku 3.
 
 ![](images/paperdownload.png)
 
-- **Step 2: Set up a server folder.** You can just make a folder anywhere, even on your desktop, just make sure there's nothing else in the folder already <span class="parens">(as the server will generate a bunch of files around itself)</span>. Put the server jar you downloaded into this folder.
+- **Krok 2: Przygotuj folder serwera.** Możesz po prostu utworzyć folder w dowolnym miejscu, nawet na pulpicie, upewnij się tylko, że w folderze nie ma nic innego <span class="parens">(ponieważ serwer wygeneruje wokół siebie mnóstwo plików)</span>. Włóż pobrany plik jar serwera do tego folderu.
 
 ![](images/myserverfolder.png)
 
-- **Step 3: Make a launch script.** The simplest way to do this is to just open Notepad and create a file named `start.bat` (be sure to save as 'all files', not 'text documents'). In this file, put the following: `java -Xms1G -Xmx1G -jar paper.jar nogui` ... you can configure the specifics - the '1G' twice is how much RAM you want to give to the server <span class="parens">(`1G` means "One GigaByte of RAM", you can also type values like `2G` for 2 GigaBytes, `500M` for 500 MegaBytes, etc. If you change it, make sure to change both the 'Xms' and the 'Xmx' values.)</span>, and 'paper.jar' is the name of the server jar file. <span class="parens">(On Linux or Mac, create a `start.sh` file and edit it with whatever your favorite text editor is. The command to include remains the same.)</span>
+- **Krok 3: Utwórz skrypt startowy.** Najprostszym sposobem na to jest otwarcie Notatnika i utworzenie pliku o nazwie `start.bat` (pamiętaj, aby zapisać jako „wszystkie pliki”, a nie „dokumenty tekstowe”). W tym pliku wpisz: `java -Xms1G -Xmx1G -jar paper.jar nogui`... możesz skonfigurować szczegóły – „1G” powtórzone dwa razy to ilość pamięci RAM, którą chcesz przydzielić serwerowi <span class="parens">(„1G” oznacza jeden gigabajt pamięci RAM, możesz też wpisać wartości takie jak „2G” dla 2 gigabajtów, „500M” dla 500 megabajtów itd. Jeśli to zmienisz, upewnij się, że zmienisz obie wartości: „Xms” i „Xmx”)</span>, a „paper.jar” to nazwa pliku jar serwera. <span class="parens">(Na Linuxie lub Macu utwórz plik `start.sh` i edytuj go w swoim ulubionym edytorze tekstu. Polecenie pozostaje takie samo)</span>.
 
 ![](images/startbat.png)
 
-- **Step 4: Launch the server once.** To do so, just double-click the start script file. If all goes well, a command line window will pop up for a minute, show a few messages, then disappear, and you'll have a new `eula.txt` file. Since Mojang is ruled by lawyers now, you have to open that file and change `false` to `true` to indicate that you accept the Minecraft EULA. Don't re-launch the server yet though.
+- **Krok 4: Uruchom serwer po raz pierwszy.** Aby to zrobić, po prostu kliknij dwukrotnie plik skryptu startowego. Jeśli wszystko pójdzie dobrze, na chwilę pojawi się okno wiersza poleceń, wyświetli kilka komunikatów, a następnie zniknie, a Ty otrzymasz nowy plik `eula.txt`. Ponieważ Mojangiem rządzą teraz prawnicy, musisz otworzyć ten plik i zmienić `false` na `true`, aby wskazać, że akceptujesz EULA Minecrafta. Nie uruchamiaj jeszcze serwera ponownie.
 
 ![](images/seteulatotrue.png)
 
-- **Step 5: Add the plugins.** Create a `plugins` folder if you don't already have one, and download the latest jar file for Denizen, Citizens, etc. <span class="parens">(any plugins you want to include)</span> and place them into that folder. For your test server, you'll probably want to install the latest [Developmental Build of Denizen](https://ci.citizensnpcs.co/job/Denizen_Developmental/) - though for your production server, you'll generally want the latest [Release Build of Denizen](https://ci.citizensnpcs.co/job/Denizen/).
+- **Krok 5: Dodaj wtyczki.** Utwórz folder `plugins`, jeśli jeszcze go nie masz, pobierz najnowszy plik jar dla Denizen, Citizens itd. <span class="parens">(wszelkie wtyczki, które chcesz dołączyć)</span> i umieść je w tym folderze. Dla serwera testowego prawdopodobnie będziesz chciał zainstalować najnowszą [rozwojową wersję Denizen (Developmental Build)](https://ci.citizensnpcs.co/job/Denizen_Developmental/) – choć dla serwera produkcyjnego zazwyczaj będziesz chciał najnowszą [wersję stabilną Denizen (Release Build)](https://ci.citizensnpcs.co/job/Denizen/).
 
 ![](images/denizeninpluginsfolder.png)
 
-- **Step 6: Launch for the first real time.** Run the start script again... this will take a moment to load everything the first time, but will load faster in future uses. Plugin folders, world data, etc. will be automatically generated.
+- **Krok 6: Uruchomienie na poważnie po raz pierwszy.** Uruchom ponownie skrypt startowy... za pierwszym razem załadowanie wszystkiego zajmie chwilę, ale przy kolejnych uruchomieniach będzie szybciej. Foldery wtyczek, dane świata itp. zostaną wygenerowane automatycznie.
 
 ![](images/firstlaunch.png)
 
-- **Step 7: Join the server.** Add a server in your Minecraft multiplayer menu, with the address set to just `localhost`. This is an automatic address that just means "the server on the same computer I'm playing on". You should be able to join it fine if nothing went wrong (and if anything did go wrong, you should have an error message somewhere to look into or report). You can use the command line window to op yourself or whatever else you need. Keep this window in view, as debug output sent to that window will come in handy later.
+- **Krok 7: Dołącz do serwera.** Dodaj serwer w menu gry wieloosobowej Minecraft, ustawiając adres na `localhost`. Jest to automatyczny adres, który oznacza po prostu „serwer na tym samym komputerze, na którym gram”. Powinieneś móc bez problemu dołączyć, jeśli nic nie poszło nie tak (a jeśli coś poszło nie tak, powinieneś mieć gdzieś komunikat o błędzie do sprawdzenia lub zgłoszenia). Możesz użyć okna wiersza poleceń, aby nadać sobie opa lub cokolwiek innego, czego potrzebujesz. Trzymaj to okno na widoku, ponieważ wyjście debugowania przesyłane do tego okna przyda się później.

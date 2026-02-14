@@ -1,60 +1,60 @@
-Long Term Memory: Flags
------------------------
+Pamięć długotrwała: Flagi (Flags)
+------------------------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-On the [previous page](/guides/basics/definitions) you learned about definitions and their usage as short-term memory. On this page, you will learn about **flags**.
+Na [poprzedniej stronie](/guides/basics/definitions) dowiedziałeś się o definicjach i ich zastosowaniu jako pamięci krótkotrwałej. Na tej stronie poznasz **flagi** (flags).
 
-### What Are Flags?
+### Czym są flagi?
 
-Flags, like definitions, are a form of memory. They are data-points that you can freely control and change within a script, without affecting anything other than your own scripts.
+Flagi, podobnie jak definicje, są formą pamięci. Są to punkty danych, które możesz dowolnie kontrolować i zmieniać w skrypcie, nie wpływając na nic poza własnymi skryptami.
 
-Flags have two key distinctions from definitions:
-- First, flags are *long term* memory, while definitions are *short term*. As you learned on the previous page, a definition only lasts as long the queue does. Flags, however, last much longer - flags can even stay forever if needed.
-- Second, you can choose what object a flag is linked to. As you'll come to understand after learning about the flag system, definitions are basically a special case of flags that are linked exclusively to queues.
+Flagi różnią się od definicji dwoma kluczowymi aspektami:
+- Po pierwsze, flagi to pamięć *długotrwała*, podczas gdy definicje są *krótkotrwałe*. Jak dowiedziałeś się na poprzedniej stronie, definicja trwa tylko tak długo, jak kolejka skryptu. Flagi natomiast trwają znacznie dłużej – mogą nawet pozostać na zawsze, jeśli to konieczne.
+- Po drugie, możesz wybrać, do jakiego obiektu flaga jest przypisana. Jak zrozumiesz po zapoznaniu się z systemem flag, definicje są zasadniczo specjalnym przypadkiem flag powiązanym wyłącznie z kolejkami.
 
-Flags also use the Data Actions system, just like definitions do.
+Flagi również wykorzystują system akcji na danych (Data Actions), podobnie jak definicje.
 
-Unlike the `define` command, the `flag` command *always* uses data action syntax. Meaning, the most basic set command uses a `:` rather than a space, like: `- flag <object> my_flag:my_value`.
+W przeciwieństwie do polecenia `define`, polecenie `flag` *zawsze* używa składni akcji na danych. Oznacza to, że najbardziej podstawowe ustawienie flagi używa dwukropka `:` zamiast spacji, np.: `- flag <obiekt> my_flag:moje_wartosc`.
 
-### Basic Usage of Flags
+### Podstawowe użycie flag
 
-Before we bother with much of the theory behind flags, let's get some practice trying them out, using [the /ex command](/guides/first-steps/ex-command)!
+Zanim zajmiemy się teorią stojącą za flagami, poćwiczmy ich używanie, korzystając z [polecenia /ex](/guides/first-steps/ex-command)!
 
-Open up your Minecraft window, and type in this command: `/ex flag server greetable:World`
+Otwórz okno Minecrafta i wpisz to polecenie: `/ex flag server greetable:Świecie`
 
-With that command, you have now set a flag named "`greetable`" to the value "`World`" on the `server` object.
+Tym poleceniem ustawiłeś flagę o nazwie „`greetable`” na wartość „`Świecie`” na obiekcie `server`.
 
-Now, let's make use of that flag... type in: `/ex narrate "Hello, <server.flag[greetable]>!"`
+Teraz skorzystajmy z tej flagi... wpisz: `/ex narrate "Witaj, <server.flag[greetable]>!"`
 
-If everything went well, you should see output like the following:
+Jeśli wszystko poszło dobrze, powinieneś zobaczyć wynik podobny do tego:
 
 ![](images/hello_greetable.png)
 
-### Flags Are Attached To Objects
+### Flagi są przypisane do obiektów
 
-Flags are always *attached to an object*. In the example above, we used the `server` object. The `server` object is a special helper object that exists for things like flags to have a global static target. Flags attached to the server stick around forever, and can be accessed from anywhere at any time.
+Flagi są zawsze *przypisane do obiektu*. W powyższym przykładzie użyliśmy obiektu `server`. Obiekt `server` to specjalny obiekt pomocniczy, który istnieje po to, aby flagi (i inne rzeczy) mogły mieć globalny, statyczny cel. Flagi przypisane do serwera zostają na zawsze i można do nich uzyskać dostęp z dowolnego miejsca w dowolnym czasie.
 
-The most common object that flags get attached to is a player. When a flag is attached to a player, that means only that one single player has that flag - any other players would only have it if the flag command is used again to set it on each other player.
+Najczęstszym obiektem, do którego przypisuje się flagi, jest gracz. Kiedy flaga jest przypisana do gracza, oznacza to, że tylko ten jeden konkretny gracz posiada tę flagę – inni gracze będą ją mieć tylko wtedy, gdy polecenie flag zostanie użyte ponownie dla każdego z nich.
 
-Setting a flag on a player is easy - it's just like setting a global flag on the server, you just have to feed the command a specific player instead of `server`.
+Ustawienie flagi na graczu jest proste – działa to tak samo jak ustawienie flagi globalnej na serwerze, musisz tylko podać poleceniu konkretnego gracza zamiast `server`.
 
-Try typing this command: `/ex flag <player> status:learning`
+Spróbuj wpisać to polecenie: `/ex flag <player> status:uczeń`
 
-And then type: `/ex narrate "<player.name> is <player.flag[status]> Denizen!"`
+A następnie wpisz: `/ex narrate "<player.name> to <player.flag[status]> Denizen!"`
 
-You should see roughly the following:
+Powinieneś zobaczyć mniej więcej coś takiego:
 
 ![](images/learning_denizen_flag.png)
 
-If any other players try that `/ex narrate` command without doing the `/ex flag` first, it will show an error message - because only *you* have the `status` flag, no other players.
+Jeśli jakikolwiek inny gracz spróbuje użyć tego polecenia `/ex narrate` bez wcześniejszego wykonania `/ex flag`, zobaczy komunikat o błędzie – ponieważ tylko *Ty* masz flagę `status`, nie inni gracze.
 
-### What Would I Ever Use This For?
+### Do czego mi się to przyda?
 
-The examples above are pretty abstract, so let's use the parts of the flag system we've already learned to create a simple script that looks a little more like something you might actually use.
+Powyższe przykłady są dość abstrakcyjne, więc wykorzystajmy części systemu flag, których już się nauczyliśmy, aby stworzyć prosty skrypt przypominający coś, czego faktycznie mógłbyś użyć.
 
 ```dscript_green
 ore_counter:
@@ -62,22 +62,22 @@ ore_counter:
     events:
         after player breaks iron_ore:
         - flag player ores_broken:++
-        - narrate "You have broken <player.flag[ores_broken]> iron ore so far! Keep it up!"
+        - narrate "Wykopałeś już <player.flag[ores_broken]> rud żelaza! Tak trzymaj!"
 ```
 
-This script will keep a running count of how many iron ore blocks the player has mined. Each player will have their own separate count <span class="parens">(this uses the 'increment' data action, which is explained on the [definitions page](/guides/basics/definitions))</span>.
+Ten skrypt będzie prowadził bieżące odliczanie, ile bloków rudy żelaza wykopał gracz. Każdy gracz będzie miał swój własny licznik <span class="parens">(wykorzystuje to akcję „increment” (inkrementacja), która została wyjaśniona na [stronie o definicjach](/guides/basics/definitions))</span>.
 
 ![](images/ore_counter.gif)
 
-You can use the 'clear' data action, marked with a `!` symbol, to remove a flag at any time. After using the script example above, try doing `/ex flag player ores_broken:!` to remove your own iron ore counter flag, then break another iron ore block. If all went well, you will see the flag tag fills with a value of `1` <span class="parens">(indicating that as far as the script knows, this is the first iron ore you've ever mined)</span>.
+Możesz użyć akcji „clear” (wyczyść), oznaczonej symbolem `!`, aby usunąć flagę w dowolnym momencie. Po wypróbowaniu powyższego skryptu spróbuj wpisać `/ex flag player ores_broken:!`, aby usunąć swój własny licznik rudy żelaza, a następnie zniszcz kolejny blok rudy. Jeśli wszystko poszło dobrze, zobaczysz, że tag flagi wypełni się wartością `1` <span class="parens">(wskazując, że z punktu widzenia skryptu jest to pierwsza ruda żelaza, jaką kiedykolwiek wykopałeś)</span>.
 
-### Do You Have This Flag?
+### Czy posiadasz tę flagę?
 
-If you want to know whether an object already has a flag or not, the solution is simple: `has_flag`! This looks just like the `flag` tag, but instead of returning the flag value, will instead return a simple boolean: `true` or `false`.
+Jeśli chcesz wiedzieć, czy dany obiekt posiada już flagę, czy nie, rozwiązanie jest proste: `has_flag`! Wygląda to tak samo jak tag `flag`, ale zamiast zwracać wartość flagi, zwróci prostą wartość logiczną: `true` lub `false`.
 
-You can use this inside an if command like `- if <player.has_flag[ores_broken]>:`, to only run the `if`'s commands when the player already has broken at least one iron ore in the script above.
+Możesz tego użyć wewnątrz polecenia if, np. `- if <player.has_flag[ores_broken]>:`, aby uruchomić polecenia bloku `if` tylko wtedy, gdy gracz wykopał już przynajmniej jedną rudę żelaza w powyższym skrypcie.
 
-This is also the basic way to implement values that either are there, or aren't <span class="parens">(as opposed to having some additional data, like how `ores_broken` has a number associated with it)</span>.
+Jest to również podstawowy sposób na implementację wartości, które albo są, albo ich nie ma <span class="parens">(w przeciwieństwie do posiadania dodatkowych danych, jak w przypadku `ores_broken`, z którym powiązana jest liczba)</span>.
 
 ```dscript_blue
 toggler_task:
@@ -85,21 +85,21 @@ toggler_task:
     script:
     - if <player.has_flag[my_first_toggle]>:
         - flag player my_first_toggle:!
-        - narrate "Disabled your toggle."
+        - narrate "Wyłączono przełącznik."
     - else:
         - flag player my_first_toggle
-        - narrate "Enabled your toggle."
+        - narrate "Włączono przełącznik."
 ```
 
-The above example script, when ran via `/ex run toggler_task`, will toggle the flag `my_first_toggle` on or off, by removing it or setting it <span class="parens">(if you have no value to give, you can just leave the value off from the flag command)</span>, using the `has_flag` tag to determine whether to add or remove it.
+Powyższy przykładowy skrypt, po uruchomieniu przez `/ex run toggler_task`, przełączy flagę `my_first_toggle` (włączy lub wyłączy), usuwając ją lub ustawiając <span class="parens">(jeśli nie masz konkretnej wartości do podania, możesz po prostu pominąć wartość w poleceniu flag)</span>, używając tagu `has_flag` do określenia, czy należy ją dodać, czy usunąć.
 
-As you learn about more features like [player commands](/guides/basics/player-commands), you can use these for simple yet powerful options, like a command that toggles some flag on or off when used, that then ties into some world event that checks if the player has the flag to determine whether to apply some special effect.
+W miarę poznawania kolejnych funkcji, takich jak [polecenia gracza (player commands)](/guides/basics/player-commands), będziesz mógł używać tego do tworzenia prostych, lecz potężnych opcji, jak np. polecenie, które po użyciu przełącza flagę, co z kolei wpływa na zdarzenie świata sprawdzające tę flagę w celu nałożenia specjalnego efektu.
 
-### Flags Are Core To Denizen
+### Flagi to podstawa Denizen
 
-Flags are a core feature of Denizen... this means that they are integrated in a variety of places within Denizen to make things easier when using them.
+Flagi są kluczową funkcją Denizen... oznacza to, że są one zintegrowane w wielu miejscach, aby ułatwić ich używanie.
 
-For example, if you want an event to only fire if the player involved has a specific flag, you can use the `flagged:` event switch, like so:
+Na przykład, jeśli chcesz, aby zdarzenie uruchamiało się tylko wtedy, gdy gracz posiada konkretną flagę, możesz użyć przełącznika zdarzenia `flagged:`, w ten sposób:
 
 ```dscript_green
 optional_ore_counter:
@@ -107,112 +107,112 @@ optional_ore_counter:
     events:
         after player breaks iron_ore flagged:ore_quest:
         - flag player ores_broken:++
-        - narrate "You have broken <player.flag[ores_broken]> iron ore so far! Keep it up!"
+        - narrate "Wykopałeś już <player.flag[ores_broken]> rud żelaza! Tak trzymaj!"
 ```
 
-This is the ore_counter script from earlier, but it now only runs for players that have the toggleable flag named `ore_quest`. Now, rather than just being a generic counter of ores broken, this script has become a part of a quest that requires a player go out and break some number of iron ore blocks to complete it.
+To jest skrypt `ore_counter` sprzed chwili, ale teraz uruchamia się tylko dla graczy, którzy mają włączoną flagę o nazwie `ore_quest`. Teraz, zamiast być tylko ogólnym licznikiem wykopanych rud, skrypt ten stał się częścią zadania (questu), które wymaga od gracza wyjścia i wykopania określonej liczby bloków rudy żelaza, aby je ukończyć.
 
-There are many features like this throughout Denizen, including the player `flagged:` event switch, the `server_flagged:` and `location_flagged:` and etc. similar event switches, `(x)_flagged` matchables, various command arguments like the `announce` command's `to_flagged` argument, a variety of convenience tags like `<server.online_players_flagged[flag_name]>`, and so much more. As you learn more about Denizen and eventually start looking through the meta-documentation, you'll encounter many of these.
+W Denizen istnieje wiele takich funkcji, w tym przełącznik zdarzenia gracza `flagged:`, podobne przełączniki `server_flagged:`, `location_flagged:` itp., obiekty typu `(x)_flagged` do dopasowywania (matchables), różne argumenty poleceń jak `to_flagged` w poleceniu `announce`, szereg wygodnych tagów jak `<server.online_players_flagged[nazwa_flagi]>` i wiele innych. Napotkasz wiele z nich, w miarę jak będziesz uczyć się Denizen i zaczniesz przeglądać meta-dokumentację.
 
-### Lifetime
+### Czas życia (Lifetime)
 
-Flags are *persistent*. This means that things which normally cause data to go away, like restarting the server, will not get rid of flag data.
+Flagi są *trwałe* (persistent). Oznacza to, że rzeczy, które normalnie powodują utratę danych, jak restart serwera, nie usuną danych flag.
 
-There are only four cases in which a flag will go away:
-- Explicit intentional removal within a script, using the 'clear' data action.
-- Timed expiration <span class="parens">(explained in the next section)</span>.
-- Attached object is gone <span class="parens">(for example, the flag is on a mob entity, and that mob dies)</span>.
-- And of course: hard server crash or deletion of server files.
+Istnieją tylko cztery przypadki, w których flaga zniknie:
+- Jawne, zamierzone usunięcie w skrypcie przy użyciu akcji „clear”.
+- Wygaśnięcie czasowe <span class="parens">(wyjaśnione w następnej sekcji)</span>.
+- Obiekt, do którego flaga była przypisana, przestał istnieć <span class="parens">(na przykład flaga jest na mobie, a ten mob ginie)</span>.
+- I oczywiście: poważna awaria serwera lub usunięcie plików serwerowych.
 
-### Flag Expirations
+### Wygasanie flag
 
-One common usage of flags is as long-term cooldown timers, like a quest or special effect that only works once per day. Here's an example of how that might look:
+Jednym z częstych zastosowań flag są długoterminowe liczniki czasu odnowienia (cooldown), np. zadanie lub efekt specjalny działający tylko raz dziennie. Oto przykład, jak może to wyglądać:
 
 ```dscript_blue
 once_a_day:
     type: task
     script:
     - if <player.has_flag[my_script_cooldown]>:
-        - narrate "You can only get this reward once per day. You must wait <player.flag_expiration[my_script_cooldown].from_now.formatted>."
+        - narrate "Możesz odebrać tę nagrodę tylko raz dziennie. Musisz poczekać jeszcze <player.flag_expiration[my_script_cooldown].from_now.formatted>."
         - stop
     - flag player my_script_cooldown expire:1d
-    - narrate "Here's your daily reward!"
+    - narrate "Oto Twoja codzienna nagroda!"
     - give diamond
 ```
 
-This script example will give the player a diamond, but no more often than once per day, using a flag as the cooldown method.
+Ten przykład skryptu da graczowi diament, ale nie częściej niż raz dziennie, używając flagi jako metody odliczania czasu odnowienia.
 
-While this might seem a bit pointless in a `task` script, after you've gone farther into the guide, you could [attach it to an NPC's click handler](/guides/npcs/assignment-scripts) to make an NPC that can be clicked for a daily reward, it becomes basically a complete feature of your server!
+Chociaż w skrypcie typu `task` może się to wydawać mało sensowne, po zapoznaniu się z dalszą częścią przewodnika będziesz mógł [podpiąć to pod obsługę kliknięcia NPC](/guides/npcs/assignment-scripts), aby stworzyć NPC, którego można klikać raz dziennie po nagrodę – stanie się to kompletną funkcją Twojego serwera!
 
 ![](images/once_a_day.gif)
 
-You'll notice two new parts of the flag system being used here:
+Zauważysz tutaj dwie nowe części systemu flag:
 
-First, in the `flag` command, there is now a `expire:1d` argument. This does exactly what you think it does: it makes the flag only stick around for one day... after that, the flag is considered the same as if it didn't exist. The input is a `DurationTag` object, which can be written like `1d` to mean "one day", or `5h` to mean "five hours", or anything like that. The duration value input is then used to calculate the date/time when the flag should expire <span class="parens">(by adding the duration onto the current date/time)</span>, and stored alongside the flag.
+Po pierwsze, w poleceniu `flag` pojawił się argument `expire:1d`. Robi on dokładnie to, co myślisz: sprawia, że flaga pozostaje tylko przez jeden dzień... po tym czasie flaga jest traktowana tak, jakby nie istniała. Wejściem jest obiekt `DurationTag`, który można zapisać jako `1d` (jeden dzień), `5h` (pięć godzin) itp. Wartość czasu trwania jest następnie używana do obliczenia daty i godziny wygaśnięcia flagi <span class="parens">(przez dodanie czasu trwania do obecnej chwili)</span> i zapisywana wraz z flagą.
 
-Second, in the `narrate` command, we used the `flag_expiration` tag. This tag, as the name implies, returns the time at which the flag is scheduled to expire. It does this in the form of a `TimeTag` object. We then use the tag `TimeTag.from_now`, which gets the `DurationTag` representing the distance in time between right now and some previously stored `TimeTag` <span class="parens">(so at the moment the flag is set, it will be `1d`... if you wait an hour, it will be `23h`, etc.)</span>, followed by the tag `DurationTag.formatted`, which converts the raw duration object to something relatively clean for human reading.
+Po drugie, w poleceniu `narrate` użyliśmy tagu `flag_expiration`. Tag ten, jak sama nazwa wskazuje, zwraca czas, w którym flaga ma wygasnąć. Robi to w formie obiektu `TimeTag`. Następnie używamy tagu `TimeTag.from_now`, który pobiera `DurationTag` reprezentujący odstęp czasu między „teraz” a wcześniej zapisanym `TimeTag` <span class="parens">(zatem w momencie ustawienia flagi będzie to `1d`... jeśli poczekasz godzinę, będzie to `23h` itd.)</span>, a na końcu tagu `DurationTag.formatted`, który konwertuje surowy obiekt czasu na postać czytelną dla człowieka.
 
-Note that flags expirations are something you can check for, but you cannot wait for them - there is no "flag expires" event or similar. If you would like to know why this is, refer to the [Flag System technical doc](https://meta.denizenscript.com/Docs/Languages/flag%20system).
+Pamiętaj, że wygaśnięcie flagi to coś, co możesz sprawdzić, ale nie możesz na to czekać – nie ma zdarzenia typu „flag expires” ani podobnego. Jeśli chcesz wiedzieć dlaczego, sprawdź [dokumentację techniczną Flag System](https://meta.denizenscript.com/Docs/Languages/flag%20system).
 
-Note that very short/simple cooldowns (anything less than a few hours, usually) should often use the `ratelimit` command instead of flags, like `- ratelimit <player> 1h`. Ratelimits are very simple and easy, but notably do not persist across restarts and do not have the ability to show cooldown messages like the one the script above uses.
+Pamiętaj również, że dla bardzo krótkich/prostych czasów odnowienia (zazwyczaj krótszych niż kilka godzin) często lepiej użyć polecenia `ratelimit` zamiast flag, np. `- ratelimit <player> 1h`. Ratelimity są bardzo proste i łatwe w użyciu, ale co ważne – nie przetrwają restartu serwera i nie dają możliwości wyświetlenia własnej wiadomości o czasie oczekiwania, jak skrypt powyżej.
 
-### What Else Can I Attach Flags To?
+### Do czego jeszcze mogę przypisać flagi?
 
-You can actually flag a lot of objects! Here are the main ones:
+Możesz flagować naprawdę wiele obiektów! Oto najważniejsze z nich:
 
-- The server itself, as a global flag, using the keyword `server`.
-- Any player, using a `PlayerTag` object.
-- Any Citizens NPC, using an `NPCTag` object.
-- Any minecraft entity, using an `EntityTag` object.
-- Any block in the world, using a `LocationTag` object.
-- Any chunk in the world, using a `ChunkTag` object.
-- Any item - however, items work a little different, so this will be covered in the [custom items page](/guides/basics/custom-items).
-- Any world using a `WorldTag` object.
-- Any *noted* area <span class="parens">(notes will be covered in the [advanced section](/guides/advanced/notables))</span> using a `CuboidTag`, `EllipsoidTag`, or `PolygonTag` object.
-- Any *noted* inventory <span class="parens">(notes will be covered in the [advanced section](/guides/advanced/notables))</span> using an `InventoryTag` object.
-- Most other object types too. Any type that's in some way uniquely identified will usually be flaggable.
+- Sam serwer jako flagę globalną, używając słowa kluczowego `server`.
+- Dowolnego gracza, używając obiektu `PlayerTag`.
+- Dowolnego NPC z Citizens, używając obiektu `NPCTag`.
+- Dowolną encję w Minecraft, używając obiektu `EntityTag`.
+- Dowolny blok w świecie, używając obiektu `LocationTag`.
+- Dowolny chunk (fragment świata), używając obiektu `ChunkTag`.
+- Dowolny przedmiot – jednak przedmioty działają nieco inaczej, co zostanie omówione na [stronie o własnych przedmiotach](/guides/basics/custom-items).
+- Dowolny świat, używając obiektu `WorldTag`.
+- Dowolny *zanotowany* (noted) obszar <span class="parens">(notatki zostaną omówione w [sekcji zaawansowanej](/guides/advanced/notables))</span>, używając obiektów `CuboidTag`, `EllipsoidTag` lub `PolygonTag`.
+- Dowolny *zanotowany* ekwipunek <span class="parens">(notatki zostaną omówione w [sekcji zaawansowanej](/guides/advanced/notables))</span>, używając obiektu `InventoryTag`.
+- Większość innych typów obiektów również. Każdy typ, który jest w jakiś sposób unikalnie zidentyfikowany, zazwyczaj może posiadać flagi.
 
-Note that flags are generally loaded when the object is loaded - so server flags are loaded when the server starts, player flags are loaded when the players joins, etc.
+Pamiętaj, że flagi są zazwyczaj ładowane wtedy, gdy ładowany jest obiekt – flagi serwera przy starcie, gracza przy dołączeniu itd.
 
-With players, if the player is offline when you use flag commands or tags, the player's data will automatically be loaded at that time.
+W przypadku graczy, jeśli gracz jest offline, gdy używasz poleceń lub tagów flag, dane gracza zostaną automatycznie załadowane w tym momencie.
 
-For entities however, if an entity is despawned <span class="parens">(meaning it's in a chunk that isn't loaded)</span>, there is no way to reliably load that entity, and it will therefore not work.
+W przypadku encji (bytów) jednak, jeśli encja jest odładowana (despawned) <span class="parens">(co oznacza, że znajduje się w chunku, który nie jest załadowany)</span>, nie ma sposobu na niezawodne załadowanie tej encji i flaga nie zadziała.
 
-For blocks, if the chunk that contains the block is not loaded, you will have to load the chunk before working with its flags. For the `flag` command, this will be automatic, however for flag *tags*, there is no automatic chunkload, and you can instead use the `chunkload` command beforehand to ensure the chunk is available.
+W przypadku bloków, jeśli chunk zawierający blok nie jest załadowany, będziesz musiał go załadować przed pracą z jego flagami. Dla polecenia `flag` stanie się to automatycznie, jednak dla *tagów* flag nie ma automatycznego ładowania chunka – możesz zamiast tego użyć wcześniej polecenia `chunkload`, aby upewnić się, że fragment świata jest dostępny.
 
-For more information on exactly how different object types handle flags, refer to the [Flag System technical doc](https://meta.denizenscript.com/Docs/Languages/flag%20system).
+Więcej informacji o tym, jak różne typy obiektów obsługują flagi, znajdziesz w [dokumentacji technicznej Flag System](https://meta.denizenscript.com/Docs/Languages/flag%20system).
 
-### Flag Names
+### Nazwy flag
 
-Many basic ASCII symbols <span class="parens">(like `.` or `!` or `%` or etc., anything that isn't a letter or number really)</span> in names of things <span class="parens">(flags, definitions, script containers, etc)</span> in Denizen can have special meanings and, other than when intentionally using those special meanings, should be avoided. Keep to simple textual names, with underscores `_` to separate words instead of spaces.
+Wiele podstawowych symboli ASCII <span class="parens">(jak `.` lub `!` lub `%` itp., właściwie wszystko, co nie jest literą ani cyfrą)</span> w nazwach czegokolwiek <span class="parens">(flag, definicji, kontenerów skryptów itd.)</span> w Denizen może mieć specjalne znaczenie i poza sytuacjami, gdy celowo z nich korzystasz, należy ich unikać. Trzymaj się prostych nazw tekstowych, używając podkreślników `_` do oddzielania słów zamiast spacji.
 
-#### Advanced Note: Maps And Sub-maps
+#### Uwaga zaawansowana: Mapy i sub-mapy
 
-Advanced/experienced users might recognize that flags are a form of data-map - that is, a system of data consisting of named keys paired with values. Those users might be interested in `MapTag` objects, or in using flags to produce dynamic submapping structures (maps within maps). The Denizen flag systems supports submapping automatically by using the `.` symbol as the submap separator, like `- flag server myroot.mysubmap.mykey:myvalue`. This will assign the flag named `myroot.mysubmap` to a MapTag value of `[mykey=myvalue]`, and thus the flag named `myroot` to a nested-MapTag value of `[mysubmap=[mykey=myvalue]]`. The `has_flag` tag will return true for `has_flag[myroot]`, and true for `has_flag[myroot.mysubmap]`, and true for `has_flag[myroot.mysubmap.mykey]`.
+Zaawansowani użytkownicy mogą zauważyć, że flagi są formą map danych – czyli systemu danych składającego się z kluczy i przypisanych do nich wartości. Takich użytkowników mogą zainteresować obiekty `MapTag` lub używanie flag do tworzenia dynamicznych struktur sub-mapowania (mapy w mapach). System flag Denizen wspiera sub-mapowanie automatycznie przez użycie symbolu `.` jako separatora, np. `- flag server korzen.podmapa.klucz:wartosc`. Przypisze to flagę o nazwie `korzen.podmapa` do wartości MapTag `[klucz=wartosc]`, a tym samym flagę o nazwie `korzen` do zagnieżdżonej wartości MapTag `[podmapa=[klucz=wartosc]]`. Tag `has_flag` zwróci prawdę dla `has_flag[korzen]`, `has_flag[korzen.podmapa]` oraz `has_flag[korzen.podmapa.klucz]`.
 
-If this seems arcane or complex to you, don't worry, you don't need to use or understand this right now. There will be further explanation of this system / how to use it / what it can be used for in a later part of [the advanced section](/guides/advanced/submapping).
+Jeśli wydaje Ci się to skomplikowane lub tajemnicze, nie martw się, nie musisz tego teraz używać ani rozumieć. Dalsze wyjaśnienie tego systemu, sposobu jego użycia i zastosowań znajdzie się w późniejszej części [sekcji zaawansowanej](/guides/advanced/submapping).
 
-#### Special Note: Restricted Flag Names
+#### Uwaga specjalna: Zastrzeżone nazwy flag
 
-It should be noted that it is considered restricted to have flag names prefixed with two underscores, like `__name`. This is because some internal features of Denizen will generate flags, and use this naming convention to avoid conflicts with scripts. This includes for example the `zap` command using `__interact_step` and the `cooldown` command using `__interact_cooldown`.
+Należy pamiętać, że nazwy flag zaczynające się od dwóch podkreślników, np. `__nazwa`, są uważane za zastrzeżone. Wynika to z faktu, że niektóre wewnętrzne funkcje Denizen generują własne flagi i używają tej konwencji nazewnictwa, aby uniknąć konfliktów ze skryptami. Obejmuje to na przykład polecenie `zap` używające `__interact_step` oraz polecenie `cooldown` używające `__interact_cooldown`.
 
-### Even More Memory
+### Jeszcze więcej pamięci
 
-Advanced users may decide they need even more custom memory options. While flags and definitions should cover the overwhelming majority of cases, Denizen does provide additional options <span class="parens">(primarily intended for intercompatibility with pre-existing data systems)</span> such as [the YAML command](https://meta.denizenscript.com/Docs/Commands/yaml) and  [the SQL command](https://meta.denizenscript.com/Docs/Commands/sql).
+Zaawansowani użytkownicy mogą uznać, że potrzebują jeszcze więcej opcji własnej pamięci. Chociaż flagi i definicje powinny pokrywać zdecydowaną większość przypadków, Denizen udostępnia dodatkowe opcje <span class="parens">(przeznaczone głównie do kompatybilności z istniejącymi systemami danych)</span>, takie jak [polecenie YAML](https://meta.denizenscript.com/Docs/Commands/yaml) oraz [polecenie SQL](https://meta.denizenscript.com/Docs/Commands/sql).
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read a lot more about flags, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się znacznie więcej o flagach, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-Note: most users, especially those learning from the Denizen for the first time, should just continue on to the next guides page. These references might be of interest to later come back to after you've learned Denizen as far as this guide teaches.
+Uwaga: większość użytkowników, zwłaszcza tych uczących się Denizen po raz pierwszy, powinna po prostu przejść do następnej strony przewodnika. Referencje te mogą być interesujące do późniejszego powrotu, gdy już nauczysz się Denizen w stopniu, jaki przewiduje ten przewodnik.
 
-- [Flag System lang doc](https://meta.denizenscript.com/Docs/Languages/flag%20system)
-- [Flag command doc](https://meta.denizenscript.com/Docs/Commands/flag)
-- [FlaggableObject.flag tag](https://meta.denizenscript.com/Docs/Tags/flaggableobject.flag)
-- [FlaggableObject.has_flag tag](https://meta.denizenscript.com/Docs/Tags/flaggableobject.has_flag)
-- [FlaggableObject.list_flags tag](https://meta.denizenscript.com/Docs/Tags/flaggableobject.list_flags)
-- [FlaggableObject.flag_expiration tag](https://meta.denizenscript.com/Docs/Tags/flaggableobject.flag_expiration)
-- [FlaggableObject.flag_map tag](https://meta.denizenscript.com/Docs/Tags/flaggableobject.flag_map)
-- [ChunkLoad command doc](https://meta.denizenscript.com/Docs/Commands/chunkload)
-- [Ratelimit command doc](https://meta.denizenscript.com/Docs/Commands/ratelimit)
-- [DurationTag object type doc](https://meta.denizenscript.com/Docs/ObjectTypes/DurationTag)
+- [Dokumentacja języka Flag System](https://meta.denizenscript.com/Docs/Languages/flag%20system)
+- [Dokumentacja polecenia flag](https://meta.denizenscript.com/Docs/Commands/flag)
+- [Tag FlaggableObject.flag](https://meta.denizenscript.com/Docs/Tags/flaggableobject.flag)
+- [Tag FlaggableObject.has_flag](https://meta.denizenscript.com/Docs/Tags/flaggableobject.has_flag)
+- [Tag FlaggableObject.list_flags](https://meta.denizenscript.com/Docs/Tags/flaggableobject.list_flags)
+- [Tag FlaggableObject.flag_expiration](https://meta.denizenscript.com/Docs/Tags/flaggableobject.flag_expiration)
+- [Tag FlaggableObject.flag_map](https://meta.denizenscript.com/Docs/Tags/flaggableobject.flag_map)
+- [Dokumentacja polecenia ChunkLoad](https://meta.denizenscript.com/Docs/Commands/chunkload)
+- [Dokumentacja polecenia Ratelimit](https://meta.denizenscript.com/Docs/Commands/ratelimit)
+- [Dokumentacja typu obiektu DurationTag](https://meta.denizenscript.com/Docs/ObjectTypes/DurationTag)

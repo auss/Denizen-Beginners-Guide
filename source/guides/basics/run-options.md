@@ -1,17 +1,17 @@
-Run It Your Way: Run/Inject Options (PLACEHOLDER ONLY)
+Uruchamiaj po swojemu: Opcje Run/Inject (TYLKO PLACEHOLDER)
 -----------------------------------
 
-**TODO: Write-up that introduces the options on the run command, including how defs are passed through (including how to do a list as a single def), and how the inject command differs.**
+**TODO: Opis wprowadzający do opcji polecenia run, w tym sposobu przekazywania definicji (w tym przekazywania listy jako pojedynczej definicji) oraz różnic w działaniu polecenia inject.**
 
-### Placeholder
+### Placeholder (Miejsce na treść)
 
-Until this page is written, you can view the [old tutorial video here](https://one.denizenscript.com/denizen/vids/Run%20And%20Inject).
+Dopóki ta strona nie zostanie napisana, możesz obejrzeć [stary film instruktażowy tutaj](https://one.denizenscript.com/denizen/vids/Run%20And%20Inject).
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read a lot more about the run command and its options, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się znacznie więcej o poleceniu run i jego opcjach, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-Note: most users, especially those learning from the Denizen for the first time, should just continue on to the next guides page. These references might be of interest to later come back to after you've learned Denizen as far as this guide teaches.
+Uwaga: większość użytkowników, zwłaszcza tych uczących się Denizen po raz pierwszy, powinna po prostu przejść do następnej strony przewodnika. Referencje te mogą być interesujące do późniejszego powrotu, gdy już nauczysz się Denizen w stopniu, jaki przewiduje ten przewodnik.
 
-- [Run command doc](https://meta.denizenscript.com/Docs/Commands/run)
-- [Inject command doc](https://meta.denizenscript.com/Docs/Commands/inject)
+- [Dokumentacja polecenia Run](https://meta.denizenscript.com/Docs/Commands/run)
+- [Dokumentacja polecenia Inject](https://meta.denizenscript.com/Docs/Commands/inject)

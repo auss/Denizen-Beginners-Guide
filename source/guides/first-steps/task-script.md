@@ -1,154 +1,154 @@
-Your First Task Script
-----------------------
+Twój pierwszy skrypt zadania (Task Script)
+------------------------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### Task Script Basics
+### Podstawy skryptu zadania
 
-A task script is a stand-alone script that can be run either via in-game command with the [/ex command](/guides/first-steps/ex-command), or by the `run` command in a script.
+Skrypt zadania (task script) to samodzielny skrypt, który można uruchomić za pomocą polecenia w grze [/ex](/guides/first-steps/ex-command) lub za pomocą polecenia `run` w innym skrypcie.
 
-Task scripts will run all of the Denizen commands that they include. A task script can be simple, it can be complicated, and it can even run other task scripts. This is useful to create logic-based script chains, like dialogue options or random content.
+Skrypty zadań wykonają wszystkie zawarte w nich polecenia Denizen. Skrypt zadania może być prosty, skomplikowany, a nawet może uruchamiać inne skrypty zadań. Jest to przydatne do tworzenia łańcuchów skryptów opartych na logice, takich jak opcje dialogowe lub losowa zawartość.
 
-### Task Script Syntax
+### Składnia skryptu zadania
 
-Here's an example of a basic task script.
+Oto przykład podstawowego skryptu zadania.
 
 ```dscript_green
 example_task:
     type: task
     script:
-    - narrate "This is a basic task script!"
+    - narrate "To jest podstawowy skrypt zadania!"
 ```
 
-This script will narrate the text: `This is a basic task script!` to the player attached to the script. If you use the `/ex` command to run this script - specifically, by running `/ex run example_task` in-game, *you* will be the attached player.
+Ten skrypt wyświetli tekst: `To jest podstawowy skrypt zadania!` graczowi przypisanemu do skryptu. Jeśli użyjesz polecenia `/ex` do uruchomienia tego skryptu – konkretnie wpisując w grze `/ex run example_task` – *Ty* będziesz przypisanym graczem.
 
-Note that this script sample is highlighted in green. That means it's good enough that you could copy/paste it and it will work. Farther down this page there's a script example highlighted in blue, meaning it's a good example but some part needs to be filled in. Later on you'll see examples in red, indicating that those examples are what to *not* do. For more information on this highlighting system, refer to [This Guide - Sample Scripts](/guides/this-guide/sample-scripts).
+Zauważ, że ten przykład skryptu jest podświetlony na zielono. Oznacza to, że jest na tyle poprawny, że możesz go skopiować/wkleić i będzie działał. Dalej na tej stronie znajduje się przykład skryptu podświetlony na niebiesko, co oznacza, że jest to dobry przykład, ale jakaś jego część wymaga uzupełnienia. Później zobaczysz przykłady na czerwono, wskazujące na to, czego *nie* należy robić. Więcej informacji na temat tego systemu podświetlania znajdziesz w sekcji [Ten przewodnik - Przykładowe skrypty](/guides/this-guide/sample-scripts).
 
-### Building Your First Task Script In VS Code
+### Tworzenie pierwszego skryptu zadania w VS Code
 
-Previously, you've learned [how to set up VS Code](/guides/first-steps/script-editor), the editor that we recommend for writing Denizen scripts.
+Wcześniej dowiedziałeś się, [jak skonfigurować VS Code](/guides/first-steps/script-editor), edytor, który polecamy do pisania skryptów Denizen.
 
-#### Creating The File
+#### Tworzenie pliku
 
-To create your first task script, start by opening your scripts folder in VS Code.
+Aby utworzyć swój pierwszy skrypt zadania, zacznij od otwarcia folderu ze skryptami w VS Code.
 
 ![](images/fileopenfolder.png)
 ![](images/fileopenscriptsfolder.png)
 
-From there, right click the scripts folder in the explorer menu and click the "New File" option.
+Następnie kliknij prawym przyciskiem myszy folder ze skryptami w menu eksploratora i wybierz opcję „New File” (Nowy plik).
 
 ![](images/rightclicknewfile.png)
 
-Type any file name you want, just make sure to end it with `.dsc` - the required extension for a Denizen script file.
+Wpisz dowolną nazwę pliku, upewnij się tylko, że kończy się ona rozszerzeniem `.dsc` – wymaganym dla plików skryptów Denizen.
 
 ![](images/typefilenametest.png)
 
-Now you can begin writing your first task script!
+Teraz możesz zacząć pisać swój pierwszy skrypt zadania!
 
-#### Writing The Script
+#### Pisanie skryptu
 
-Let's start with the core of the script:
+Zacznijmy od rdzenia skryptu:
 
 ```dscript_blue
 my_first_task:
     type: task
     script:
-    - narrate (sometext)
+    - narrate (tekst)
 ```
 
-This example should look familiar - it's very similar to the example above.
+Ten przykład powinien wyglądać znajomo – jest bardzo podobny do przykładu powyżej.
 
-You should write this by first typing `my_first_task:` <span class="parens">(making sure to use `_` underscore symbols rather than spaces, and a `:` colon at the end), then press the ENTER key to go to the next line, and the TAB key to space forward the next block. As you continue typing lines, the level of indentation will remain where it was, meaning you do not have to press TAB again until you need to space something even farther out, as will be needed in later examples.
+Powinieneś go napisać, wpisując najpierw `my_first_task:` <span class="parens">(pamiętając o użyciu znaków podkreślenia `_` zamiast spacji i dwukropka `:` na końcu)</span>, następnie naciśnij klawisz ENTER, aby przejść do nowej linii, oraz klawisz TAB, aby zrobić wcięcie dla kolejnego bloku. Podczas pisania kolejnych linii poziom wcięcia pozostanie taki sam, co oznacza, że nie musisz ponownie naciskać klawisza TAB, dopóki nie będziesz musiał zrobić jeszcze większego wcięcia, co będzie potrzebne w późniejszych przykładach.
 
-#### Script Names
+#### Nazwy skryptów
 
-The name of the script here is `my_first_task`. It's at the top of the indentation <span class="parens">(meaning that there are no spaces at the start of the line, whereas all the other lines have exactly 4 spaces at the start - those are indented farther in)</span>. Each top-level indentation entry is a separate script. Here is an example of two different scripts:
+Nazwa skryptu tutaj to `my_first_task`. Znajduje się ona na samym początku linii <span class="parens">(co oznacza, że nie ma spacji na początku linii, podczas gdy wszystkie inne linie mają dokładnie 4 spacje na początku – są one bardziej wcięte)</span>. Każdy wpis na najwyższym poziomie wcięcia to oddzielny skrypt. Oto przykład dwóch różnych skryptów:
 
 ```dscript_green
 my_first_task:
     type: task
     script:
-    - narrate "This is is task number one!"
+    - narrate "To jest zadanie numer jeden!"
 
 my_second_task:
     type: task
     script:
-    - narrate "This is task number two!"
+    - narrate "To jest zadanie numer dwa!"
 ```
 
-This example demonstrates what having two different scripts in the same file looks like. `my_first_task` and `my_second_task` are two different scripts, and each is a fully self-contained script.
+Ten przykład pokazuje, jak wyglądają dwa różne skrypty w tym samym pliku. `my_first_task` i `my_second_task` to dwa różne skrypty, a każdy z nich jest w pełni samodzielny.
 
-Additionally, note that *script names* and *file names* are different. Both `my_first_task` and `my_second_task` could be contained within the same file named `my_first_scripts.dsc`. It's the script name <span class="parens">(that `my_first_task`)</span> that matters, the file name <span class="parens">(`my_first_scripts.dsc`)</span> is entirely for your own personal organization, and will not make any difference to Denizen. Note as well that you're free to create subfolders inside the `scripts` folder, and any script files within will be loaded just the same.
+Dodatkowo pamiętaj, że *nazwy skryptów* i *nazwy plików* to dwie różne rzeczy. Zarówno `my_first_task`, jak i `my_second_task` mogą znajdować się w tym samym pliku o nazwie `moje_pierwsze_skrypty.dsc`. Liczy się nazwa skryptu <span class="parens">(ta `my_first_task`)</span>, nazwa pliku <span class="parens">(`moje_pierwsze_skrypty.dsc`)</span> służy wyłącznie Twojej własnej organizacji i nie ma znaczenia dla Denizen. Pamiętaj też, że możesz swobodnie tworzyć podfoldery wewnątrz folderu `scripts`, a wszystkie pliki skryptów w nich zawarte zostaną załadowane tak samo.
 
-#### Script Types
+#### Typy skryptów
 
-Below the script name - on the second level of indentation - you'll see the `type` key.
+Poniżej nazwy skryptu – na drugim poziomie wcięcia – zobaczysz klucz `type`.
 
-The `type` key is where you specify which `type` of Denizen script you're writing. In this case, we're writing a `task` script. You may have already seen `world` scripts, `item` scripts, `inventory` scripts, or any of the many other types that exist. For now, we will focus on `task` scripts. You'll learn about the different types as you read through these guides, and you can find explanations about all of them from the meta documentation on the [language explanation page](https://meta.denizenscript.com/Docs/Languages/container).
+Klucz `type` służy do określenia, jakiego typu skrypt Denizen piszesz. W tym przypadku piszemy skrypt typu `task`. Mogłeś już widzieć skrypty `world`, `item`, `inventory` lub którykolwiek z wielu innych istniejących typów. Na razie skupimy się na skryptach `task`. Dowiesz się o różnych typach w miarę czytania tych przewodników, a wyjaśnienia na temat ich wszystkich znajdziesz w meta-dokumentacji na [stronie wyjaśniającej język](https://meta.denizenscript.com/Docs/Languages/container).
 
-Make sure you write `type: task` in your script on the second level of indentation <span class="parens">(press **enter** to start a new line, then press **tab** to indent once. This will add 4 spaces on the line, and every time you press enter after there will automatically be 4 spaces again, until you press backspace to remove the spaces)</span>, below the script name, like this:
+Upewnij się, że w swoim skrypcie na drugim poziomie wcięcia wpisałeś `type: task` <span class="parens">(naciśnij **enter**, aby zacząć nową linię, a następnie **tab**, aby zrobić wcięcie. To doda 4 spacje w linii, a po każdym kolejnym naciśnięciu enter automatycznie znów pojawią się 4 spacje, dopóki nie naciśniesz backspace, aby je usunąć)</span>, pod nazwą skryptu, w ten sposób:
 
 ```dscript_blue
 my_first_task:
     type: task
 ```
 
-#### Script Commands
+#### Polecenia skryptu
 
-Below the `type` key, you'll see the `script` key. For a task script, the `script` key is where you write the content of the script - the set of instructions that tell Denizen what to do. Other types of scripts use other keys, and you'll learn about them as you continue to work through this guide. The majority of actual work you do in Denizen will be under keys like this one.
+Poniżej klucza `type` zobaczysz klucz `script`. W przypadku skryptu zadania, pod kluczem `script` wpisujesz treść skryptu – zestaw instrukcji, które mówią Denizen, co ma robić. Inne typy skryptów używają innych kluczy, o których dowiesz się w dalszej części tego przewodnika. Większość rzeczywistej pracy, którą wykonasz w Denizen, będzie odbywać się pod kluczami takimi jak ten.
 
-Let's look at another example script:
+Spójrzmy na inny przykładowy skrypt:
 
 ```dscript_green
 my_first_task:
     type: task
     script:
-    - narrate "This is a valid task script!"
-    - narrate "Congratulations on writing your first script!"
+    - narrate "To jest poprawny skrypt zadania!"
+    - narrate "Gratulacje z okazji napisania pierwszego skryptu!"
 ```
 
-Notice how the text we want to narrate - `This is a valid task script!` - is enclosed in `""` quotes. Because the message we want to narrate has ` ` spaces in it, we enclose it in quotes to make sure that the command only has one argument. Denizen commands have arguments that are separated by ` ` spaces. For example, `run one two three` has arguments `one`, `two`, and `three`, but `run "one two three"` only has one argument, `one two three`.
+Zauważ, że tekst, który chcemy wyświetlić – `To jest poprawny skrypt zadania!` – jest ujęty w cudzysłów `""`. Ponieważ wiadomość, którą chcemy wyświetlić, zawiera spacje, umieszczamy ją w cudzysłowie, aby upewnić się, że polecenie ma tylko jeden argument. Polecenia Denizen mają argumenty oddzielone spacjami. Na przykład `run jeden dwa trzy` ma argumenty `jeden`, `dwa` i `trzy`, ale `run "jeden dwa trzy"` ma tylko jeden argument: `jeden dwa trzy`.
 
-### Completed Product
+### Ukończony produkt
 
-At this point, you should have a task script that's ready to run! Go on, give it a try - first, type `/ex reload` in-game to load the new script in, then use the `/ex run (YourTaskName)` command to run the task in-game. For example, the in-game command to run the above script would be `/ex run my_first_task`.
+W tym momencie powinieneś mieć skrypt zadania gotowy do uruchomienia! No dalej, spróbuj – najpierw wpisz w grze `/ex reload`, aby załadować nowy skrypt, a następnie użyj polecenia `/ex run (NazwaTwojegoZadania)`, aby uruchomić zadanie w grze. Na przykład polecenie w grze do uruchomienia powyższego skryptu to `/ex run my_first_task`.
 
-If you see the text that you wrote for the `narrate` command, you've successfully written your first task script. Congratulations!
+Jeśli widzisz tekst, który napisałeś dla polecenia `narrate`, pomyślnie napisałeś swój pierwszy skrypt zadania. Gratulacje!
 
 ![](images/runfirsttaskscript.png)
 
-### A Little Bit Further
+### Krok dalej
 
-To take what you learned here a little bit further, and bearing in mind that while we've been using the `run` command via `/ex`, it is a Denizen script command <span class="parens">(the `/ex` command is just an in-game tool to quickly run any script command)</span>, let's look at an example that does just a little bit more than the previous ones.
+Aby nieco rozwinąć to, czego się tutaj nauczyłeś – pamiętając, że chociaż używaliśmy polecenia `run` przez `/ex`, jest to polecenie skryptowe Denizen <span class="parens">(polecenie `/ex` to tylko narzędzie w grze do szybkiego uruchamiania dowolnego polecenia skryptowego)</span> – spójrzmy na przykład, który robi nieco więcej niż poprzednie.
 
-You can also use one task script to trigger another task script. That looks like this:
+Możesz również użyć jednego skryptu zadania, aby uruchomić inny skrypt zadania. Wygląda to tak:
 
 ```dscript_green
 my_first_task:
     type: task
     script:
-    - narrate "This is a valid task script!"
-    - narrate "Congratulations on writing your first script!"
+    - narrate "To jest poprawny skrypt zadania!"
+    - narrate "Gratulacje z okazji napisania pierwszego skryptu!"
     - run my_second_task
 
 my_second_task:
     type: task
     script:
-    - narrate "This is your second task script!"
+    - narrate "To jest Twój drugi skrypt zadania!"
 ```
 
-This is just a basic example, and you'll be able to create more complicated and powerful scripts as you learn more about Denizen.
+To tylko podstawowy przykład, a będziesz mógł tworzyć bardziej skomplikowane i potężne skrypty, w miarę jak będziesz uczyć się więcej o Denizen.
 
-It's worth noting that in the example above, `my_first_task` and `my_second_task` are each a separate *script container*, and both can be within one *script file*, or different files - it doesn't make a difference to Denizen.
+Warto zauważyć, że w powyższym przykładzie `my_first_task` i `my_second_task` to oddzielne *kontenery skryptów* i oba mogą znajdować się w jednym *pliku skryptu* lub w różnych plikach – dla Denizen nie ma to znaczenia.
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read a lot more about task scripts, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się znacznie więcej o skryptach zadań, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-Note: most users, especially those learning from the Denizen for the first time, should just continue on to the next guides page. These references might be of interest to later come back to after you've learned Denizen as far as this guide teaches.
+Uwaga: większość użytkowników, zwłaszcza tych uczących się Denizen po raz pierwszy, powinna po prostu przejść do następnej strony przewodnika. Referencje te mogą być interesujące do późniejszego powrotu, gdy już nauczysz się Denizen w stopniu, jaki przewiduje ten przewodnik.
 
-- [Task script containers doc](https://meta.denizenscript.com/Docs/Languages/task%20script%20containers)
-- [Run command doc](https://meta.denizenscript.com/Docs/Commands/run)
+- [Dokumentacja kontenerów skryptów zadań](https://meta.denizenscript.com/Docs/Languages/task%20script%20containers)
+- [Dokumentacja polecenia Run](https://meta.denizenscript.com/Docs/Commands/run)

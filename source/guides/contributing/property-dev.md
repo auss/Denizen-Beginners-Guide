@@ -1,34 +1,34 @@
-Adding New Properties And Tools
--------------------------------
+Dodawanie nowych właściwości i narzędzi
+-------------------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-You should already be familiar with how to use tags and mechanisms within scripts. This page will walk you through creating your own custom tags, mechanisms, and properties in Java.
+Powinieneś być już zaznajomiony z używaniem tagów i mechanizmów wewnątrz skryptów. Ta strona przeprowadzi Cię przez proces tworzenia własnych tagów, mechanizmów i właściwości (properties) w Javie.
 
-### Registering Tags
+### Rejestracja tagów
 
-Tags that don't belong to properties are registered in the class definition of the object type, specifically in the `registerTags` static method. Take a look at the `PlayerTag` class located in the `objects` package.
+Tagi, które nie należą do właściwości, są rejestrowane w definicji klasy danego typu obiektu, konkretnie w statycznej metodzie `registerTags`. Spójrz na klasę `PlayerTag` znajdującą się w pakiecie `objects`.
 
-Every tag type has a **tag processor**, which is defined as a static member of the type's class as `tagProcessor`. To register a tag, you'll need to call `registerTag` on this object. This method takes three parameters: the return type's class, the name of the tag, and a lambda expression that takes two parameters of its own.
+Każdy typ tagu posiada **procesor tagów** (tag processor), który jest zdefiniowany jako statyczny element klasy danego typu pod nazwą `tagProcessor`. Aby zarejestrować tag, należy wywołać `registerTag` na tym obiekcie. Metoda ta przyjmuje trzy parametry: klasę zwracanego typu, nazwę tagu oraz wyrażenie lambda przyjmujące dwa własne parametry.
 
 ```java
-tagProcessor.registerTag(ElementTag.class, "tag_name", (attribute, object) -> {
-    return new ElementTag("Hello, world!");
+tagProcessor.registerTag(ElementTag.class, "nazwa_tagu", (attribute, object) -> {
+    return new ElementTag("Witaj, świecie!");
 });
 ```
 
-Let's explain that lambda in more detail. The `attribute` parameter is an instance of the `Attribute` class which is a general utility object that contains all information about the tag being processed and a variety of helper methods and tools to use while processing the tag. For example, you can access the parameter with `attribute.getParam()`. When things go wrong, you'll call `attribute.echoError("...")` and return null.
+Wyjaśnijmy tę lambdę dokładniej. Parametr `attribute` jest instancją klasy `Attribute`, która jest ogólnym obiektem narzędziowym zawierającym wszystkie informacje o przetwarzanym tagu oraz szereg metod pomocniczych. Na przykład możesz uzyskać dostęp do parametru przez `attribute.getParam()`. Gdy coś pójdzie nie tak, wywołujesz `attribute.echoError("...")` i zwracasz null.
 
-The `object` parameter is just the instance of the current class. This means that in the `PlayerTag` class, `object` would be a `PlayerTag`.
+Parametr `object` to po prostu instancja aktualnej klasy. Oznacza to, że w klasie `PlayerTag`, `object` będzie typu `PlayerTag`.
 
-Using this information, let's make a tag called `uuid_uppercase` which returns the player's UUID and capitalizes every letter. This doesn't have a genuine use; it's just for demonstration and practice purposes. If it did have a use, then the author of this guide page would have already contributed it.
+Korzystając z tych informacji, stwórzmy tag o nazwie `uuid_uppercase`, który zwraca UUID gracza i zamienia wszystkie litery na wielkie. Nie ma to większego sensu użytkowego; służy jedynie celom demonstracyjnym i ćwiczeniowym.
 
-We want to a return a single string, so our return type will be ElementTag. Additionally, we can use the `getUUID()` method on `object` to get the player's UUID. `UUID` is a Java utility class that has a `toString()` method, so we can use that alongside `toUpperCase()` to get what we want.
+Chcemy zwrócić pojedynczy ciąg znaków, więc naszym typem zwracanym będzie `ElementTag`. Dodatkowo możemy użyć metody `getUUID()` na obiekcie `object`, aby pobrać UUID gracza. `UUID` to klasa narzędziowa Javy posiadająca metodę `toString()`, więc możemy jej użyć wraz z `toUpperCase()`, aby uzyskać zamierzony efekt.
 
-The `ElementTag` class has many constructors, including one that can take a single `String`, so we'll use that.
+Klasa `ElementTag` ma wiele konstruktorów, w tym jeden przyjmujący pojedynczy `String`, którego użyjemy.
 
 ```java
 tagProcessor.registerTag(ElementTag.class, "uuid_uppercase", (attribute, object) -> {
@@ -36,17 +36,17 @@ tagProcessor.registerTag(ElementTag.class, "uuid_uppercase", (attribute, object)
 });
 ```
 
-Put this into the `registerTags` method, build Denizen, and put the jar into your `plugins` folder. Now, if you start the server and run `/ex narrate <player.uuid_uppercase>` in-game, it'll display your UUID in uppercase.
+Umieść to w metodzie `registerTags`, zbuduj Denizen i wklej plik jar do folderu `plugins`. Teraz po uruchomieniu serwera i wpisaniu w grze `/ex narrate <player.uuid_uppercase>`, zobaczysz swój UUID zapisany wielkimi literami.
 
 ![](images/uuid_uppercase.png)
 
-### Taking Tag Input
+### Przyjmowanie parametrów tagu
 
-Let's mess with the player's UUID a bit more. We'll be editing our `uuid_uppercase` tag to take a boolean input that represents whether the UUID should be repeated once with a space in between.
+Pobawmy się jeszcze trochę z UUID gracza. Edytujemy nasz tag `uuid_uppercase` tak, aby przyjmował parametr logiczny (boolean) określający, czy UUID ma zostać powtórzony dwukrotnie ze spacją pomiędzy.
 
-We can use the `attribute` parameter to check if the tag has input with `hasParam()`. If so, we can get the input as an element with `getParamElement()`. The `ElementTag` class has a variety of methods for returning different primitive values depending on its internal value; we can get the boolean input by calling `asBoolean()`.
+Możemy użyć parametru `attribute`, aby sprawdzić, czy tag posiada wejście za pomocą `hasParam()`. Jeśli tak, możemy pobrać to wejście jako element przez `getParamElement()`. Klasa `ElementTag` posiada zestaw metod zwracających różne wartości prymitywne w zależności od wewnętrznej zawartości; możemy pobrać wartość logiczną, wywołując `asBoolean()`.
 
-The above logic can be turned into one if statement like so:
+Powyższą logikę można zamienić w jedną instrukcję if:
 
 ```java
 if (attribute.hasParam() && attribute.getParamElement().asBoolean()) {
@@ -54,7 +54,7 @@ if (attribute.hasParam() && attribute.getParamElement().asBoolean()) {
 }
 ```
 
-We can then move our UUID string to a variable and modify it if the condition passes <span class="parens">(concatenation is fine)</span>. After that, we just return it as an element like before.
+Możemy następnie przenieść nasz ciąg UUID do zmiennej i zmodyfikować go, jeśli warunek jest spełniony <span class="parens">(konkatenacja jest w porządku)</span>. Następnie po prostu zwracamy go jako element, jak wcześniej.
 
 ```java
 tagProcessor.registerTag(ElementTag.class, "uuid_uppercase", (attribute, object) -> {
@@ -66,35 +66,35 @@ tagProcessor.registerTag(ElementTag.class, "uuid_uppercase", (attribute, object)
 });
 ```
 
-With this setup, the tag input is optional; you don't even need to use `[]`. If you test it and input `true`, however, it should return two uppercase UUIDs separated by a space.
+Przy takiej konfiguracji parametr tagu jest opcjonalny; nie musisz nawet używać `[]`. Jeśli jednak przetestujesz to i wpiszesz `true`, tag powinien zwrócić dwa wielkie UUID rozdzielone spacją.
 
-### Documenting Tags: Meta Entries
+### Dokumentowanie tagów: Wpisy meta
 
-We have a complete and functional tag, but there's one more thing we're missing: documentation! If you've ever wondered how the [meta documentation site](https://meta.denizenscript.com/) works, it actually looks through all the Denizen code and finds custom comments to parse. We call this **meta documentation** because it is documentation that exists next to, but not as a direct part of, the feature it's documenting. For tags, it look like this:
+Mamy kompletny i działający tag, ale brakuje nam jeszcze jednej rzeczy: dokumentacji! Jeśli kiedykolwiek zastanawiałeś się, jak działa [strona z meta-dokumentacją](https://meta.denizenscript.com/), to w rzeczywistości przeszukuje ona cały kod Denizen i znajduje specjalne komentarze do przetworzenia. Nazywamy to **meta-dokumentacją**, ponieważ jest to dokumentacja istniejąca obok, ale nie jako bezpośrednia część funkcji, którą opisuje. Dla tagów wygląda to tak:
 
 ```text
 // <--[tag]
-// @attribute <ObjectTag.tag_name>
+// @attribute <ObjectTag.nazwa_tagu>
 // @returns ObjectTag
-// @mechanism ObjectTag.mech_name
+// @mechanism ObjectTag.nazwa_mechanizmu
 // @description
-// This is the description of the tag.
+// To jest opis tagu.
 // -->
 ```
 
-Note that "attribute" is just another term for tag. Keep in mind that this needs to display exactly how the tag should be used, so if the tag takes input, you'll need to account for it. The `@mechanism` key is optional; if present, it means that the supplied mechanism is the direct counterpart to the tag.
+Zauważ, że „attribute” to po prostu inny termin na tag. Pamiętaj, że musi to pokazywać dokładnie, jak tag powinien być używany, więc jeśli tag przyjmuje wejście, musisz to uwzględnić. Klucz `@mechanism` jest opcjonalny; jeśli występuje, oznacza to, że podany mechanizm jest bezpośrednim odpowiednikiem tagu.
 
-The `@returns` key is the tag type of the returned value. In our case, it's just `ElementTag`, since we're returning a piece of text. However, you'll need to be more specific at times; ElementTags can contain booleans, integers, and decimals. For those cases, we denote the specific type in parentheses: `ElementTag(Boolean)`, `ElementTag(Number)`, and `ElementTag(Decimal)` respectively. This specification also applies to ListTags: for example, if you had a list of locations, you'd denote the type as `ListTag(LocationTag)`.
+Klucz `@returns` to typ tagu zwracanej wartości. W naszym przypadku jest to po prostu `ElementTag`, ponieważ zwracamy tekst. Czasem jednak musisz być bardziej precyzyjny; ElementTagi mogą zawierać wartości logiczne, liczby całkowite i dziesiętne. W takich przypadkach oznaczamy konkretny typ w nawiasach: odpowiednio `ElementTag(Boolean)`, `ElementTag(Number)` oraz `ElementTag(Decimal)`. Ta specyfikacja dotyczy również ListTagów: na przykład dla listy lokalizacji typem byłoby `ListTag(LocationTag)`.
 
-Meta entries are stuck directly above the tag code. Here's what it would look like on our tag:
+Wpisy meta są umieszczane bezpośrednio nad kodem tagu. Oto jak wyglądałoby to przy naszym tagu:
 
 ```java
 // <--[tag]
 // @attribute <PlayerTag.uuid_uppercase[(<repeat>)]>
 // @returns ElementTag
 // @description
-// Returns the UUID of the player in uppercase.
-// Optionally specify whether the UUID should be repeated once.
+// Zwraca UUID gracza wielkimi literami.
+// Opcjonalnie określa, czy UUID ma zostać powtórzony raz.
 // -->
 tagProcessor.registerTag(ElementTag.class, "uuid_uppercase", (attribute, object) -> {
     String uuid = object.getUUID().toString().toUpperCase();
@@ -105,40 +105,40 @@ tagProcessor.registerTag(ElementTag.class, "uuid_uppercase", (attribute, object)
 });
 ```
 
-Note that while meta-documentation is, as far as your IDE cares, just a text comment, it is in fact a very strict format that must be followed with care. This is because multiple services automatically parse and make use of this metadata. For example, if you forgot the `()` around the `<repeat>` in the above example, [the script editor](/guides/first-steps/script-editor) would display an error on any script that tried to use the tag without the parameter.
+Pamiętaj, że choć meta-dokumentacja jest dla Twojego edytora tylko komentarzem tekstowym, w rzeczywistości jest to bardzo rygorystyczny format, którego należy przestrzegać. Wiele usług automatycznie analizuje te metadane. Na przykład, jeśli zapomnisz nawiasów `()` wokół `<repeat>` w powyższym przykładzie, [edytor skryptów](/guides/first-steps/script-editor) wyświetli błąd w każdym skrypcie próbującym użyć tagu bez parametru.
 
-### Creating Mechanisms
+### Tworzenie mechanizmów
 
-**NOTE**: This section is subject to change in the future when mechanisms are updated to use a registration system akin to the tag registration system.
+**UWAGA**: Ta sekcja może ulec zmianie w przyszłości, gdy mechanizmy zostaną zaktualizowane o system rejestracji podobny do tego dla tagów.
 
-Unlike modern tags, mechanisms undergo a series of checks to "match" the mechanism. This is done in the class definition's `adjust` method, which takes a `mechanism` parameter. Mechanisms have a variety of methods to match and check input, which we'll see shortly.
+W przeciwieństwie do nowoczesnych tagów, mechanizmy przechodzą serię sprawdzeń w celu „dopasowania” (match). Dzieje się to w metodzie `adjust` definicji klasy, która przyjmuje parametr `mechanism`. Mechanizmy mają różne metody do dopasowywania i sprawdzania wejścia, które zaraz zobaczymy.
 
-To match a mechanism, use the `matches(String)` method and provide the mechanism name. To require a specific input type, you can make use of the methods starting with `require`, such as `requireBoolean()` and `requireObject(Object)`. Wrap these methods in an if statement to start a mechanism block.
+Aby dopasować mechanizm, użyj metody `matches(String)` i podaj nazwę mechanizmu. Aby wymagać konkretnego typu wejścia, możesz skorzystać z metod zaczynających się od `require`, takich jak `requireBoolean()` czy `requireObject(Object)`. Otocz te metody instrukcją if, aby rozpocząć blok mechanizmu.
 
 ```java
-if (mechanism.matches("some_mechanism") && mechanism.requireBoolean()) {
-    // do stuff
+if (mechanism.matches("jakis_mechanizm") && mechanism.requireBoolean()) {
+    // wykonaj akcje
 }
 ```
 
-Let's make a mechanism for an ItemTag called `wrap_brackets` that takes an integer as input. It'll wrap its display name in brackets with the specified amount of spaces in between. We can make use of the `requireInteger()` method for the input.
+Stwórzmy mechanizm dla `ItemTag` o nazwie `wrap_brackets`, który przyjmuje liczbę całkowitą. Otoczy on nazwę wyświetlaną przedmiotu nawiasami z określoną liczbą spacji pomiędzy. Skorzystamy z metody `requireInteger()` dla wejścia.
 
-The `ItemTag` class has an `Item` instance variable named `item`. Since `adjust` isn't a static method, we can use instance variables directly inside of mechanism code. The display name, lore, enchantments, etc. all fall under "item meta," which we can check exists with `hasItemMeta()` and get with `getItemMeta()`. In the case there isn't any existing item meta, we'll throw an error. 
+Klasa `ItemTag` posiada zmienną instancyjną `Item` o nazwie `item`. Ponieważ `adjust` nie jest metodą statyczną, możemy używać zmiennych instancyjnych bezpośrednio w kodzie mechanizmu. Nazwa wyświetlana, opis (lore), zaklęcia itp. należą do „meta przedmiotu” (item meta), której istnienie możemy sprawdzić przez `hasItemMeta()` i pobrać przez `getItemMeta()`. Jeśli meta przedmiotu nie istnieje, wyrzucimy błąd.
 
-Generally, you should try to check for reasonably possible invalid inputs and give a clean error to explain the user. This is not strictly necessary, but it is encouraged to help ensure that Denizen remains friendly to new scripters, as unchecked errors may be hard to track down and fix for the inexperienced.
+Ogólnie powinieneś starać się sprawdzać możliwe błędne dane i wyświetlać czytelny błąd dla użytkownika. Nie jest to ściśle wymagane, ale zalecane, aby Denizen pozostał przyjazny dla nowych użytkowników, ponieważ niesprawdzone błędy mogą być trudne do namierzenia dla niedoświadczonych osób.
 
-There is an `echoError("...")` method for both `attribute` in tags and `mechanism` in mechanisms. That doesn't stop the code, however, so you'll need to return in both cases. Since you need to return something in a tag, you'll return `null`, as that is understood by the tag system to indicate the tag was invalid.
+Istnieje metoda `echoError("...")` zarówno dla `attribute` w tagach, jak i dla `mechanism` w mechanizmach. Nie zatrzymuje ona jednak wykonywania kodu, więc w obu przypadkach musisz użyć `return`. Ponieważ w tagu musisz coś zwrócić, zwrócisz `null`, co jest rozumiane przez system jako informacja, że tag był nieprawidłowy.
 
 ```java
 if (mechanism.matches("wrap_brackets") && mechanism.requireInteger()) {
     if (getItemMeta() == null || !getItemMeta().hasDisplayName()) {
-        mechanism.echoError("This item doesn't have a display name!");
+        mechanism.echoError("Ten przedmiot nie ma nazwy wyswietlanej!");
         return;
     }
 }
 ```
 
-Now that we're free of errors, we can use the `getValue()` method, which returns the input as an ElementTag. Building off of the [Taking Tag Input](#taking-tag-input) section, we can use `asInt()` for the amount of brackets. After that, we can use some basic `StringBuilder` logic to repeat spaces.
+Teraz, gdy błędy nam nie grożą, możemy użyć metody `getValue()`, która zwraca wejście jako `ElementTag`. Korzystając z wiedzy z sekcji o wejściach tagów, użyjemy `asInt()` dla liczby spacji. Następnie możemy użyć prostej logiki `StringBuilder` do powtórzenia spacji.
 
 ```java
 if (mechanism.matches("wrap_brackets") && mechanism.requireInteger()) {
@@ -151,16 +151,16 @@ if (mechanism.matches("wrap_brackets") && mechanism.requireInteger()) {
 }
 ```
 
-It's time we talk about **NMS** <span class="parens">(short for `net.minecraft.server`, the core Minecraft server package)</span>. "NMS" code in Denizen is generally used any time the Spigot API does not support a feature, or code must be written differently depending on the Minecraft version. In the case of item display names, the Spigot API has a method for display names that improperly handles advanced text features <span class="parens">(for example, alternate fonts)</span> and as such a special NMS assisted implementation is used instead in Denizen.
+Czas porozmawiać o **NMS** <span class="parens">(skrót od `net.minecraft.server`, rdzennego pakietu serwera Minecraft)</span>. Kod „NMS” w Denizen jest zazwyczaj używany wtedy, gdy Spigot API nie wspiera danej funkcji lub gdy kod musi być napisany inaczej zależnie od wersji Minecrafta. W przypadku nazw wyświetlanych przedmiotów, Spigot API posiada metodę, która niewłaściwie obsługuje zaawansowane funkcje tekstu <span class="parens">(np. alternatywne czcionki)</span> i dlatego w Denizen używa się specjalnej implementacji wspomaganej przez NMS.
 
-Denizen provides NMS tooling through the class `NMSHandler` and its attached sub-classes. The specific class we want to access is `ItemHelper`, which can be accessed via `NMSHandler.getItemHelper()`. We can then use `getDisplayName(ItemTag)` and `setDisplayName(ItemTag, String)` to achieve what we want.
+Denizen dostarcza narzędzia NMS poprzez klasę `NMSHandler` i jej podklasy. Klasa, do której chcemy uzyskać dostęp, to `ItemHelper`, dostępna przez `NMSHandler.getItemHelper()`. Możemy wtedy użyć `getDisplayName(ItemTag)` oraz `setDisplayName(ItemTag, String)`, aby osiągnąć cel.
 
-Going back to the item mechanism - it's a simple call to those two methods, and some string concatenation. Here's our final implementation:
+Wracając do mechanizmu przedmiotu – to proste wywołanie tych dwóch metod i konkatenacja ciągów. Oto nasza finalna implementacja:
 
 ```java
 if (mechanism.matches("wrap_brackets") && mechanism.requireInteger()) {
     if (getItemMeta() == null || !getItemMeta().hasDisplayName()) {
-        mechanism.echoError("This item doesn't have a display name!");
+        mechanism.echoError("Ten przedmiot nie ma nazwy wyswietlanej!");
         return;
     }
     int amount = mechanism.getValue().asInt();
@@ -173,53 +173,53 @@ if (mechanism.matches("wrap_brackets") && mechanism.requireInteger()) {
 }
 ```
 
-Remember that you'll need to use the [`inventory`](https://meta.denizenscript.com/Docs/Commands/inventory) command to adjust an item in your inventory. The item will also need to have its `display` property set beforehand <span class="parens">(that's what the error check is for)</span>.
+Pamiętaj, że będziesz musiał użyć polecenia [`inventory`](https://meta.denizenscript.com/Docs/Commands/inventory) do dostosowania przedmiotu w swoim ekwipunku. Przedmiot musi też mieć wcześniej ustawioną właściwość `display` <span class="parens">(po to jest sprawdzenie błędu)</span>.
 
-Mechanisms also have meta entries! Try to fill out one on your own based on this template:
+Mechanizmy również mają wpisy meta! Spróbuj wypełnić jeden samodzielnie na podstawie tego szablonu:
 
 ```text
 // <--[mechanism]
 // @object ObjectTag
-// @name mech_name
+// @name nazwa_mechanizmu
 // @input ObjectTag
 // @description
-// This is the description of the mechanism.
+// To jest opis mechanizmu.
 // @tags
-// <ObjectTag.tag_name>
+// <ObjectTag.nazwa_tagu>
 // -->
 ```
 
-### Properties?
+### Właściwości (Properties)?
 
-Many objects in Denizen can be described by some core type, combined with a set of specific details about that object. Each specific detail that is necessary to accurately define the identity of an object is called a **Property**.
+Wiele obiektów w Denizen można opisać za pomocą pewnego typu podstawowego połączonego z zestawem konkretnych szczegółów. Każdy taki szczegół, niezbędny do dokładnego określenia tożsamości obiektu, nazywany jest **Właściwością** (Property).
 
-For example, `MaterialTag`, when used to identify block types, has a core type - the Material enum value - and various specific datapoints about the block data. For example, [`MaterialTag.half`](https://meta.denizenscript.com/Docs/Tags/materialtag.half) is the "half" value of a material like a bed - the head half, or the foot half. The head-half of a bed is a different precise block-type than the foot-half of a bed. This shows up in Denizen like `red_bed[half=head]`. When this material is read by Denizen, it creates an instance of `MaterialTag` with the material type `red_bed`, and the adjusts the `half` mechanism with a value of `head` to produce the final valid object. When `identify()` is called on the instance, it reads through all properties and includes them in the output.
+Na przykład `MaterialTag` służący do identyfikacji typów bloków posiada typ podstawowy (Material enum) oraz różne konkretne punkty danych o bloku. Na przykład [`MaterialTag.half`](https://meta.denizenscript.com/Docs/Tags/materialtag.half) to wartość „połowy” materiału takiego jak łóżko – górna (head) lub dolna (foot). Górna połowa łóżka to inny precyzyjny typ bloku niż dolna. W Denizen widać to jako `red_bed[half=head]`. Kiedy ten materiał jest odczytywany przez Denizen, tworzy on instancję `MaterialTag` o typie `red_bed`, a następnie dostosowuje mechanizm `half` z wartością `head`, aby uzyskać ostateczny poprawny obiekt. Gdy na instancji wywoływana jest metoda `identify()`, odczytuje ona wszystkie właściwości i dołącza je do wyniku.
 
-Each Property in Denizen is defined in its own class that implements the `Property` interface. A valid property must necessarily have a name, a mechanism, and a value getter that corresponds to the mechanism. Properties should almost always have one or more tags to read the relevant data directly as well.
+Każda właściwość w Denizen jest zdefiniowana we własnej klasie implementującej interfejs `Property`. Poprawna właściwość musi koniecznie posiadać nazwę, mechanizm oraz funkcję pobierającą wartość (getter) odpowiadającą mechanizmowi. Właściwości powinny prawie zawsze posiadać również jeden lub więcej tagów do bezpośredniego odczytu danych.
 
-Tags are registered in the static `registerTags` method, and mechanisms are applied in the `adjust` method. You might recognize that this is exactly how it works in the tag type classes!
+Tagi są rejestrowane w statycznej metodzie `registerTags`, a mechanizmy są nakładane w metodzie `adjust`. Możesz zauważyć, że działa to dokładnie tak samo, jak w klasach typów tagów!
 
-Here are the methods a property needs to implement:
+Oto metody, które właściwość musi zaimplementować:
 
-- `getPropertyString` - the current value of the property as a String, formatted to be input directly back into the mechanism. For simple properties such as boolean values, this can return `"true"` or `"false"`. However, with more complex tag outputs, you can use the relevant object type's `identify()` method. This can return `null` in cases where a property's value is a default or 'unset' state. It can also return `null` for extension properties <span class="parens">(further explanation below)</span>.
-- `getPropertyId` - the property's name. This must be the same as the mechanism name. For example, `half` in `MaterialTag.half`.
-- `describes` - this is a static class called through reflection by the property engine and by `getFrom`. It takes an ObjectTag and determines if it can be used for the property. This must both check the tag type and validate that the object's specific sub-type can be described by the property. For example, `leaf_size` is only relevant to `bamboo` blocks, so `MaterialLeafSize` checks if the material provided is bamboo.
-- `getFrom` - this is a static class called through reflection by the property engine. It must return an instance of the property if valid to, or `null` if not. This method's body in practice is almost always just copy/pasted from reference implementations.
+- `getPropertyString` – aktualna wartość właściwości jako String, sformatowana tak, by mogła zostać wprowadzona z powrotem do mechanizmu. Dla prostych właściwości typu boolean może to być `"true"` lub `"false"`. Jednak przy bardziej złożonych wynikach tagów możesz użyć metody `identify()` odpowiedniego typu obiektu. Może to zwrócić `null` w przypadkach, gdy wartość właściwości jest domyślna lub nieustawiona. Może też zwrócić `null` dla właściwości rozszerzających (extension properties) <span class="parens">(wyjaśnienie poniżej)</span>.
+- `getPropertyId` – nazwa właściwości. Musi być taka sama jak nazwa mechanizmu. Na przykład `half` w `MaterialTag.half`.
+- `describes` – statyczna metoda wywoływana przez mechanizm refleksji. Przyjmuje `ObjectTag` i określa, czy może on być użyty dla tej właściwości. Musi ona zarówno sprawdzać typ tagu, jak i weryfikować, czy konkretny podtyp obiektu może być opisany przez tę właściwość. Na przykład `leaf_size` dotyczy tylko bloków `bamboo`, więc `MaterialLeafSize` sprawdza, czy podany materiał to bambus.
+- `getFrom` – statyczna metoda wywoływana przez mechanizm refleksji. Musi zwrócić instancję właściwości, jeśli jest to możliwe, lub `null` w przeciwnym razie. Ciało tej metody w praktyce jest niemal zawsze kopiowane z referencyjnych implementacji.
 
-Currently, when creating mechanisms, you need to add the mechanism name to the `handledMechs` array. There used to be the equivalent for tags, but that was deprecated in favor of the registry system. If your mechanism isn't recognized, chances are you probably forgot to put it in the array.
+Obecnie przy tworzeniu mechanizmów musisz dodać nazwę mechanizmu do tablicy `handledMechs`. Kiedyś istniał odpowiednik dla tagów, ale został zastąpiony przez system rejestracji. Jeśli Twój mechanizm nie jest rozpoznawany, prawdopodobnie zapomniałeś dodać go do tej tablicy.
 
-For a property to be recognized, it itself needs to be registered. The `properties` package holds all the packages for the different types of properties as well as the `PropertyRegistry` class. To register a property, use `PropertyParser.registerProperty()` and pass in the property class and the tag type it applies to. Make sure to place this call in alphabetical order with the other properties of the same type.
+Aby właściwość została rozpoznana, musi zostać zarejestrowana. Pakiet `properties` zawiera wszystkie pakiety dla różnych typów właściwości oraz klasę `PropertyRegistry`. Aby zarejestrować właściwość, użyj `PropertyParser.registerProperty()`, podając klasę właściwości i typ tagu, którego dotyczy. Pamiętaj, aby umieścić to wywołanie w kolejności alfabetycznej wraz z innymi właściwościami tego samego typu.
 
-Take a look at the existing property classes for examples!
+Przejrzyj istniejące klasy właściwości jako przykłady!
 
-#### Extension Properties
+#### Właściwości rozszerzające (Extension Properties)
 
-An additional usage of the property system that comes up is as an extension to existing object types. Notably, the Spigot implementation of Denizen has a few extensions of core types such as `BukkitElementProperties`. Also, Depenizen heavily utilizes extension properties to add external-plugin-relevant features to Spigot object types like PlayerTag.
+Dodatkowym zastosowaniem systemu właściwości jest rozszerzanie istniejących już typów obiektów. Przykładowo implementacja Denizen dla Spigota posiada kilka rozszerzeń typów rdzennych, takich jak `BukkitElementProperties`. Również Depenizen intensywnie wykorzystuje właściwości rozszerzające, aby dodawać funkcje związane z zewnętrznymi wtyczkami do typów obiektów Spigota, takich jak `PlayerTag`.
 
-At a technical level, an extension property:
-- implements `Property` like any normal property would
-- usually does not have any checks in the `describes` method other than object type
-- always returns null from `getPropertyString`
-- has a generic name (usually the class name) as the return from `getPropertyId`
-- does not necessarily have any mechanism(s)
-- exists in a separate project from the one that defines the relevant object
+Z technicznego punktu widzenia właściwość rozszerzająca:
+- implementuje `Property` jak każda inna właściwość
+- zazwyczaj nie posiada żadnych sprawdzeń w metodzie `describes` poza typem obiektu
+- zawsze zwraca null z `getPropertyString`
+- posiada generyczną nazwę (zazwyczaj nazwę klasy) jako wynik `getPropertyId`
+- niekoniecznie posiada mechanizm(y)
+- istnieje w oddzielnym projekcie niż ten, który definiuje dany obiekt

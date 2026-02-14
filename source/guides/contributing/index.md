@@ -1,12 +1,12 @@
-Contributing to Denizen
------------------------
+Współtworzenie Denizen
+----------------------
 
-Compared to most other programming languages, Denizen makes it exceptionally easy to add new features or tweak existing ones. 
+W porównaniu do większości innych języków programowania, Denizen sprawia, że dodawanie nowych funkcji lub poprawianie istniejących jest wyjątkowo łatwe.
 
-This section contains guides for implementing many of Denizen's core language features, whether you want to contribute to the main project or include Denizen support for your own plugin.
+Ta sekcja zawiera przewodniki dotyczące implementacji wielu podstawowych funkcji języka Denizen, niezależnie od tego, czy chcesz wspomóc główny projekt, czy dodać wsparcie Denizen do własnej wtyczki.
 
 <!-- Note: 'a href' style link in an attempt to bruteforce past a bug in the markdown parser where '.md' extension gets stripped inappropriately -->
-Before you begin, read the <a href="https://github.com/DenizenScript/Denizen/blob/dev/CONTRIBUTING.md">Contributing page</a>. It's also recommended to have some basic Java knowledge at your disposal.
+Zanim zaczniesz, przeczytaj <a href="https://github.com/DenizenScript/Denizen/blob/dev/CONTRIBUTING.md">stronę o współtworzeniu</a>. Zaleca się również posiadanie podstawowej wiedzy o Javie.
 
 ``` toctree::
     :maxdepth: 1

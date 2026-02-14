@@ -1,13 +1,13 @@
-The Basics
+Podstawy
 ----------
 
-This section will help you understand all the basic tools available in Denizen. This is **not** the first steps to take.
+Ta sekcja pomoże Ci zrozumieć wszystkie podstawowe narzędzia dostępne w Denizen. To **nie są** pierwsze kroki, które powinieneś podjąć.
 
-Before starting this section, you should already understand everything in the [Your First Steps](/guides/first-steps/index) section. If you don't understand the basic ideas of commands, tags, etc. please go back and read through that.
+Przed rozpoczęciem tej sekcji powinieneś już rozumieć wszystko z sekcji [Twoje pierwsze kroki](/guides/first-steps/index). Jeśli nie rozumiesz podstawowych koncepcji poleceń, tagów itp., wróć do niej i przeczytaj ją uważnie.
 
-Pages listed below won't always give full background information, and will generally assume you've written a few simple scripts before and understand the basic ideas.
+Strony wymienione poniżej nie zawsze będą podawać pełne informacje wprowadzające i zazwyczaj zakładają, że napisałeś już kilka prostych skryptów i rozumiesz podstawowe zasady.
 
-Remember: just reading the guide isn't the same as actually practicing. It's important to write the sample scripts and get the experience of having typed it all out and tried running it.
+Pamiętaj: samo czytanie przewodnika to nie to samo co rzeczywista praktyka. Ważne jest, aby pisać przykładowe skrypty i zdobyć doświadczenie płynące z samodzielnego ich wpisywania i uruchamiania.
 
 ``` toctree::
     :maxdepth: 1

@@ -1,15 +1,15 @@
-Denizen's Project Layout
-------------------------
+Struktura projektu Denizen
+---------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-**Denizen** is a plugin for Minecraft servers that parses and interprets a scripting language called **DenizenScript**. The most popular implementation of Denizen is the Spigot implementation, which is the jar you've most likely downloaded many times. At the time of writing, it is the *only* maintained implementation.
+**Denizen** to wtyczka dla serwerów Minecraft, która analizuje i interpretuje język skryptowy zwany **DenizenScript**. Najpopularniejszą implementacją Denizen jest ta dla Spigota – to właśnie ten plik jar prawdopodobnie wielokrotnie pobierałeś. W momencie pisania tego tekstu jest to *jedyna* utrzymywana implementacja.
 
-Any Denizen implementation depends on **DenizenCore**, which is the main set of tools that powers every language feature. It includes all content that isn't implementation-specific, such as basic ElementTag manipulation and data script containers.
+Każda implementacja Denizen zależy od **DenizenCore**, czyli głównego zestawu narzędzi, który napędza każdą funkcję języka. Zawiera on całą zawartość, która nie jest specyficzna dla konkretnej implementacji, taką jak podstawowe operacje na ElementTag czy kontenery skryptów danych.
 
-Support for other plugins within Denizen scripts is provided by **Depenizen**. It uses the tools provided by both DenizenCore and Denizen to interact with external APIs. This is also the case for **dDiscordBot**, although it focuses on a single API <span class="parens">(that being Discord)</span>.
+Wsparcie dla innych wtyczek w skryptach Denizen zapewnia **Depenizen**. Wykorzystuje on narzędzia dostarczane zarówno przez DenizenCore, jak i Denizen, do interakcji z zewnętrznymi API. Podobnie działa **dDiscordBot**, choć skupia się on na jednym konkretnym API <span class="parens">(Discord)</span>.
 
-Unless you're going to be working with core language features, most of your code will be recognizably similar, and you can find numerous examples throughout these projects for each type of contribution.
+O ile nie planujesz pracy nad podstawowymi funkcjami języka, większość Twojego kodu będzie wyglądać podobnie do istniejących już rozwiązań – we wspomnianych projektach znajdziesz mnóstwo przykładów dla każdego typu wkładu.

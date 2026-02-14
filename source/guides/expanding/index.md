@@ -1,11 +1,11 @@
-Expanding Beyond Just Minecraft
--------------------------------
+Rozszerzanie poza samego Minecrafta
+---------------------------------
 
-Denizen is made for Minecraft servers and as such is only really designed to work with Minecraft servers. However, your Minecraft server as a project and a community probably extends beyond just the core Minecraft server itself - you might have a Discord group, a website, a Bungee network connecting multiple servers, ...
+Denizen został stworzony dla serwerów Minecraft i jako taki jest zaprojektowany przede wszystkim do pracy z nimi. Jednak Twój serwer Minecraft jako projekt i społeczność prawdopodobnie wykracza poza sam rdzeń serwera – możesz mieć grupę na Discordzie, stronę internetową, sieć Bungee łączącą wiele serwerów...
 
-This section contains guides on how to integrate your Denizen scripts running on your core Minecraft server with these expanded outside parts of your project.
+Ta sekcja zawiera przewodniki o tym, jak zintegrować skrypty Denizen działające na Twoim głównym serwerze Minecraft z tymi zewnętrznymi elementami Twojego projektu.
 
-If you're wondering whether you need to look through these: they're not really needed to understand Denizen, but you might choose to look at the pages relating to things you use, or just skim through to look for ideas that might improve your server and its community.
+Jeśli zastanawiasz się, czy musisz to czytać: nie jest to niezbędne do zrozumienia samego Denizen, ale możesz przejrzeć strony dotyczące narzędzi, których używasz, lub po prostu poszukać pomysłów na ulepszenie swojego serwera i jego społeczności.
 
 ``` toctree::
     :maxdepth: 1

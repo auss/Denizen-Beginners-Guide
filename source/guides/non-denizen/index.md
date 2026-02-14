@@ -1,7 +1,7 @@
-Other Topics (Not Denizen Specific)
------------------------------------
+Inne tematy (Niezwiązane bezpośrednio z Denizen)
+-----------------------------------------------
 
-This section is for topics not specific to Denizen, but still likely to be very useful to Denizen users.
+Ta sekcja dotyczy tematów, które nie są specyficzne tylko dla Denizen, ale prawdopodobnie okażą się bardzo przydatne dla jego użytkowników.
 
 ``` toctree::
     :maxdepth: 1

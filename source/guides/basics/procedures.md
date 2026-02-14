@@ -1,24 +1,24 @@
-Blurring The Line Between Commands And Tags: Procedure Scripts
---------------------------------------------------------------
+Zacieranie granicy między poleceniami a tagami: Skrypty procedur (Procedure Scripts)
+--------------------------------------------------------------------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### Procedure Basics
+### Podstawy procedur
 
-You may be working on a project and find that there is a section of script that you write often, that you'd like to be able to neatly package up and reuse. Maybe you have some math that you don't want to copy/paste, or you have a script that generates a custom name for items or NPCs. You've already learned about using `task` scripts for reusable sections of script that can be called in one line with the `run` command, but what about something even smaller and easier to use? Meet: **Procedure** scripts!
+Pracując nad projektem, możesz zauważyć, że pewne fragmenty skryptu piszesz bardzo często i chciałbyś móc je schludnie zapakować oraz używać wielokrotnie. Może to być jakieś równanie matematyczne, którego nie chcesz kopiować i wklejać, albo skrypt generujący unikalne nazwy dla przedmiotów lub NPC. Dowiedziałeś się już o używaniu skryptów typu `task` do tworzenia reużywalnych sekcji kodu, które można wywołać jedną linią za pomocą polecenia `run`, ale co jeśli potrzebujesz czegoś jeszcze mniejszego i łatwiejszego w użyciu? Poznaj: skrypty **procedur** (Procedure scripts)!
 
-They can be broken down into two pieces:
+Składają się one z dwóch części:
 
-#### The Procedure Script Container
+#### Kontener skryptu procedury (Procedure Script Container)
 
-A procedure script is where you lay out your logic. Using the examples from before, this is where you'd write the math equation, or where the random name generation code would go.
+Skrypt procedury to miejsce, w którym zapisujesz swoją logikę. Korzystając z wcześniejszych przykładów: to tutaj wpisałbyś równanie matematyczne lub kod generujący losowe imię.
 
-A procedure script usually has one or more input definitions <span class="parens">(just like the inputs to a `task`)</span>, but doesn't have to. A procedure must, however, always `determine` an output.
+Skrypt procedury zazwyczaj posiada jedną lub więcej definicji wejściowych <span class="parens">(podobnie jak wejścia w skrypcie `task`)</span>, choć nie jest to wymagane. Procedura musi jednak zawsze zwracać wynik za pomocą polecenia `determine`.
 
-The following is an example script that will get a list of 9 locations, centered on the one that was given to the script.
+Poniżej znajduje się przykładowy skrypt, który pobierze listę 9 lokalizacji, wyśrodkowaną na tej, która została podana skryptowi.
 
 ```dscript_green
 surrounding_blocks:
@@ -28,87 +28,87 @@ surrounding_blocks:
     - repeat 3 as:x from:-1:
         - repeat 3 as:z from:-1:
             - define blocks:->:<[center].add[<[x]>,0,<[z]>]>
-    # A procedure script MUST determine something.
+    # Skrypt procedury MUSI coś ustalić (determine).
     - determine <[blocks]>
 ```
 
-#### Procedure Tag
+#### Tag procedury (Procedure Tag)
 
-A `proc` tag is what to use to get the result from a procedure script. Continuing with our math and name generating example, when I want the answer from my math equation, or I want to generate a name, I would use the procedure tag the same way I would use any other tag in Denizen. The following example uses the `surrounding_blocks` procedure script shown above in some other script.
+Tag `proc` służy do pobrania wyniku ze skryptu procedury. Kontynuując przykład z matematyką i generowaniem imion: kiedy potrzebuję wyniku mojego równania lub chcę wygenerować imię, używam tagu procedury w taki sam sposób, w jaki użyłbym każdego innego tagu w Denizen. Poniższy przykład wykorzystuje skrypt procedury `surrounding_blocks` pokazany powyżej w innym skrypcie.
 
 ```dscript_green
 some_script:
     type: task
     script:
-    # Get a 3x3 at the player's feet location
+    # Pobierz obszar 3x3 pod stopami gracza
     - define locations <player.location.proc[surrounding_blocks]>
-    # turn them into fake stone for a couple seconds
+    # zamień je w fałszywy kamień na kilka sekund
     - showfake <[locations]> stone d:2s
 ```
 
-Procedure tags give scripters a way to break up their code into more manageable chunks, and to keep themselves from having to repeat their code too often. We've managed to make a neat fake-platform spawning mechanic with only a few lines of code, and we've neatly packaged away our some of the more confusing parts. Rather than having to think about the specifics of how to accomplish our task, we can focus more broadly on what we want to do instead!
+Tagi procedur dają skrypciarzom sposób na dzielenie kodu na łatwiejsze do zarządzania fragmenty i chronią przed zbyt częstym powtarzaniem tego samego kodu. Udało nam się stworzyć fajny mechanizm przywoływania fałszywej platformy przy użyciu zaledwie kilku linii kodu, schludnie ukrywając bardziej skomplikowane części. Zamiast skupiać się na szczegółach realizacji technicznej, możemy skupić się na tym, co chcemy osiągnąć!
 
-There a couple different ways to use a procedure tag, with some differences that are worth being aware of.
+Istnieje kilka sposobów użycia tagu procedury, z pewnymi różnicami, o których warto wiedzieć.
 
-This first one is the simplest way of getting a value from a procedure script with no extra inputs<span class="parens">(the `proc` form)</span>:
+Pierwszy to najprostszy sposób na pobranie wartości ze skryptu procedury bez żadnych dodatkowych wejść <span class="parens">(forma `proc`)</span>:
 
 ```dscript_blue
-# This assumes 'my_procedure_script' has no input 'definitions' at all
+# Zakłada, że 'my_procedure_script' nie posiada żadnych wejściowych 'definitions'
 - define my_value <proc[my_procedure_script]>
 ```
 
-If you wanted to pass something into your procedure script, you can use the `.context` portion of the tag, which might look something like this<span class="parens">(the `proc.context` form)</span>:
+Jeśli chcesz przekazać coś do skryptu procedury, możesz użyć części `.context` tagu, co może wyglądać mniej więcej tak <span class="parens">(forma `proc.context`)</span>:
 
 ```dscript_blue
-# This assumes 'my_procedure_script' has 3 simple input 'definitions'
+# Zakłada, że 'my_procedure_script' posiada 3 proste wejściowe 'definitions'
 - define my_value <proc[my_procedure_script].context[apple|orange|lasagna]>
 ```
 
-That will pass three values (`apple`, `orange` and `lasagna`) into the procedure script, and assign them whatever definitions were written in the `definitions` key. You can pass virtually anything into a procedure script.
+Przekaże to trzy wartości (`apple`, `orange` i `lasagna`) do skryptu procedury i przypisze je do definicji zapisanych w kluczu `definitions`. Do skryptu procedury możesz przekazać praktycznie wszystko.
 
-If you only have a single value to pass in, you may also find it easier to use this shortened version of the tag <span class="parens">(the `ObjectTag.proc` form)</span>:
+Jeśli masz do przekazania tylko jedną wartość, wygodniejsza może być skrócona wersja tagu <span class="parens">(forma `ObjectTag.proc`)</span>:
 
 ```dscript_blue
-# This assumes 'my_procedure_script' has 1 simple input definition
+# Zakłada, że 'my_procedure_script' posiada 1 prostą definicję wejściową
 - define fruit apple
 - define my_value <[fruit].proc[my_procedure_script]>
 ```
 
-This will pass `apple` into the procedure script, and it will be the first definition in the `definitions` key. You can also combine the shorter version and the context, if you so choose.
+Przekaże to `apple` do skryptu procedury i będzie to pierwsza definicja w kluczu `definitions`. Możesz również łączyć wersję skróconą z kontekstem, jeśli tak zdecydujesz.
 
-It's important to note that the context key may not function exactly like you expect it to, when it comes to passing in a list. If we were to use the short version of the procedure script, and pass in a list, it would function as one might expect; setting the first definition from the `definitions` key to the list. However, if you were to place the list into the context key, it will not pass the whole list in as one value, but as separate, individual values. The following are two visual examples of this. Assuming that `colors` is a list with `red`, `brown` and `green`:
+Ważne jest, aby zauważyć, że klucz context może nie działać dokładnie tak, jak się spodziewasz, gdy przekazujesz listę. Jeśli użyjesz skróconej wersji i przekażesz listę, zadziała to zgodnie z oczekiwaniami – pierwsza definicja z klucza `definitions` zostanie ustawiona na tę listę. Jednak jeśli umieścisz listę w kluczu context, nie przekaże on całej listy jako jednej wartości, lecz jako oddzielne, poszczególne wartości. Oto dwa wizualne przykłady. Zakładając, że `colors` to lista zawierająca `red`, `brown` i `green`:
 
 ```dscript_blue
-# Our three definitions will be the colors list, 'apple', and '14'
+# Naszymi trzema definicjami będą: lista colors, 'apple' oraz '14'
 - define my_value <[colors].proc[my_procedure_script].context[apple|14]>
 ```
 
 ```dscript_red
-# Our three definitions will be the three colors in the list, while 'apple' and '14' will be ignored or corrupted
+# Naszymi trzema definicjami będą trzy kolory z listy, natomiast 'apple' i '14' zostaną zignorowane lub uszkodzone
 - define my_value <proc[my_procedure_script].context[<[colors]>|apple|14]>
 ```
 
-There are ways around this, such as wrapping your lists with `list_single`, or turning your list into a comma separated element, then splitting the list back apart, or just having one map argument that contains all the different definitions you want. Ultimately it's up to you to determine what is best for your use case.
+Istnieją sposoby na obejście tego problemu, takie jak owinięcie listy w `list_single` lub zamiana listy w element rozdzielony przecinkami (a potem ponowne rozdzielenie jej wewnątrz procedury), albo po prostu użycie jednego argumentu typu map, który zawiera wszystkie potrzebne definicje. Ostatecznie to Ty decydujesz, co jest najlepsze dla Twojego przypadku.
 
-For more on this potential issue, refer to the [common mistakes section on Object Hacking](/guides/troubleshooting/common-mistakes#object-hacking-is-a-bad-idea).
+Więcej na temat tego potencjalnego problemu znajdziesz w sekcji częstych błędów dotyczącej [Object Hackingu](/guides/troubleshooting/common-mistakes#object-hacking-is-a-bad-idea).
 
-### Tasks vs Procedures
+### Zadania (Tasks) a Procedury (Procedures)
 
-Procedures are not dissimilar from tasks, but there a few important differences to be aware of.
+Procedury nie różnią się drastycznie od zadań, ale istnieje kilka istotnych różnic, o których należy wiedzieć.
 
-#### Side Effects
+#### Efekty uboczne (Side Effects)
 
-Procedure scripts can **not** change external state. That is, a procedure script cannot change anything at all, only determine a value. Things that count as a side effect are things like placing a block, removing/adding a mob, loading files from your computer, setting a flag, and so on. It's important that when you run a procedure tag, that it does not affect anything; it can and most likely will read values, but should *not* be writing any values. That means, ultimately, there are very few commands that can be used in a procedure tag. `define` and `determine`, control flow commands like `if` and `foreach`, and debug are just about all you can use in a procedure tag.
+Skrypty procedur **nie mogą** zmieniać stanu zewnętrznego. Oznacza to, że skrypt procedury nie może niczego zmienić, a jedynie wyznaczyć wartość. Rzeczy, które liczą się jako efekt uboczny, to np. postawienie bloku, usunięcie/dodanie moba, ładowanie plików z komputera, ustawienie flagi i tak dalej. Ważne jest, aby uruchomienie tagu procedury nie wpływało na nic; skrypt ten może (i najpewniej będzie) odczytywać wartości, ale *nie powinien* zapisywać żadnych wartości. Oznacza to, że w tagu procedury można używać bardzo niewielu poleceń. `define` oraz `determine`, polecenia sterujące przepływem jak `if` czy `foreach`, oraz debugowanie – to właściwie wszystko, czego możesz użyć.
 
-This is the same limitation that applies to all **tags** in Denizen. It applies to procedures because that's exactly what a procedure script is: a custom tag!
+Jest to to samo ograniczenie, które dotyczy wszystkich **tagów** w Denizen. Dotyczy ono procedur, ponieważ skrypt procedury to dokładnie to: własny, niestandardowy tag!
 
-#### Returning Values
+#### Zwracanie wartości
 
-While task scripts *can* optionally return a value when it's done running, a procedure tag **has** to return a value. Tasks are like a thing that needs to be done, while a procedure is more like a question that is being asked. If you were needed to mow the lawn, you'd do the **task** of mowing the lawn, but once you were done, you could go on doing something else. You *might* let them know that you finished, or tell them how long it took, but those are *NOT* required to do the task of mowing the lawn. However, if you were asked a question by a teacher, then giving an answer is not only expected, it's **required**.
+Podczas gdy skrypty zadań (task scripts) *mogą* opcjonalnie zwrócić wartość po zakończeniu, tag procedury **musi** zwrócić wartość. Zadania są jak czynność, którą trzeba wykonać, podczas gdy procedura jest bardziej jak zadane pytanie. Gdybyś musiał skosić trawnik, wykonałbyś **zadanie** koszenia trawnika, a po skończeniu mógłbyś zająć się czymś innym. *Mógłbyś* poinformować kogoś o zakończeniu lub powiedzieć, ile czasu Ci to zajęło, ale nie jest to *WYMAGANE* do samego wykonania zadania koszenia. Jeśli jednak nauczyciel zada Ci pytanie, to udzielenie odpowiedzi jest nie tylko oczekiwane, ale wręcz **wymagane**.
 
-While task scripts do have the ability to return values, it is more cumbersome than using a procedure. In the following examples, there is a procedure and a task, and they both find all the fruits in a sentence, and give them back to us in a list. We're going to pick one at random and narrate it back to the player.
+Chociaż skrypty zadań mają możliwość zwracania wartości, jest to bardziej uciążliwe niż użycie procedury. W poniższych przykładach mamy procedurę i zadanie – oba znajdują wszystkie owoce w zdaniu i zwracają je w formie listy. Następnie wybierzemy jeden losowo i wyświetlimy go graczowi.
 
-Here's the task version:
+Oto wersja z zadaniem:
 
 ```dscript_yellow
 get_fruits:
@@ -121,13 +121,13 @@ task_example:
     type: world
     events:
         on player chats:
-        # run the task, and save the result. We also need to specify waiting for the task to finish
+        # uruchom zadanie i zapisz wynik. Musimy też określić czekanie na zakończenie zadania
         - ~run get_fruits def:<context.message> save:fruit_list
-        # get the saved list, get the queue, then the determined list, and a random entry from that determination
-        - narrate "No way, I like <entry[fruit_list].created_queue.determination.first.random.if_null[nothing]> too!"
+        # pobierz zapisaną listę, pobierz kolejkę, następnie ustaloną listę i losowy wpis z tej determinacji
+        - narrate "Nie gadaj, ja też lubię <entry[fruit_list].created_queue.determination.first.random.if_null[nothing]>!"
 ```
 
-And here's the procedure version:
+A oto wersja z procedurą:
 
 ```dscript_green
 get_fruits:
@@ -140,66 +140,66 @@ proc_example:
     type: world
     events:
         on player chats:
-        # read out the sentence
-        - narrate "No way, I like <context.message.proc[get_fruits].random.if_null[nothing]> too!"
+        # odczytaj zdanie
+        - narrate "Nie gadaj, ja też lubię <context.message.proc[get_fruits].random.if_null[nothing]>!"
 ```
 
-Notice that the `get_fruits` is basically the same, but the `proc_example` event is much simpler.
+Zauważ, że `get_fruits` jest w obu przypadkach w zasadzie takie samo, ale zdarzenie `proc_example` jest o wiele prostsze.
 
-#### Order of Operations
+#### Kolejność operacji
 
-While both tasks and procedures have a script component, and a way to run that component, tasks are run with a command like `inject` or `run`, and can run in parallel with other code. Procedures, on the other hand, are run whenever their tag is processed, which can be more or less than you might think, or at times that you didn't expect. A procedure can't wait: it must be able to fill its tag immediately, and will freeze the server if it takes too long to do so.
+Choć zarówno zadania, jak i procedury posiadają komponent skryptu oraz sposób na jego uruchomienie, zadania są uruchamiane poleceniami takimi jak `inject` lub `run` i mogą działać równolegle z innym kodem. Procedury natomiast są uruchamiane za każdym razem, gdy ich tag jest przetwarzany, co może dziać się częściej lub rzadziej niż myślisz, albo w momentach, których się nie spodziewałeś. Procedura nie może czekać: musi wypełnić swój tag natychmiastowo i „zamrozi” serwer, jeśli zajmie jej to zbyt dużo czasu.
 
-Ultimately, this means that you will have to be more aware of scripts that could cause lag on the server. The following is an example that wouldn't cause a problem with a task script, but *would* cause a problem with a procedure script.
+Ostatecznie oznacza to, że będziesz musiał bardziej uważać na skrypty, które mogą powodować lagowanie serwera. Poniżej znajduje się przykład, który nie sprawiłby problemu jako skrypt zadania, ale *sprawiłby* problem jako skrypt procedury.
 
-This task usage should be quite smooth:
+To użycie zadania powinno być całkiem płynne:
 
 ```dscript_blue
 smooth_example:
     type: task
     script:
-    - narrate "What's the millionth digit of pi? Hmm..."
-    # Get the millionth digit of pi. Using the wait operator will wait for the task to finish,
-    # but other things on the server will keep processing, so there won't be any lag.
+    - narrate "Jaka jest milionowa cyfra liczby pi? Hmm..."
+    # Pobierz milionową cyfrę pi. Użycie operatora czekania (~) poczeka na zakończenie zadania,
+    # ale inne rzeczy na serwerze będą wciąż przetwarzane, więc nie będzie laga.
     - ~run digit_of_pi def:1000000 save:digit
-    - narrate "Ya, the millionth digit is <entry[digit].queue.determination.first>."
+    - narrate "No tak, milionowa cyfra to <entry[digit].queue.determination.first>."
 ```
 
-This procedure usage however might freeze up the server a bit:
+To użycie procedury może jednak nieco „przyciąć” serwer:
 
 ```dscript_red
 laggy_example:
     type: task
     script:
-    - narrate "What's the millionth digit of pi? Hmm..."
-    # The server will hang as it is busy processing this procedure script so it can run the narrate.
-    - narrate "Ya, the millionth digit is <proc[digit_of_pi].context[1000000]>."
+    - narrate "Jaka jest milionowa cyfra liczby pi? Hmm..."
+    # Serwer zatrzyma się, ponieważ będzie zajęty przetwarzaniem tego skryptu procedury, aby móc wykonać narrate.
+    - narrate "No tak, milionowa cyfra to <proc[digit_of_pi].context[1000000]>."
 ```
 
-### When To Use
+### Kiedy używać
 
-While tasks and procedures are similar, they both have things they are useful for.
+Choć zadania i procedury są do siebie podobne, oba mają swoje zastosowania.
 
-A task script is usually better if you have something that:
+Skrypt zadania (task script) jest zazwyczaj lepszy, jeśli masz coś, co:
 
-- doesn't need a response
-- might take a long time to get an answer
-- affects the world in some way
+- nie wymaga odpowiedzi
+- może zająć dużo czasu przed udzieleniem odpowiedzi
+- wpływa na świat w jakiś sposób
 
-And a procedure script is usually better if you have something that:
+A skrypt procedury (procedure script) jest zazwyczaj lepszy, jeśli masz coś, co:
 
-- doesn't affect the world
-- is always going to give you an answer
-- needs to be used from inside a tag
+- nie wpływa na świat
+- zawsze udzieli Ci odpowiedzi
+- musi być użyte wewnątrz tagu
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read a lot more about procedure scripts, the procedure tag, and its options, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się znacznie więcej o skryptach procedur, tagu procedury i jego opcjach, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-Note: most users, especially those learning from the Denizen for the first time, should just continue on to the next guides page. These references might be of interest to later come back to after you've learned Denizen as far as this guide teaches.
+Uwaga: większość użytkowników, zwłaszcza tych uczących się Denizen po raz pierwszy, powinna po prostu przejść do następnej strony przewodnika. Referencje te mogą być interesujące do późniejszego powrotu, gdy już nauczysz się Denizen w stopniu, jaki przewiduje ten przewodnik.
 
-- [Procedure script doc](https://meta.denizenscript.com/Docs/Languages/procedure%20script%20containers)
-- [Proc tag doc](https://meta.denizenscript.com/Docs/Tags/proc)
-- [Proc.context tag doc](https://meta.denizenscript.com/Docs/Tags/proc.context)
-- [ObjectTag.proc tag doc](https://meta.denizenscript.com/Docs/Tags/objecttag.proc)
-- [Determine command doc](https://meta.denizenscript.com/Docs/Commands/determine)
+- [Dokumentacja kontenerów skryptów procedur](https://meta.denizenscript.com/Docs/Languages/procedure%20script%20containers)
+- [Tag proc](https://meta.denizenscript.com/Docs/Tags/proc)
+- [Tag proc.context](https://meta.denizenscript.com/Docs/Tags/proc.context)
+- [Tag ObjectTag.proc](https://meta.denizenscript.com/Docs/Tags/objecttag.proc)
+- [Dokumentacja polecenia Determine](https://meta.denizenscript.com/Docs/Commands/determine)

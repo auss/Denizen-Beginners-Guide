@@ -1,15 +1,15 @@
-Loop Optimization: List Filters (NOT YET WRITTEN)
--------------------------------
+Optymalizacja pętli: Filtry list (JESZCZE NIE NAPISANO)
+------------------------------------------------------
 
-**TODO: Write-up that explains tags like `list.filter`, `list.filter_tag`, `list.parse`, `list.parse_tag`, `list.sort_by_number` and why this is better than a foreach loop.**
+**TODO: Opis wyjaśniający tagi takie jak `list.filter`, `list.filter_tag`, `list.parse`, `list.parse_tag`, `list.sort_by_number` oraz dlaczego są one lepsze niż pętla foreach.**
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read some more about list filters, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się więcej o filtrach list, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-- [List.filter tag doc](https://meta.denizenscript.com/Docs/Tags/list.filter)
-- [List.parse tag doc](https://meta.denizenscript.com/Docs/Tags/list.parse)
-- [List.sort_by_number tag doc](https://meta.denizenscript.com/Docs/Tags/list.sort_by_number)
-- [List.sort_by_value tag doc](https://meta.denizenscript.com/Docs/Tags/list.sort_by_value)
-- [List.highest tag doc](https://meta.denizenscript.com/Docs/Tags/list.highest)
-- [List.lowest tag doc](https://meta.denizenscript.com/Docs/Tags/list.lowest)
+- [Dokumentacja tagu List.filter](https://meta.denizenscript.com/Docs/Tags/list.filter)
+- [Dokumentacja tagu List.parse](https://meta.denizenscript.com/Docs/Tags/list.parse)
+- [Dokumentacja tagu List.sort_by_number](https://meta.denizenscript.com/Docs/Tags/list.sort_by_number)
+- [Dokumentacja tagu List.sort_by_value](https://meta.denizenscript.com/Docs/Tags/list.sort_by_value)
+- [Dokumentacja tagu List.highest](https://meta.denizenscript.com/Docs/Tags/list.highest)
+- [Dokumentacja tagu List.lowest](https://meta.denizenscript.com/Docs/Tags/list.lowest)

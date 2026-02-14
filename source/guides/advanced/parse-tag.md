@@ -1,10 +1,10 @@
-A Deeper Tag: The Parsed Tag (NOT YET WRITTEN)
-----------------------------
+Głębszy tag: Tag Parsed (JESZCZE NIE NAPISANO)
+--------------------------------------------
 
-**TODO: Write-up that explains the `<ElementTag.parsed>` tag and when you'd use it.**
+**TODO: Opis wyjaśniający tag `<ElementTag.parsed>` oraz kiedy należy go używać.**
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read some more about the parsed tag, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się więcej o tagu parsed, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-- [Element.Parsed tag doc](https://meta.denizenscript.com/Docs/Tags/element.parsed)
+- [Dokumentacja tagu Element.Parsed](https://meta.denizenscript.com/Docs/Tags/element.parsed)

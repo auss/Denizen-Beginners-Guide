@@ -1,7 +1,7 @@
-Your First Steps
+Twoje pierwsze kroki
 ----------------
 
-This section will guide you through getting set up to work with Denizen, and the very most basic fundamental scripting concepts you'll need before you can start scripting seriously.
+Ta sekcja poprowadzi Cię przez proces przygotowania do pracy z Denizen oraz przedstawi najbardziej podstawowe, fundamentalne koncepcje skryptowania, których będziesz potrzebować, zanim zaczniesz na poważnie tworzyć skrypty.
 
 ``` toctree::
     :maxdepth: 1

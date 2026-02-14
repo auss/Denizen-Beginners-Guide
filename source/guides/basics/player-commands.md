@@ -1,283 +1,282 @@
-Handling Player Commands
+Obsługa poleceń gracza
 ------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### What Are Player Commands?
+### Czym są polecenia gracza?
 
-A player command is a command that a player types in chat to perform some unique task. These can range from fun user interactions to moderating tools, and are found all over Minecraft. Denizen allows you to create custom player commands of your own to further enhance your server. This page will walk through making a basic 'warp' command, a command that allows a user to set up points for others to teleport to. This is to illustrate how to make custom player commands as well as point out various features one should think about when making player commands.
+Polecenie gracza to komenda, którą gracz wpisuje na czacie, aby wykonać określone zadanie. Mogą one obejmować zarówno zabawne interakcje, jak i narzędzia moderacyjne, i są spotykane w całym świecie Minecrafta. Denizen pozwala na tworzenie własnych poleceń, aby jeszcze bardziej wzbogacić Twój serwer. Ta strona przeprowadzi Cię przez proces tworzenia podstawowego polecenia „warp” – komendy, która pozwala użytkownikowi ustawiać punkty, do których inni mogą się teleportować. Przykład ten zilustruje, jak tworzyć własne polecenia oraz na jakie funkcje warto zwrócić uwagę podczas ich projektowania.
 
-### The Basic Structure
+### Podstawowa struktura
 
-To start off, all custom commands in Denizen require the same basic structure. This is similar to the `task` scripts you have been seeing up until now, however with a few more required details:
+Na początek: wszystkie własne polecenia w Denizen wymagają tej samej podstawowej struktury. Jest ona podobna do skryptów typu `task`, które widziałeś do tej pory, jednak zawiera kilka dodatkowych wymaganych szczegółów:
 
 ```dscript_blue
-ScriptContainerName:
+NazwaKonteneraSkryptu:
     type: command
-    name: [commandName]
-    description: [a short description of your command]
-    usage: [a description of the usage]
-    permission: [permission key]
+    name: [nazwaPolecenia]
+    description: [krótki opis Twojego polecenia]
+    usage: [opis sposobu użycia]
+    permission: [klucz uprawnienia]
     script:
-    - (commands here)
+    - (polecenia tutaj)
 ```
 
-In [the script editor](/guides/first-steps/script-editor), you can simply type `command` and use tab completion to generate the template of a command script at any time.
+W [edytorze skryptów](/guides/first-steps/script-editor) możesz po prostu wpisać `command` i użyć autouzupełniania (klawisz Tab), aby w dowolnym momencie wygenerować szablon skryptu polecenia.
 
-In addition to specifying the type of this script is `command`, you also need to provide the name of the command. This is what the user will be typing in chat to run the command <span class="parens">(without the `/` slash prefix)</span>.
+Oprócz określenia typu skryptu jako `command`, musisz również podać nazwę polecenia (`name`). To jest to, co użytkownik będzie wpisywał na czacie, aby uruchomić polecenie <span class="parens">(bez ukośnika `/` na początku)</span>.
 
-You also need to provide a description and a usage text. These are primarily for the default `/help` command.
+Musisz również podać opis (`description`) oraz tekst użycia (`usage`). Służą one głównie domyślnemu poleceniu `/help`.
 
-You also generally should specify a permission node - this can be be any made up key for now. You're probably an op on your test server, so you'll bypass the permission requirement anyway.
+Zazwyczaj powinieneś również określić węzeł uprawnienia (`permission`) – na razie może to być dowolny wymyślony przez Ciebie klucz. Prawdopodobnie jesteś opem na swoim serwerze testowym, więc i tak ominiesz wymóg posiadania uprawnień.
 
-So let's start our command script by filling out the required fields:
+Zacznijmy więc nasz skrypt polecenia od wypełnienia wymaganych pól:
 ```dscript_green
 warp_command:
     type: command
     name: warp
-    description: Warps you to magical places.
+    description: Teleportuje cię do magicznych miejsc.
     usage: /warp
     permission: dscript.warp
     script:
-    - narrate "<&[base]>This is where my command will go!"
+    - narrate "<&[base]>Tutaj znajdzie się treść mojego polecenia!"
 ```
-Try it out in game by running `/warp`. This should just narrate out `This is where my command will go!`. Far from what we have set out to do, but our custom command does work in the sense it does something.
+Wypróbuj to w grze, wpisując `/warp`. Powinno to po prostu wyświetlić tekst `Tutaj znajdzie się treść mojego polecenia!`. Daleko nam jeszcze do zamierzonego celu, ale nasze własne polecenie działa w tym sensie, że coś robi.
 
 ![](images/warp_command_example_1.png)
 
-### Handling Player Arguments
+### Obsługa argumentów gracza
 
-A command is often much more than just the initial name. While some basic ones can be, often a command expects more details from the player. In our case with the warp command, we want to make warp points as well as travel to those points. For instance I might want to use `/warp create spawn` to make a new warp point called spawn. In this case `create` and `spawn` would be the arguments.
+Polecenie to często coś więcej niż tylko sama nazwa. Choć niektóre podstawowe komendy mogą takie być, często polecenie oczekuje od gracza dodatkowych szczegółów. W naszym przypadku z poleceniem warp chcemy tworzyć punkty teleportacji oraz podróżować do nich. Na przykład chciałbym użyć `/warp create spawn`, aby stworzyć nowy punkt o nazwie spawn. W tym przypadku `create` oraz `spawn` byłyby argumentami.
 
-Similar to events, the command script has a few `context` tags that store some information about how the player used the command. One of these is `<context.args>` which contains a list of all the arguments the player used.
+Podobnie jak zdarzenia, skrypt polecenia posiada kilka tagów `context`, które przechowują informacje o tym, jak gracz użył polecenia. Jednym z nich jest `<context.args>`, który zawiera listę wszystkich argumentów użytych przez gracza.
 
-Let us give our command some functionality, namely creating new warp points and also being able to warp to those points:
+Nadajmy naszemu poleceniu funkcjonalność, a mianowicie tworzenie nowych punktów warp oraz możliwość teleportacji do nich:
 ```dscript_yellow
 warp_command:
     type: command
     name: warp
-    description: Warps you to magical places.
-    usage: /warp create|goto [warp-name]
+    description: Teleportuje cię do magicznych miejsc.
+    usage: /warp create|goto [nazwa-warpu]
     permission: dscript.warp
     script:
     - choose <context.args.first>:
         - case create:
             - define name <context.args.get[2]>
             - flag server warps.<[name]>:<player.location>
-            - narrate "<&[base]>Created warp <&[emphasis]><[name]><&[base]>!"
+            - narrate "<&[base]>Stworzono warp <&[emphasis]><[name]><&[base]>!"
         - case goto:
             - define name <context.args.get[2]>
             - teleport <player> <server.flag[warps.<[name]>]>
-            - narrate "<&[base]>Warped to <&[emphasis]><[name]><&[base]>!"
+            - narrate "<&[base]>Przeniesiono do <&[emphasis]><[name]><&[base]>!"
 ```
-Try this out by doing `/warp create test`, then move away a bit, then `/warp goto test`. You will find yourself back at the first location you set the warp at.
+Wypróbuj to, wpisując `/warp create test`, następnie odejdź kawałek i wpisz `/warp goto test`. Powinieneś wrócić do pierwszej lokalizacji, w której ustawiłeś warp.
 
-To break down what's going on:
-- We take a look at the first argument passed in
-- If this argument is `create` create a flag on the server based on the second argument passed in
-- Otherwise if that first argument is `goto` teleport the player to the location stored in the flag specified by the second argument
+Przeanalizujmy, co się dzieje:
+- Sprawdzamy pierwszy podany argument.
+- Jeśli tym argumentem jest `create`, tworzymy flagę na serwerze o nazwie opartej na drugim argumencie.
+- W przeciwnym razie, jeśli pierwszym argumentem jest `goto`, teleportujemy gracza do lokalizacji zapisanej we fladze określonej przez drugi argument.
 
-You might notice that if the player inputs anything other than a command exactly the way we wanted, the script will break. More on how to deal with this farther down.
+Możesz zauważyć, że jeśli gracz wpisze cokolwiek innego niż polecenie dokładnie tak, jak chcieliśmy, skrypt się zepsuje. Więcej o tym, jak sobie z tym radzić, dowiesz się niżej.
 
-Notice we have now also updated the `usage` text. While this doesn't affect how the script actually operates, it is good to keep the documentation accurate.
+Zauważ, że zaktualizowaliśmy również tekst `usage`. Choć nie wpływa to na samo działanie skryptu, dobrze jest dbać o dokładność dokumentacji.
 
-You'll also notice that the `narrate` command makes use of multiple colors <span class="parens">(of the standard colors selected in your Denizen `config.yml` file)</span> to make the key parts of the message clearly stand out. Little touches like this go a long way in making your commands friendly to players.
+Zauważysz też, że polecenie `narrate` wykorzystuje wiele kolorów <span class="parens">(spośród standardowych kolorów wybranych w pliku `config.yml` wtyczki Denizen)</span>, aby kluczowe części wiadomości były wyraźnie widoczne. Takie małe detale sprawiają, że Twoje polecenia są bardziej przyjazne dla graczy.
 
-#### Handling Player Player Arguments
+#### Obsługa argumentów wskazujących na gracza
 
-A common feature of many commands is being able to do something to someone else, and as such you would need to pass in their name. For instance with our warp command we may want the functionality of being able to warp someone else instead of just yourself.
+Częstą funkcją wielu poleceń jest możliwość zrobienia czegoś komuś innemu, co wymaga podania imienia tej osoby. Na przykład w naszym poleceniu warp możemy chcieć dodać funkcjonalność teleportowania kogoś innego zamiast tylko siebie.
 
-Let us say we want the command to look like `/warp player (player name) (destination)`. The resulting script would now look something like this:
+Załóżmy, że chcemy, aby polecenie wyglądało tak: `/warp player (nazwa gracza) (cel)`. Wynikowy skrypt wyglądałby teraz mniej więcej tak:
 ```dscript_yellow
 warp_command:
     type: command
     name: warp
-    description: Warps you to magical places.
-    usage: /warp create [warp-name] | goto [warp-name] | player [player] [warp-name]
+    description: Teleportuje cię do magicznych miejsc.
+    usage: /warp create [nazwa-warpu] | goto [nazwa-warpu] | player [gracz] [nazwa-warpu]
     permission: dscript.warp
     script:
     - choose <context.args.first>:
         - case create:
             - define name <context.args.get[2]>
             - flag server warps.<[name]>:<player.location>
-            - narrate "<&[base]>Created warp <&[emphasis]><[name]><&[base]>!"
+            - narrate "<&[base]>Stworzono warp <&[emphasis]><[name]><&[base]>!"
         - case goto:
             - define name <context.args.get[2]>
             - teleport <player> <server.flag[warps.<[name]>]>
-            - narrate "<&[base]>Warped to <&[emphasis]><[name]><&[base]>!"
+            - narrate "<&[base]>Przeniesiono do <&[emphasis]><[name]><&[base]>!"
         - case player:
             - define playerName <context.args.get[2]>
             - define destination <context.args.get[3]>
             - define playerToWarp <server.match_player[<[playerName]>]>
             - teleport <[playerToWarp]> <server.flag[warps.<[destination]>]>
-            - narrate "<&[base]>Warped <&[emphasis]><[playerToWarp].name> <&[base]>to <&[emphasis]><[destination]><&[base]>!"
+            - narrate "<&[base]>Przeniesiono gracza <&[emphasis]><[playerToWarp].name> <&[base]>do <&[emphasis]><[destination]><&[base]>!"
 ```
-Try this out on someone else on the server, or if this is localhost you can test it by passing in your own name.
+Wypróbuj to na kimś innym na serwerze, a jeśli testujesz lokalnie (localhost), możesz przetestować to, podając własne imię.
 
-Notice we don't use the argument passed in directly for the teleport command, we instead used the tag `<server.match_player[]>` to find the player object of the given name. This is an important step - while there are some smart converters in Denizen where you can just give the name of the thing and it will get the correct object (such as materials) this does not work with players. In addition, `<server.match_player[]>` allows for imprecise inputs, such as if there is someone named `bobby` on the server `<server.match_player[bob]>` would work <span class="parens">(assuming there was no one actually named `bob`)</span>.
+Zauważ, że w poleceniu teleport nie używamy bezpośrednio podanego argumentu, lecz tagu `<server.match_player[]>`, aby znaleźć obiekt gracza o danej nazwie. To ważny krok – o ile w Denizen istnieją inteligentne konwertery, którym możesz po prostu podać nazwę rzeczy i one pobiorą właściwy obiekt (np. materiały), o tyle w przypadku graczy to nie działa. Dodatkowo `<server.match_player[]>` pozwala na nieprecyzyjne wejścia, np. jeśli na serwerze jest ktoś o imieniu `bobby`, polecenie `<server.match_player[bob]>` zadziała <span class="parens">(zakładając, że nie ma nikogo o imieniu `bob`)</span>.
 
 ![](images/warp_command_example_2.png)
 
-### Adding Tab Completions
+### Dodawanie autouzupełniania (Tab Completions)
 
-A nice way to enhance your command scripts is by adding tab completions - a system in Minecraft for auto-completing arguments. In order to accomplish this you can add the following:
+Fajnym sposobem na ulepszenie skryptów poleceń jest dodanie autouzupełniania – systemu w Minecraft do automatycznego kończenia argumentów klawiszem Tab. Aby to osiągnąć, możesz dodać następującą sekcję:
 ```dscript_blue
 warp_command:
     type: command
     name: warp
-    description: Warps you to magical places.
-    usage: /warp create [warp-name] | goto [warp-name] | player [player] [warp-name]
+    description: Teleportuje cię do magicznych miejsc.
+    usage: /warp create [nazwa-warpu] | goto [nazwa-warpu] | player [gracz] [nazwa-warpu]
     permission: dscript.warp
     tab completions:
         1: create|goto|player
         2: <context.args.first.equals[goto].if_true[<server.flag[warps].keys>].if_false[]>
         3: <context.args.first.equals[player].if_true[<server.flag[warps].keys>].if_false[]>
     script:
-    #...nothing changed here
+    #...tutaj nic się nie zmieniło
 ```
-Try this out, while typing in the command see the Minecraft tab-complete menu pop up and see it in action.
+Wypróbuj to – podczas wpisywania polecenia zobaczysz menu autouzupełniania Minecrafta.
 
-What will happen is that while the player is typing the first argument, the suggestions `create`, `goto`, and `player` will be shown, with the one that is closely matched being highlighted.
+Działa to tak, że gdy gracz wpisuje pierwszy argument, wyświetlane są sugestie `create`, `goto` oraz `player`, z podświetleniem tej najlepiej dopasowanej.
 
-While the player is typing the second argument, if the first argument is `goto` it will fetch all the keys stored in the warp flag, otherwise nothing will be suggested. A similar thing is done for the third argument, but checking if the first argument is `player`.
+Gdy gracz wpisuje drugi argument, jeśli pierwszym argumentem było `goto`, skrypt pobierze wszystkie klucze zapisane we fladze warpów, w przeciwnym razie nic nie zostanie zasugerowane. Podobnie dzieje się dla trzeciego argumentu, ale sprawdzając, czy pierwszym argumentem było `player`.
 
 ![](images/warp_command_tabcomplete.png)
 
-Something to keep in mind, tab completions does not provide any additional functionality to your script other than give suggestions to the player. You still need to write the rest of the script out to handle any arguments passed in.
+Warto pamiętać, że autouzupełnianie nie zapewnia żadnej dodatkowej funkcjonalności skryptu poza dawaniem sugestii graczowi. Wciąż musisz napisać resztę skryptu, aby obsłużyć podane argumenty.
 
-You might notice at this point that adding tab-completions for player names in the 'player' sub-command would require a really long line for tab completions of argument #2 - hitting barriers like this is the first sign that command is getting too complicated, and that you may want to split your command into multiple <span class="parens">(for example, a `createwarp [name]` command script, separate from a `warpto [name] (player)` command script)</span>.
+Możesz zauważyć w tym punkcie, że dodanie autouzupełniania dla imion graczy w podpoleceniu 'player' wymagałoby bardzo długiej linii dla argumentu nr 2 – napotykanie takich barier to pierwszy sygnał, że polecenie staje się zbyt skomplikowane i warto rozważyć podzielenie go na kilka mniejszych <span class="parens">(na przykład oddzielny skrypt polecenia `createwarp [nazwa]` i oddzielny `warpto [nazwa] (gracz)`)</span>.
 
-### Don't Trust The Player
+### Nie ufaj graczowi
 
-The script as-is technically works fine, assuming everyone uses it properly - However, there is no guarantee of that happening. This comes to an important topic: *never trust the player*. Do not assume the player will always do what you want them to do or expect them to do.
+Skrypt w obecnej formie technicznie działa dobrze, zakładając, że wszyscy używają go prawidłowo. Nie ma jednak gwarancji, że tak będzie. Prowadzi to do ważnego tematu: *nigdy nie ufaj graczowi*. Nie zakładaj, że gracz zawsze zrobi to, co chcesz lub czego od niego oczekujesz.
 
-Some players may attempt to cheat or exploit the system, others may simply make mistakes. Humans are imperfect, and as such your command script must be prepared for this.
+Niektórzy gracze mogą próbować oszukiwać lub wykorzystywać luki w systemie, inni mogą po prostu popełniać błędy. Ludzie są niedoskonali i Twój skrypt polecenia musi być na to przygotowany.
 
-There are a number of issues that can rise up from our simple command here, such as:
-- What if someone tries to goto a warp that doesn't exist?
-- What if someone tries to create a warp that already exists?
-- What if someone forgot to put in arguments?
-- What if someone put in too many arguments?
-- What if someone gives an invalid argument?
-- What if the player you specified doesn't exist?
-- What if the warp name has some incompatible syntax like a `.` or space or something else in it?
+Z naszego prostego polecenia może wyniknąć szereg problemów, takich jak:
+- Co jeśli ktoś spróbuje przenieść się do warpu, który nie istnieje?
+- Co jeśli ktoś spróbuje stworzyć warp, który już istnieje?
+- Co jeśli ktoś zapomni podać argumenty?
+- Co jeśli ktoś poda zbyt wiele argumentów?
+- Co jeśli ktoś poda nieprawidłowy argument?
+- Co jeśli gracz, którego wskazałeś, nie istnieje?
+- Co jeśli nazwa warpu zawiera niekompatybilne znaki, takie jak `.` lub spację?
 
 ![](images/warp_command_errors.png)
 
-While some issues may simply be mostly harmless <span class="parens">(such as providing too many arguments)</span>, some may cause errors in the script <span class="parens">(such as the warp not existing)</span>, or ruin something else <span class="parens">(such as creating a warp that already existed)</span>. For all of these cases, it is important that you catch these player errors to make sure everything is as smooth as possible for everyone.
+Choć niektóre problemy mogą być w większości niegroźne <span class="parens">(jak podanie zbyt wielu argumentów)</span>, inne mogą powodować błędy w skrypcie <span class="parens">(jak brakujący warp)</span> lub psuć coś innego <span class="parens">(jak nadpisanie istniejącego warpu)</span>. We wszystkich tych przypadkach ważne jest, abyś przechwytywał te błędy graczy, dbając o to, by wszystko działało jak najsprawniej dla każdego.
 
-Let's see what our script looks like with thorough error checking:
+Zobaczmy, jak wygląda nasz skrypt z gruntownym sprawdzaniem błędów:
 ```dscript_green
 warp_command:
     type: command
     name: warp
-    description: Warps you to magical places.
-    usage: /warp create [warp-name] | goto [warp-name] | player [player] [warp-name]
+    description: Teleportuje cię do magicznych miejsc.
+    usage: /warp create [nazwa-warpu] | goto [nazwa-warpu] | player [gracz] [nazwa-warpu]
     permission: dscript.warp
     tab completions:
         1: create|goto|player
         2: <context.args.first.equals[goto].if_true[<server.flag[warps].keys.parse[unescaped].if_null[]>].if_false[]>
         3: <context.args.first.equals[player].if_true[<server.flag[warps].keys.parse[unescaped].if_null[]>].if_false[]>
     script:
-    # If the command is used without input, the player probably doesn't know what to do
-    # So tell them
+    # Jeśli polecenie zostanie użyte bez wejścia, gracz prawdopodobnie nie wie, co zrobić
+    # Więc mu to powiedz
     - if <context.args.is_empty>:
-        - narrate "<&[error]>/warp create [warp-name]"
-        - narrate "<&[error]>/warp goto [warp-name]"
-        - narrate "<&[error]>/warp player [player] [warp-name]"
+        - narrate "<&[error]>/warp create [nazwa-warpu]"
+        - narrate "<&[error]>/warp goto [nazwa-warpu]"
+        - narrate "<&[error]>/warp player [gracz] [nazwa-warpu]"
         - stop
     - choose <context.args.first>:
         - case create:
-            # Validate the argument count
+            # Sprawdź liczbę argumentów
             - if <context.args.size> < 2:
-                - narrate "<&[error]>You need to give the warp a name!"
+                - narrate "<&[error]>Musisz podać nazwę warpu!"
                 - stop
             - else if <context.args.size> > 2:
-                - narrate "<&[error]>You provided too many arguments!"
+                - narrate "<&[error]>Podałeś zbyt wiele argumentów!"
                 - stop
             - define name <context.args.get[2]>
-            # Don't let users overwrite existing warps
-            # Use ".escaped" to prevent strange symbols in the name causing issues
+            # Nie pozwól użytkownikom nadpisywać istniejących warpów
+            # Użyj ".escaped", aby dziwne symbole w nazwie nie powodowały problemów
             - if <server.has_flag[warps.<[name].escaped>]>:
-                - narrate "<&[error]>A warp already exists with the name of <&[emphasis]><[name]><&[error]>!"
+                - narrate "<&[error]>Warp o nazwie <&[emphasis]><[name]><&[error]> już istnieje!"
                 - stop
-            # This means you'll need a 'warp delete [name]' as well
+            # To oznacza, że będziesz potrzebować też 'warp delete [nazwa]'
             - flag server warps.<[name].escaped>:<player.location>
-            - narrate "<&[base]>Created warp <&[emphasis]><[name]><&[base]>!"
+            - narrate "<&[base]>Stworzono warp <&[emphasis]><[name]><&[base]>!"
         - case goto:
             - if <context.args.size> < 2:
-                - narrate "<&[error]>You need to specify where to warp to!"
+                - narrate "<&[error]>Musisz określić, dokąd chcesz się przenieść!"
                 - stop
             - else if <context.args.size> > 2:
-                - narrate "<&[error]>You provided too many arguments!"
+                - narrate "<&[error]>Podałeś zbyt wiele argumentów!"
                 - stop
             - define name <context.args.get[2]>
-            # Make sure the warp exists
+            # Upewnij się, że warp istnieje
             - if !<server.has_flag[warps.<[name].escaped>]>:
-                - narrate "<&[error]>No warp by <&[emphasis]><[name]> <&[error]>exists!"
+                - narrate "<&[error]>Warp o nazwie <&[emphasis]><[name]> <&[error]>nie istnieje!"
                 - stop
             - teleport <player> <server.flag[warps.<[name].escaped>]>
-            - narrate "<&[base]>Warped to <&[emphasis]><[name]><&[base]>!"
+            - narrate "<&[base]>Przeniesiono do <&[emphasis]><[name]><&[base]>!"
         - case player:
             - if <context.args.size> < 3:
-                - narrate "<&[error]>You need to specify a player and where to warp to!"
+                - narrate "<&[error]>Musisz podać gracza oraz cel teleportacji!"
                 - stop
             - else if <context.args.size> > 3:
-                - narrate "<&[error]>You provided too many arguments!"
+                - narrate "<&[error]>Podałeś zbyt wiele argumentów!"
                 - stop
             - define playerName <context.args.get[2]>
             - define destination <context.args.get[3]>
-            # Use a fallback to catch invalid player name input
+            # Użyj fallbacka, aby przechwycić błędną nazwę gracza
             - define playerToWarp <server.match_player[<[playerName]>].if_null[null]>
             - if <[playerToWarp]> == null:
-                - narrate "<&[error]>Can't find player by name '<&[emphasis]><[playerName]><&[error]>'!"
+                - narrate "<&[error]>Nie można znaleźć gracza o nazwie '<&[emphasis]><[playerName]><&[error]>'!"
                 - stop
             - if !<server.has_flag[warps.<[destination].escaped>]>:
-                - narrate "<&[error]>No warp by <&[emphasis]><[destination]> <&[error]>exists!"
+                - narrate "<&[error]>Warp o nazwie <&[emphasis]><[destination]> <&[error]>nie istnieje!"
                 - stop
             - teleport <[playerToWarp]> <server.flag[warps.<[destination].escaped>]>
-            - narrate "<&[base]>Warped <&[emphasis]><[playerToWarp].name> <&[base]>to <&[emphasis]><[destination]><&[base]>!"
-        # Handle invalid first-argument with a simple error message to the player
+            - narrate "<&[base]>Przeniesiono gracza <&[emphasis]><[playerToWarp].name> <&[base]>do <&[emphasis]><[destination]><&[base]>!"
+        # Obsłuż nieprawidłowy pierwszy argument prostym komunikatem o błędzie dla gracza
         - default:
-            - narrate "<&[error]>Unknown argument '<&[emphasis]><context.args.first><&[error]>'!"
+            - narrate "<&[error]>Nieznany argument '<&[emphasis]><context.args.first><&[error]>'!"
 ```
-Try this out now by intentionally providing bad inputs and watch the command stop you.
+Wypróbuj to teraz, celowo podając błędne dane, i zobacz, jak polecenie Cię powstrzymuje.
 
-Some safety measurements that are used here:
-- Checking the size of the argument list to verify that the player actually typed in that argument
-- Checking to see if the server does or does not have the flag to make sure there are no conflicts
-- Stopping the script if any issue is detected as well as letting the user know what's wrong
-- Added a null check to the tab completions so that in case there are no warps, Denizen will not display errors
-- Added a null check to the `match_player` tag to verify that the player actually exists
-- Used the `.escaped` tag to guarantee syntax-affecting symbols like `.` aren't put directly into the flag name.
+Niektóre środki bezpieczeństwa zastosowane tutaj:
+- Sprawdzanie rozmiaru listy argumentów, aby zweryfikować, czy gracz faktycznie wpisał dany argument.
+- Sprawdzanie, czy serwer posiada daną flagę, aby uniknąć konfliktów.
+- Zatrzymywanie skryptu w przypadku wykrycia problemu oraz informowanie użytkownika, co jest nie tak.
+- Dodanie sprawdzenia `null` do autouzupełniania, aby w przypadku braku warpów Denizen nie wyświetlał błędów.
+- Dodanie sprawdzenia `null` do tagu `match_player`, aby zweryfikować, czy gracz faktycznie istnieje.
+- Użycie tagu `.escaped`, aby zagwarantować, że symbole wpływające na składnię (jak `.`) nie zostaną wstawione bezpośrednio do nazwy flagi.
 
-While the size of the script has greatly increased, this is a necessary step for commands and for player interfaces in general.
-You can read more about this in [the Common Mistakes page](/guides/troubleshooting/common-mistakes#don-t-trust-players).
+Choć rozmiar skryptu znacznie wzrósł, jest to niezbędny krok dla poleceń i ogólnie dla interfejsów gracza. Możesz przeczytać więcej o tym na stronie [Częste błędy (Common Mistakes)](/guides/troubleshooting/common-mistakes#don-t-trust-players).
 
 ![](images/warp_command_safe.png)
 
-### Wait, Can I See Your Permissions?
+### Chwila, czy mogę zobaczyć Twoje uprawnienia?
 
-In addition to simply verifying whether or not the player has input the arguments correctly, you also want to make sure that the player has permission to use the command. By default Minecraft doesn't have a permission system <span class="parens">(beyond setting players to op)</span>, however there are a number of permission plugins that exist to help manage these, and if you're already running a server, you probably already have such a plugin installed.
+Oprócz zwykłej weryfikacji, czy gracz poprawnie wpisał argumenty, chcesz również upewnić się, że ma on uprawnienia do użycia polecenia. Domyślnie Minecraft nie posiada systemu uprawnień <span class="parens">(poza nadawaniem statusu operatora)</span>, jednak istnieje wiele wtyczek, które pomagają nimi zarządzać – jeśli prowadzisz już serwer, prawdopodobnie masz taką zainstalowaną.
 
-The first step of permissions checking is just that the player has access to the command at all. This is handled by the `permission: dscript.warp` line we've included in every example thus far. Thanks to that line, any player that is not op and does not have the permission `dscript.warp` will not be able to use the command. It is generally recommended to add such a permission to any custom command, even if you plan for it to be used by anyone.
+Pierwszym etapem sprawdzania uprawnień jest sam dostęp do polecenia. Obsługuje to linia `permission: dscript.warp`, którą zamieszczaliśmy w każdym przykładzie. Dzięki niej każdy gracz, który nie jest opem i nie posiada uprawnienia `dscript.warp`, nie będzie mógł użyć tego polecenia. Ogólnie zaleca się dodawanie takiego uprawnienia do każdego własnego polecenia, nawet jeśli planujesz, by było ono dostępne dla każdego.
 
-The specific permission key name can be anything you want. You're creating a new permission node, so you get to choose its name.
+Konkretna nazwa klucza uprawnienia może być dowolna. Tworzysz nowy węzeł uprawnienia, więc sam wybierasz jego nazwę.
 
-It's common to use a basic format like `dscript.[CommandName]` or `[ProjectName].[CommandName]` or something similar. You generally want your permission nodes to have relatively obvious names.
+Często używa się podstawowego formatu typu `dscript.[NazwaPolecenia]` lub `[NazwaProjektu].[NazwaPolecenia]`. Zazwyczaj chcesz, aby Twoje węzły uprawnień miały stosunkowo oczywiste nazwy.
 
 ![](images/warp_command_noperms.png)
 
-Sometimes you need a bit more permission testing than just basic access to the command - for instance we may want any player to be able to use the warps, but not make any new ones or force other players to warp. Adding such a permission check may look something like:
+Czasami potrzebujesz nieco więcej sprawdzania uprawnień niż tylko podstawowy dostęp do polecenia – na przykład możemy chcieć, aby każdy gracz mógł korzystać z warpów, ale nie mógł tworzyć nowych ani zmuszać innych graczy do teleportacji. Dodanie takiego sprawdzenia uprawnień mogłoby wyglądać tak:
 ```dscript_green
 warp_command:
     type: command
     name: warp
-    description: Warps you to magical places.
-    usage: /warp create [warp-name] | goto [warp-name] | player [player] [warp-name]
+    description: Teleportuje cię do magicznych miejsc.
+    usage: /warp create [nazwa-warpu] | goto [nazwa-warpu] | player [gracz] [nazwa-warpu]
     permission: dscript.warp
     tab completions:
         1: create|goto|player
@@ -285,76 +284,75 @@ warp_command:
         3: <context.args.first.equals[player].if_true[<server.flag[warps].keys.parse[unescaped].if_null[]>].if_false[]>
     script:
     - if <context.args.is_empty>:
-        - narrate "<&[error]>/warp create [warp-name]"
-        - narrate "<&[error]>/warp goto [warp-name]"
-        - narrate "<&[error]>/warp player [player] [warp-name]"
+        - narrate "<&[error]>/warp create [nazwa-warpu]"
+        - narrate "<&[error]>/warp goto [nazwa-warpu]"
+        - narrate "<&[error]>/warp player [gracz] [nazwa-warpu]"
         - stop
     - choose <context.args.first>:
         - case create:
-            #+ Require a special warp creation permission
+            #+ Wymagaj specjalnego uprawnienia do tworzenia warpów
             - if !<player.has_permission[dscript.warp.create]>:
-                - narrate "<&[error]>You don't have permission to use this!"
+                - narrate "<&[error]>Nie masz uprawnień, aby tego użyć!"
                 - stop
             - if <context.args.size> < 2:
-                - narrate "<&[error]>You need to give the warp a name!"
+                - narrate "<&[error]>Musisz podać nazwę warpu!"
                 - stop
             - else if <context.args.size> > 2:
-                - narrate "<&[error]>You provided too many arguments!"
+                - narrate "<&[error]>Podałeś zbyt wiele argumentów!"
                 - stop
             - define name <context.args.get[2]>
             - if <server.has_flag[warps.<[name].escaped>]>:
-                - narrate "<&[error]>A warp already exists with the name of <&[emphasis]><[name]><&[error]>!"
+                - narrate "<&[error]>Warp o nazwie <&[emphasis]><[name]><&[error]> już istnieje!"
                 - stop
             - flag server warps.<[name].escaped>:<player.location>
-            - narrate "<&[base]>Created warp <&[emphasis]><[name]><&[base]>!"
+            - narrate "<&[base]>Stworzono warp <&[emphasis]><[name]><&[base]>!"
         - case goto:
             - if <context.args.size> < 2:
-                - narrate "<&[error]>You need to specify where to warp to!"
+                - narrate "<&[error]>Musisz określić, dokąd chcesz się przenieść!"
                 - stop
             - else if <context.args.size> > 2:
-                - narrate "<&[error]>You provided too many arguments!"
+                - narrate "<&[error]>Podałeś zbyt wiele argumentów!"
                 - stop
             - define name <context.args.get[2]>
             - if !<server.has_flag[warps.<[name].escaped>]>:
-                - narrate "<&[error]>No warp by <&[emphasis]><[name]> <&[error]>exists!"
+                - narrate "<&[error]>Warp o nazwie <&[emphasis]><[name]> <&[error]>nie istnieje!"
                 - stop
             - teleport <player> <server.flag[warps.<[name].escaped>]>
-            - narrate "<&[base]>Warped to <&[emphasis]><[name]><&[base]>!"
+            - narrate "<&[base]>Przeniesiono do <&[emphasis]><[name]><&[base]>!"
         - case player:
-            #+ Require a special warp-other-player permission
+            #+ Wymagaj specjalnego uprawnienia do teleportowania innych graczy
             - if !<player.has_permission[dscript.warp.other]>:
-                - narrate "<&[error]>You don't have permission to use this!"
+                - narrate "<&[error]>Nie masz uprawnień, aby tego użyć!"
                 - stop
             - if <context.args.size> < 3:
-                - narrate "<&[error]>You need to specify a player and where to warp to!"
+                - narrate "<&[error]>Musisz podać gracza oraz cel teleportacji!"
                 - stop
             - else if <context.args.size> > 3:
-                - narrate "<&[error]>You provided too many arguments!"
+                - narrate "<&[error]>Podałeś zbyt wiele argumentów!"
                 - stop
             - define playerName <context.args.get[2]>
             - define destination <context.args.get[3]>
             - define playerToWarp <server.match_player[<[playerName]>].if_null[null]>
             - if <[playerToWarp]> == null:
-                - narrate "<&[error]>Can't find player by name '<&[emphasis]><[playerName]><&[error]>'!"
+                - narrate "<&[error]>Nie można znaleźć gracza o nazwie '<&[emphasis]><[playerName]><&[error]>'!"
                 - stop
             - if !<server.has_flag[warps.<[destination].escaped>]>:
-                - narrate "<&[error]>No warp by <&[emphasis]><[destination]> <&[error]>exists!"
+                - narrate "<&[error]>Warp o nazwie <&[emphasis]><[destination]> <&[error]>nie istnieje!"
                 - stop
             - teleport <[playerToWarp]> <server.flag[warps.<[destination].escaped>]>
-            - narrate "<&[base]>Warped <&[emphasis]><[playerToWarp].name> <&[base]>to <&[emphasis]><[destination]><&[base]>!"
+            - narrate "<&[base]>Przeniesiono gracza <&[emphasis]><[playerToWarp].name> <&[base]>do <&[emphasis]><[destination]><&[base]>!"
         - default:
-            - narrate "<&[error]>Unknown argument '<&[emphasis]><context.args.first><&[error]>'!"
+            - narrate "<&[error]>Nieznany argument '<&[emphasis]><context.args.first><&[error]>'!"
 ```
 
-Notice now the extra `if` check when the player is trying to create a warp and for warping other players using the tag `has_permission`.
-Try testing this out, either with someone else or if you are on localhost remove permissions from yourself.
+Zauważ teraz dodatkowe sprawdzenie `if` przy próbie tworzenia warpu oraz przy teleportowaniu innych graczy, używające tagu `has_permission`. Wypróbuj to – albo z kimś innym, albo jeśli jesteś lokalnie, odbierz sobie uprawnienia.
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read a lot more about player commands, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się znacznie więcej o poleceniach gracza, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-Note: most users, especially those learning from the Denizen for the first time, should just continue on to the next guides page. These references might be of interest to later come back to after you've learned Denizen as far as this guide teaches.
+Uwaga: większość użytkowników, zwłaszcza tych uczących się Denizen po raz pierwszy, powinna po prostu przejść do następnej strony przewodnika. Referencje te mogą być interesujące do późniejszego powrotu, gdy już nauczysz się Denizen w stopniu, jaki przewiduje ten przewodnik.
 
-- [Command script containers doc](https://meta.denizenscript.com/Docs/Languages/command%20script%20containers)
-- [Match_player tag doc](https://meta.denizenscript.com/Docs/Tags/server.match_player)
-- [Match_offline_player tag doc](https://meta.denizenscript.com/Docs/Tags/server.match_offline_player)
+- [Dokumentacja kontenerów skryptów poleceń](https://meta.denizenscript.com/Docs/Languages/command%20script%20containers)
+- [Tag match_player](https://meta.denizenscript.com/Docs/Tags/server.match_player)
+- [Tag match_offline_player](https://meta.denizenscript.com/Docs/Tags/server.match_offline_player)

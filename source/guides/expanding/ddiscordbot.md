@@ -1,116 +1,116 @@
-Denizen and Discord: dDiscordBot
---------------------------------
+Denizen i Discord: dDiscordBot
+-------------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### Introduction
+### Wstęp
 
-dDiscordBot is an **addon plugin** for Denizen that provides commands, script events, and tags for interacting with the Discord API. Basically, you can create a functioning Discord bot directly within Denizen!
+dDiscordBot to **dodatek (addon)** do Denizen, który udostępnia polecenia, zdarzenia skryptowe i tagi do interakcji z API Discorda. Zasadniczo możesz stworzyć w pełni funkcjonalnego bota Discord bezpośrednio wewnątrz Denizen!
 
-### What Can It Do?
+### Co on potrafi?
 
-There are many libraries for various different programming languages for the Discord API. You might be familiar with some, such as [Discord.Net](https://github.com/discord-net/Discord.Net), or [JDA](https://github.com/DV8FromTheWorld/JDA) <span class="parens">(both of these libraries are used by Denizen's own projects)</span>. These libraries aim to cover **all aspects** of the Discord API.
+Istnieje wiele bibliotek API Discorda dla różnych języków programowania. Być może znasz niektóre z nich, jak [Discord.Net](https://github.com/discord-net/Discord.Net) czy [JDA](https://github.com/DV8FromTheWorld/JDA) <span class="parens">(obie te biblioteki są używane w projektach własnych Denizen)</span>. Te biblioteki dążą do pokrycia **wszystkich aspektów** API Discorda.
 
-Denizen is for Minecraft servers. Accordingly, dDiscordBot provides utilities that would be useful for a Minecraft server to interact with Discord. Nevertheless, some of the things you can do are:
+Denizen jest przeznaczony dla serwerów Minecraft. W związku z tym dDiscordBot zapewnia narzędzia, które są przydatne dla serwera Minecraft w interakcji z Discordem. Niemniej jednak, niektóre z rzeczy, które możesz zrobić, to:
 
-- Send, receive, and reply to messages
-  - Attach files, embeds, and buttons
-- Manage and reply to slash commands
-- Manage roles
+- Wysyłanie, odbieranie i odpowiadanie na wiadomości
+  - Załączanie plików, embedów (ramek) i przycisków
+- Zarządzanie i odpowiadanie na polecenia ukośnika (slash commands)
+- Zarządzanie rolami
 
-...and much more.
+...i wiele więcej.
 
-### What Can It Be Used For?
+### Do czego można go użyć?
 
-Many Minecraft servers have Discord communities. They provide a social space outside of the game itself. Discord users might want to interact with the online Minecraft players, and vice versa. 
+Wiele serwerów Minecraft posiada społeczności na Discordzie. Zapewniają one przestrzeń socjalną poza samą grą. Użytkownicy Discorda mogą chcieć wchodzić w interakcje z graczami online i na odwrót.
 
-The main uses might be an account linker, which verifies a Discord user with their player on the server, and a chat bridge between Discord and Minecraft. You might also relay announcements, host cross-platform events, or let Discord users query data from the server.
+Głównymi zastosowaniami mogą być: łącznik kont (account linker), który weryfikuje użytkownika Discorda z jego kontem gracza na serwerze, oraz mostek czatu (chat bridge) między Discordem a Minecraftem. Możesz także przekazywać ogłoszenia, organizować wydarzenia międzyplatformowe lub pozwolić użytkownikom Discorda na odpytywanie serwera o dane.
 
-### Creating a Bot
+### Tworzenie bota
 
-There are enough tutorials out there for creating a bot account, such as [this one](https://discordpy.readthedocs.io/en/stable/discord.html).
+Istnieje wystarczająco dużo poradników dotyczących tworzenia konta bota, na przykład [ten tutaj](https://discordpy.readthedocs.io/en/stable/discord.html).
 
-Make sure to enable the `Server Members Intent` and `Message Content Intent` on the bot page.
+Pamiętaj, aby na stronie bota włączyć opcje `Server Members Intent` oraz `Message Content Intent`.
 
-When generating a link to have bot join a server, use the 'OAuth2' page of the developers tab and checkmark the `bot` box. You probably also want to checkmark `applications.commands` if you want to use slash commands.
+Generując link do zaproszenia bota na serwer, użyj strony 'OAuth2' w panelu deweloperskim i zaznacz pole `bot`. Prawdopodobnie zechcesz też zaznaczyć `applications.commands`, jeśli planujesz używać poleceń ukośnika.
 
-Alternately, just use the join link: `https://discord.com/oauth2/authorize?scope=bot%20applications.commands&permissions=0&client_id=1234` and replace the `1234` at the end with your bot's application ID.
+Alternatywnie, użyj po prostu linku: `https://discord.com/oauth2/authorize?scope=bot%20applications.commands&permissions=0&client_id=1234` i zastąp `1234` na końcu identyfikatorem aplikacji (Application ID) swojego bota.
 
-In most cases, you do not want to assign bot permissions on the 'OAuth2' page, as this can make a mess in your server role settings page.
+W większości przypadków nie chcesz przypisywać uprawnień bota na stronie 'OAuth2', ponieważ może to zrobić bałagan w ustawieniach ról na Twoim serwerze.
 
-### Sticking It Onto Your Server
+### Instalacja na serwerze
 
-When we say dDiscordBot is an addon plugin, that means it's not in the main Denizen jar - it has its own jar, which you have to download and put in your plugins folder. [You can download it here.](https://ci.citizensnpcs.co/job/dDiscordBot/)
+Kiedy mówimy, że dDiscordBot jest dodatkiem, oznacza to, że nie znajduje się on w głównym pliku jar Denizen – ma swój własny plik jar, który musisz pobrać i umieścić w folderze plugins. [Możesz go pobrać tutaj.](https://ci.citizensnpcs.co/job/dDiscordBot/)
 
-If you're installing dDiscordBot for the first time, you have to restart your server to load it in. Once you've restarted, your server has access to a variety of Discord related commands, tags, and events.
+Jeśli instalujesz dDiscordBot po raz pierwszy, musisz zrestartować serwer, aby go załadować. Po restarcie Twój serwer uzyska dostęp do szeregu poleceń, tagów i zdarzeń związanych z Discordem.
 
-### Logging In
+### Logowanie
 
-Once you have a bot created on Discord's applications page, that bot added to your Discord group, and dDiscordBot installed onto your Minecraft server, the next step is to login to that Discord bot instance from your minecraft server.
+Gdy masz już bota utworzonego na stronie aplikacji Discorda, dodanego do swojej grupy na Discordzie oraz zainstalowany dDiscordBot na serwerze Minecraft, kolejnym krokiem jest zalogowanie się do instancji bota z poziomu serwera.
 
-To log your server in as your bot, use the [`discordconnect` command](https://meta.denizenscript.com/Docs/Commands/discordconnect).
+Aby zalogować serwer jako bota, użyj [polecenia `discordconnect`](https://meta.denizenscript.com/Docs/Commands/discordconnect).
 
-For security reasons, you'll need to use a SecretTag for the token, by putting your token in the `plugins/Denizen/secrets.secret` file. Just add a key like `discord_bot_token: 123.abc` <span class="parens">(and swap `123.abc` for the token from the Discord applications page you created above)</span>.
+Ze względów bezpieczeństwa będziesz musiał użyć tagu SecretTag dla tokena, umieszczając swój token w pliku `plugins/Denizen/secrets.secret`. Po prostu dodaj klucz typu `discord_bot_token: 123.abc` <span class="parens">(i zamień `123.abc` na token ze strony aplikacji Discorda)</span>.
 
-The `discordconnect` command takes an `id` argument. This can be anything you want, just choose a label that's memorable and fitting <span class="parens">(such as `mybot`, `ticketbot`, or `relay`)</span>, and is just used to uniquely identify a single bot in the case you have multiple bots in use at once on your server. Almost all Discord commands require this argument, and you just have to make sure to use the same label you chose every time.
+Polecenie `discordconnect` przyjmuje argument `id`. Może to być cokolwiek, wybierz po prostu etykietę, która jest łatwa do zapamiętania i pasuje do celu <span class="parens">(np. `mojbot`, `pomocbot` lub `relay`)</span>. Służy ona do unikalnej identyfikacji bota w przypadku, gdy używasz wielu botów naraz na jednym serwerze. Prawie wszystkie polecenia Discord wymagają tego argumentu i musisz upewnić się, że za każdym razem używasz tej samej wybranej etykiety.
 
-Note that while you can connect or disconnect at any time, you only *need* to connect once - usually done right after the server starts with the [`server start` event](https://meta.denizenscript.com/Docs/Events/server%20start). Additionally, make sure to [~wait for](https://meta.denizenscript.com/Docs/Languages/waitable) this command, as you should with all other Discord commands.
+Pamiętaj, że choć możesz łączyć się i rozłączać w dowolnym momencie, zazwyczaj wystarczy połączyć się raz – najlepiej tuż po starcie serwera przy użyciu [zdarzenia `server start`](https://meta.denizenscript.com/Docs/Events/server%20start). Dodatkowo pamiętaj, aby używać [operatora czekania (~)](https://meta.denizenscript.com/Docs/Languages/waitable) przy tym poleceniu, podobnie jak przy innych poleceniach Discorda.
 
 ```dscript_green
 connect_to_discord:
     type: world
     events:
         after server start:
-        - ~discordconnect id:mybot token:<secret[discord_bot_token]>
+        - ~discordconnect id:mojbot token:<secret[discord_bot_token]>
 ```
 
-### Sending a Message
+### Wysyłanie wiadomości
 
-Now that you've logged in, you can send your first message. The [`discordmessage` command](https://meta.denizenscript.com/Docs/Commands/discordmessage) has a `channel` argument, which is the Discord channel you want the bot to send the message in. The bot must have permissions to view and send messages in that channel, of course. You can use the proper [channel object](https://meta.denizenscript.com/Docs/ObjectTypes/DiscordChannelTag) anywhere you have the reference, or just use channel's internal Discord ID; if you don't know how to view IDs on Discord, [look here](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-).
+Skoro już się zalogowałeś, możesz wysłać swoją pierwszą wiadomość. [Polecenie `discordmessage`](https://meta.denizenscript.com/Docs/Commands/discordmessage) posiada argument `channel`, który wskazuje kanał Discorda, na który bot ma wysłać wiadomość. Bot musi oczywiście posiadać uprawnienia do wyświetlania i wysyłania wiadomości na tym kanale. Możesz użyć właściwego [obiektu kanału](https://meta.denizenscript.com/Docs/ObjectTypes/DiscordChannelTag) wszędzie tam, gdzie masz do niego odniesienie, lub po prostu użyć wewnętrznego identyfikatora ID kanału na Discordzie; jeśli nie wiesz, jak sprawdzić ID na Discordzie, [zobacz tutaj](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-).
 
-Note that if you're going to use a channel or server's ID a lot, you should put it in a data script/flag it somewhere. You can do this in-game for example by typing the command `/ex flag server discord_botspam:<discord[mybot].group[Denizen].channel[bot-spam]>` and filling in the appropriate names - of course, be sure to check the debug output to ensure it filled properly. You can try `/ex narrate <server.flag[discord_botspam].name>` to make sure it has the channel stored properly.
+Zauważ, że jeśli zamierzasz często używać ID kanału lub serwera, powinieneś zapisać je w skrypcie danych lub fladze. Możesz to zrobić w grze, na przykład wpisując polecenie `/ex flag server discord_botspam:<discord[mojbot].group[Denizen].channel[bot-spam]>` i wpisując odpowiednie nazwy – oczywiście sprawdź wyjście debugowania, aby upewnić się, że tag wypełnił się poprawnie. Możesz spróbować `/ex narrate <server.flag[discord_botspam].name>`, aby upewnić się, że kanał jest poprawnie zapisany.
 
-Here's how sending a message to a channel would link in a simple task script:
+Oto jak wysłanie wiadomości na kanał wyglądałoby w prostym skrypcie zadania:
 
 ```dscript_green
 send_a_message:
     type: task
     script:
-    - ~discordmessage id:mybot channel:<server.flag[discord_botspam]> "Hello, world!"
+    - ~discordmessage id:mojbot channel:<server.flag[discord_botspam]> "Witaj, świecie!"
 ```
 
-#### Fancier Messages: Embeds
+#### Bardziej ozdobne wiadomości: Embedy
 
-If you've ever interacted with a bot on Discord <span class="parens">(hopefully you have if you're at the point of making your own!)</span> you know they often don't reply in plaintext, but instead through specially formatted boxes - these are called "embeds".
+Jeśli kiedykolwiek wchodziłeś w interakcję z botem na Discordzie <span class="parens">(miejmy nadzieję, że tak, skoro tworzysz własnego!)</span>, wiesz, że często nie odpowiadają one czystym tekstem, lecz specjalnie sformatowanymi ramkami – nazywają się one „embedami”.
 
 ![](images/discord_embed.png)
 
-In Denizen, this is handled via [DiscordEmbedTag objects](https://meta.denizenscript.com/Docs/ObjectTypes/DiscordEmbedTag). This is sent with the same `discordmessage` command, with the embed object replacing the message text.
+W Denizen obsługuje się to za pomocą [obiektów DiscordEmbedTag](https://meta.denizenscript.com/Docs/ObjectTypes/DiscordEmbedTag). Wysyła się je tym samym poleceniem `discordmessage`, zastępując tekst wiadomości obiektem embed.
 
-`DiscordEmbedTag` is basically just a wrapper around a MapTag of data. At the most basic, you can construct it via the [`discord_embed` tag](https://meta.denizenscript.com/Docs/Tags/discord_embed) and fill it with data via [`DiscordEmbedTag.with[key].as[value]`](https://meta.denizenscript.com/Docs/Tags/discordembedtag.with.as) or [`DiscordEmbedTag.with_map`](https://meta.denizenscript.com/Docs/Tags/discordembedtag.with_map).
+`DiscordEmbedTag` to zasadniczo opakowanie wokół obiektu MapTag z danymi. W najprostszym przypadku możesz go skonstruować za pomocą [tagu `discord_embed`](https://meta.denizenscript.com/Docs/Tags/discord_embed) i wypełnić go danymi za pomocą [`DiscordEmbedTag.with[key].as[value]`](https://meta.denizenscript.com/Docs/Tags/discordembedtag.with.as) lub [`DiscordEmbedTag.with_map`](https://meta.denizenscript.com/Docs/Tags/discordembedtag.with_map).
 
-There is a long list of keys supported by `DiscordEmbedTag`, so refer to the object's tag documentation for details. Titles and descriptions are used the most often.
+Istnieje długa lista kluczy wspieranych przez `DiscordEmbedTag`, więc sprawdź dokumentację tagów tego obiektu po szczegóły. Najczęściej używane są tytuły (`title`) i opisy (`description`).
 
-A very simple embed can be made completely inline using `with_map` and map syntax. More complicated input, especially when using tags, is probably better input using the `with[...].as[...]` tag variant to prevent mis-parsing, or a [`definemap` command](https://meta.denizenscript.com/Docs/Commands/definemap).
+Bardzo prosty embed można stworzyć całkowicie w jednej linii, używając `with_map` i składni mapy. Bardziej skomplikowane dane, zwłaszcza przy użyciu tagów, lepiej wprowadzać przy użyciu wariantu tagu `with[...].as[...]` (aby zapobiec błędom przetwarzania) lub [polecenia `definemap`](https://meta.denizenscript.com/Docs/Commands/definemap).
 
-Simple inline usage example:
+Przykład prostego użycia w linii:
 
 ```dscript_green
 send_an_embed:
     type: task
     script:
-    - define embed <discord_embed.with_map[title=Example Bot;description=Wow! This bot sure is a bot;timestamp=<util.time_now>;color=#00FFFF]>
-    - ~discordmessage id:mybot channel:<server.flag[discord_botspam]> <[embed]>
+    - define embed <discord_embed.with_map[title=Przykładowy Bot;description=Wow! Ten bot to naprawdę bot;timestamp=<util.time_now>;color=#00FFFF]>
+    - ~discordmessage id:mojbot channel:<server.flag[discord_botspam]> <[embed]>
 ```
 
-Note as well that you can use the `<n>` tag to produce newlines in any message or embed.
+Zauważ również, że możesz użyć tagu `<n>`, aby uzyskać znak nowej linii w dowolnej wiadomości lub embedzie.
 
-### Automatic Messaging
+### Automatyzacja wiadomości
 
-Let's make this automated! Using the [`discord message received` event](https://meta.denizenscript.com/Docs/Events/discord%20message%20received), you can detect when a Discord user sends a message and run commands based off the message content. You can also respond in the same channel they sent the message in! For example, if you wanted to respond to the user if their message includes "ping", you'd do:
+Zróbmy to w sposób zautomatyzowany! Korzystając ze [zdarzenia `discord message received`](https://meta.denizenscript.com/Docs/Events/discord%20message%20received), możesz wykryć, kiedy użytkownik Discorda wyśle wiadomość i uruchomić polecenia na podstawie jej treści. Możesz także odpowiedzieć na tym samym kanale, na którym wiadomość została wysłana! Na przykład, jeśli chcesz odpowiedzieć użytkownikowi, gdy jego wiadomość zawiera słowo „ping”:
 
 ```dscript_green
 ping_pong:
@@ -118,22 +118,22 @@ ping_pong:
     events:
         after discord message received:
         - if <context.new_message.text.contains_text[ping]>:
-            - ~discordmessage id:mybot reply:<context.new_message> Pong!
-            # or: - ~discordmessage id:mybot channel:<context.new_message.channel> Pong!
+            - ~discordmessage id:mojbot reply:<context.new_message> Pong!
+            # lub: - ~discordmessage id:mojbot channel:<context.new_message.channel> Pong!
 ```
 
 ![](images/acikek_pingpong.png)
 
-#### Applied: A Chat Bridge
+#### Zastosowanie: Mostek czatu (Chat Bridge)
 
-Now you've got the basic tools to make a chat bridge. A basic chat bridge functions as two simple parts:
+Masz już podstawowe narzędzia do stworzenia mostka czatu. Podstawowy mostek działa w dwóch prostych krokach:
 
-- When a minecraft user chats, Send a message to a Discord channel
-- When a Discord user sends a message in the channel, broadcast it to the online Minecraft players
+- Gdy gracz w Minecraft pisze na czacie, wyślij wiadomość na kanał Discorda.
+- Gdy użytkownik Discorda wyśle wiadomość na kanał, rozgłoś ją graczom online w Minecraft.
 
-Let's tackle the first part. You can use the [`player chats` event](https://meta.denizenscript.com/Docs/Events/player%20chats) for this one. Then all you have to do is use the `discordmessage` command like in the first example. You should also include the Minecraft player's name in the message, otherwise the Discord users won't know who it's from.
+Zajmijmy się pierwszą częścią. Możesz do tego użyć [zdarzenia `player chats`](https://meta.denizenscript.com/Docs/Events/player%20chats). Następnie wystarczy użyć polecenia `discordmessage`, jak w pierwszym przykładzie. Powinieneś także dołączyć imię gracza z Minecrafta, w przeciwnym razie użytkownicy Discorda nie będą wiedzieli, od kogo pochodzi wiadomość.
 
-Note that Discord text formatting uses [Markdown](https://support.discord.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-) - Denizen's Minecraft chat formatting tags like `<bold>` won't work here.
+Pamiętaj, że formatowanie tekstu na Discordzie używa [Markdowna](https://support.discord.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-) – tagi formatowania czatu Minecrafta z Denizen, takie jak `<bold>`, tutaj nie zadziałają.
 
 ```dscript_green
 chat_bridge:
@@ -141,47 +141,47 @@ chat_bridge:
     events:
         after player chats:
         - define message "**<player.name>**: <context.message>"
-        - ~discordmessage id:mybot channel:<server.flag[discord_chatrelay]> <[message]>
+        - ~discordmessage id:mojbot channel:<server.flag[discord_chatrelay]> <[message]>
 ```
 
-Great! Now for the next step. You can use the `discord message received` event like in the earlier example, but we only want to relay the message if it's in a certain channel. Luckily, this event comes equipped with a `channel` switch, which is exactly what we need. This time, because the message will be displayed in Minecraft, we should use Denizen Minecraft chat formatting tags instead of Discord Markdown.
+Świetnie! Teraz kolejny krok. Możesz użyć zdarzenia `discord message received` jak we wcześniejszym przykładzie, ale chcemy przesyłać wiadomość tylko wtedy, gdy pochodzi ona z konkretnego kanału. Na szczęście to zdarzenie jest wyposażone w przełącznik `channel`, którego potrzebujemy. Tym razem, ponieważ wiadomość zostanie wyświetlona w Minecraft, powinniśmy użyć tagów formatowania czatu Denizen zamiast Discord Markdown.
 
-Note that the received [`DiscordMessageTag` object](https://meta.denizenscript.com/Docs/ObjectTypes/DiscordMessageTag) doesn't only represent the message content: you can get the author, channel, id, and much more.
+Zauważ, że otrzymany [obiekt `DiscordMessageTag`](https://meta.denizenscript.com/Docs/ObjectTypes/DiscordMessageTag) nie reprezentuje tylko samej treści wiadomości: możesz pobrać autora, kanał, ID i wiele więcej.
 
 ```dscript_blue
 chat_bridge:
     type: world
     events:
-        # Note that this '12345' should be replaced by the raw channel ID you have copied.
-        # Unfortunately, tags like server.flag don't currently work in event label lines.
+        # Pamiętaj, że '12345' należy zastąpić skopiowanym, surowym ID kanału.
+        # Niestety tagi typu server.flag obecnie nie działają w liniach etykiet zdarzeń.
         after discord message received channel:12345:
-        # ex: [Discord] <acikek> Hello!
+        # np.: [Discord] <acikek> Cześć!
         - announce "[<blue>Discord<&r>] <&lt><context.new_message.author.name><&gt> <context.new_message.text>"
 ```
 
-### Slash Commands
+### Polecenia ukośnika (Slash Commands)
 
-Slash commands are Discord's new way for interacting with a bot upon request. They're builtin to the client, which means you can see the help for a command without external resources. They also show up in a list when you start a message with `/` - go ahead and try it!
+Polecenia ukośnika to nowy sposób interakcji z botem na żądanie na Discordzie. Są wbudowane w klienta, co oznacza, że pomoc do polecenia można zobaczyć bez zewnętrznych zasobów. Pojawiają się one również na liście, gdy zaczniesz pisać wiadomość od `/` – śmiało, wypróbuj!
 
 ![](images/discord_slashcommands.png)
 
-With dDiscordBot, you can create your own slash commands. They belong to a feature set known as Interactions, along with buttons and selection menus.
+Dzięki dDiscordBot możesz tworzyć własne polecenia ukośnika. Należą one do zestawu funkcji znanych jako Interakcje (Interactions), obok przycisków i menu wyboru.
 
-**You only have to create a slash command once.** Creating a slash command of the same name updates the existing one.
+**Polecenie ukośnika wystarczy utworzyć tylko raz.** Utworzenie polecenia o tej samej nazwie aktualizuje to już istniejące.
 
-When a user uses a slash command, you need to respond within just 5 seconds. However, that doesn't necessarily mean you have to send a message; instead, if you need more time, you can *defer* - or acknowledge - the request, which you can reply to later.
+Gdy użytkownik użyje polecenia ukośnika, musisz odpowiedzieć w ciągu zaledwie 5 sekund. Nie oznacza to jednak konieczności natychmiastowego wysłania wiadomości; zamiast tego, jeśli potrzebujesz więcej czasu, możesz *odroczyć* (defer) – czyli potwierdzić – żądanie, na które odpowiesz później.
 
-You can read further about slash command limitations [here](https://gist.github.com/MinnDevelopment/b883b078fdb69d0e568249cc8bf37fe9).
+Więcej o ograniczeniach poleceń ukośnika możesz przeczytać [tutaj](https://gist.github.com/MinnDevelopment/b883b078fdb69d0e568249cc8bf37fe9).
 
-#### Applied: A Last-login Command
+#### Zastosowanie: Polecenie ostatniego logowania
 
-Let's make a slash command for a player's last login time. If the player is online, we should say that instead. First, you have to create the command. You can do so with the [`discordcommand` command](https://meta.denizenscript.com/Docs/Commands/discordcommand) and the `create` argument. We want to take input from the user for the player name; this is called an option, and it needs to be attached to the command upon creation.
+Zróbmy polecenie ukośnika sprawdzające czas ostatniego logowania gracza. Jeśli gracz jest online, powinniśmy zamiast tego wyświetlić taką informację. Najpierw musisz utworzyć polecenie. Możesz to zrobić za pomocą [polecenia `discordcommand`](https://meta.denizenscript.com/Docs/Commands/discordcommand) z argumentem `create`. Chcemy pobrać od użytkownika imię gracza; nazywa się to opcją i musi zostać dołączone do polecenia przy jego tworzeniu.
 
-When creating a slash command, you can specify a server for it to be available to with the `group` argument. This is very useful for testing, even if you want it to be globally available in the future. **Registering a global command can take up to an hour!**
+Tworząc polecenie ukośnika, możesz określić serwer (grupę), na którym ma być ono dostępne, za pomocą argumentu `group`. Jest to bardzo przydatne do testów, nawet jeśli w przyszłości chcesz, by polecenie było dostępne globalnie. **Rejestracja polecenia globalnego może zająć do godziny!**
 
-The `options` argument is a map of maps, where the values follow a certain format. You can view the map format on the [meta page](https://meta.denizenscript.com/Docs/Commands/discordcommand). It's recommended to use the `definemap` command for this. 
+Argument `options` to mapa map, gdzie wartości pasują do określonego formatu. Możesz go zobaczyć na [stronie meta](https://meta.denizenscript.com/Docs/Commands/discordcommand). Do tego celu zaleca się użycie polecenia `definemap`.
 
-The `name` argument is required, and the `description` argument is optional, but it's useful for users. Let's throw everything into a task script:
+Argument `name` jest wymagany, a `description` opcjonalny, ale przydatny dla użytkowników. Wrzućmy wszystko do skryptu zadania:
 
 ```dscript_blue
 create_lastlogin:
@@ -191,17 +191,17 @@ create_lastlogin:
         1:
             type: string
             name: player
-            description: The Minecraft player's name
+            description: Imię gracza Minecraft
             required: true
 
-    - ~discordcommand id:mybot create name:lastlogin "description:Displays a player's last login time." "group:<discord[mybot].group[My server]>" options:<[options]>
+    - ~discordcommand id:mojbot create name:lastlogin "description:Wyświetla czas ostatniego logowania gracza." "group:<discord[mojbot].group[Moj serwer]>" options:<[options]>
 ```
 
-Once the command is created, you can use the [`discord slash command` event](https://meta.denizenscript.com/Docs/Events/discord%20slash%20command) to listen for uses. Be sure to use the `name` switch for the name of the command.
+Gdy polecenie zostanie utworzone, możesz użyć [zdarzenia `discord slash command`](https://meta.denizenscript.com/Docs/Events/discord%20slash%20command), aby nasłuchiwać jego użyć. Pamiętaj, aby użyć przełącznika `name` dla nazwy polecenia.
 
-Using slash commands, buttons, and selection menus is called an interaction, and these are the things we have to acknowledge, as mentioned previously. You can handle this with the [`discordinteraction` command](https://meta.denizenscript.com/Docs/Commands/discordinteraction), which has a required `interaction` argument. Note that this command **doesn't** need the `id` argument. All three corresponding events have a `<context.interaction>` tag, which includes the bot reference inherently.
+Używanie poleceń ukośnika, przycisków i menu wyboru nazywa się interakcją i to są rzeczy, które musimy potwierdzić (acknowledge), jak wspomniano wcześniej. Możesz to obsłużyć [poleceniem `discordinteraction`](https://meta.denizenscript.com/Docs/Commands/discordinteraction), które wymaga argumentu `interaction`. Zauważ, że to polecenie **nie potrzebuje** argumentu `id`. Wszystkie trzy odpowiadające zdarzenia posiadają tag `<context.interaction>`, który zawiera już w sobie odniesienie do bota.
 
-It's good practice to defer the response even if the interaction isn't going to take long to respond to. Use the `defer` instruction to acknowledge, and the `reply` instruction to reply with a message. For now, just test out the usage with a Hello World:
+Dobrą praktyką jest odroczenie odpowiedzi (defer), nawet jeśli odpowiedź na interakcję nie zajmie dużo czasu. Użyj instrukcji `defer`, aby potwierdzić otrzymanie, oraz `reply`, aby odpowiedzieć wiadomością. Na razie przetestuj działanie prostym „Hello World”:
 
 ```dscript_green
 lastlogin:
@@ -209,24 +209,24 @@ lastlogin:
     events:
         on discord slash command name:lastlogin:
         - ~discordinteraction defer interaction:<context.interaction>
-        - ~discordinteraction reply interaction:<context.interaction> "Hello, world!"
+        - ~discordinteraction reply interaction:<context.interaction> "Witaj, świecie!"
 ```
 
 ![](images/lastlogin_helloworld.png)
 
-This command relies on dealing with the passed-in option. Since we set the `player` option to `required`, a standard Discord client will prevent the user from using slash command without supplying that string.
+To polecenie polega na obsłudze przekazanej opcji. Skoro ustawiliśmy opcję `player` jako `required` (wymaganą), standardowy klient Discorda nie pozwoli użytkownikowi na użycie polecenia bez podania tego tekstu.
 
-The `<context.options>` tag for the `discord slash command` event returns a MapTag of option names and their supplied values.
+Tag `<context.options>` dla zdarzenia `discord slash command` zwraca MapTag z nazwami opcji i ich podanymi wartościami.
 
-We can get the player name value they input via `<context.options.get[name]>`, and put that into `<server.match_offline_player[...]>` to retrieve the actual player object corresponding to the name.
+Możemy pobrać wartość imienia gracza przez `<context.options.get[player]>` i wstawić ją do `<server.match_offline_player[...]>`, aby pobrać właściwy obiekt gracza odpowiadający temu imieniu.
 
-As we teach on the [Common Mistakes Page: Don't Trust Players](/guides/troubleshooting/common-mistakes#don-t-trust-players), never trust input from a user. Even for this simple interaction, the Discord user might: input the name of a player that doesn't exist, input something that isn't a player name at all or is formatted like an unrelated object, input an empty value, or glitch something to bypass the required options list and thus have no player input at all. So, make sure to verify every last piece of input with care, and handle the error cases with a simple refusal message.
+Jak uczymy na stronie [Częste błędy: Nie ufaj graczom](/guides/troubleshooting/common-mistakes#don-t-trust-players), nigdy nie ufaj danym od użytkownika. Nawet przy tej prostej interakcji użytkownik Discorda może: podać imię gracza, który nie istnieje, podać coś, co w ogóle nie jest imieniem gracza lub jest sformatowane jak niepowiązany obiekt, podać pustą wartość lub użyć błędu, by pominąć wymaganą listę opcji i nie podać nic. Dlatego upewnij się, że starannie weryfikujesz każdą informację i obsługujesz przypadki błędów prostym komunikatem odmownym.
 
-Next, you'll want to check if the player is online or offline, which you can do with the [`PlayerTag.is_online` tag](https://meta.denizenscript.com/Docs/Tags/playertag.is_online). If they are, you can just say so. If not, you can use the [`PlayerTag.last_played_time` tag](https://meta.denizenscript.com/Docs/Tags/playertag.last_played_time) and format the returned [`TimeTag`](https://meta.denizenscript.com/Docs/ObjectTypes/timetag). We can use the [`TimeTag.format_discord` tag](https://meta.denizenscript.com/Docs/Tags/timetag.format_discord) to display that time cleanly using Discord's automatic formatting - you can alternately use [`TimeTag.format[...]`](https://meta.denizenscript.com/Docs/Tags/timetag.format) to build a custom format.
+Następnie zechcesz sprawdzić, czy gracz jest online czy offline, co możesz zrobić za pomocą [tagu `PlayerTag.is_online`](https://meta.denizenscript.com/Docs/Tags/playertag.is_online). Jeśli jest, możesz po prostu to napisać. Jeśli nie, możesz użyć [tagu `PlayerTag.last_played_time`](https://meta.denizenscript.com/Docs/Tags/playertag.last_played_time) i sformatować zwrócony [obiekt `TimeTag`](https://meta.denizenscript.com/Docs/ObjectTypes/timetag). Możemy użyć [tagu `TimeTag.format_discord`](https://meta.denizenscript.com/Docs/Tags/timetag.format_discord), aby wyświetlić ten czas czytelnie przy użyciu automatycznego formatowania Discorda – alternatywnie możesz użyć [`TimeTag.format[...]`](https://meta.denizenscript.com/Docs/Tags/timetag.format), by stworzyć własny format.
 
-Make sure to include the player's name in the message! `<server.match_offline_player[...]>` returns the *best match* for the input, meaning the result player won't always be the one the user was thinking if they input a name incorrectly.
+Pamiętaj o dołączeniu imienia gracza do wiadomości! `<server.match_offline_player[...]>` zwraca *najlepsze dopasowanie* do wejścia, co oznacza, że wynikowy gracz nie zawsze będzie tym, o którym myślał użytkownik, jeśli błędnie wpisał imię.
 
-Here's the final script:
+Oto ostateczny skrypt:
 
 ```dscript_green
 lastlogin:
@@ -235,47 +235,47 @@ lastlogin:
         on discord slash command name:lastlogin:
         - ~discordinteraction defer interaction:<context.interaction>
 
-        # Note that empty input to match_offline_player is guaranteed to return null.
+        # Zauważ, że puste wejście do match_offline_player na pewno zwróci null.
         - define player <server.match_offline_player[<context.options.get[player].if_null[<empty>]>].if_null[null]>
 
         - if <[player]> == null:
-            - ~discordinteraction reply interaction:<context.interaction> "That name is invalid, or that player has never joined!"
+            - ~discordinteraction reply interaction:<context.interaction> "To imię jest nieprawidłowe lub ten gracz nigdy nie dołączył do serwera!"
             - stop
 
         - if <[player].is_online>:
-            - ~discordinteraction reply interaction:<context.interaction> "**<[player].name>** is online!"
+            - ~discordinteraction reply interaction:<context.interaction> "**<[player].name>** jest obecnie na serwerze!"
         - else:
-            - define message "**<[player].name>** was last seen: <[player].last_played_time.format_discord>"
+            - define message "**<[player].name>** był ostatnio widziany: <[player].last_played_time.format_discord>"
             - ~discordinteraction reply interaction:<context.interaction> <[message]>
 ```
 
 ![](images/acikek_lastlogin.gif)
 
-<span class="parens">(The format used in this gif was `<[player].last_played_time.format[LLLL dd, yyyy 'at' hh:mm a]>` instead of the format_discord tag)</span>
+<span class="parens">(Format użyty na tym gifie to `<[player].last_played_time.format[LLLL dd, yyyy 'o' hh:mm a]>` zamiast tagu format_discord)</span>
 
-### Clicky Thingies: Components
+### Klikalne cosie: Komponenty
 
-The rest of the interactions feature set includes buttons and selection menus, which are in their own category: *components*. Components can be attached to both interaction replies and basic messages (via the `rows` argument), and when used, return an interaction.
+Reszta zestawu funkcji interakcji obejmuje przyciski i menu wyboru, które znajdują się w osobnej kategorii: *komponenty*. Komponenty można dołączać zarówno do odpowiedzi na interakcje, jak i do zwykłych wiadomości (za pomocą argumentu `rows`), a po użyciu zwracają one interakcję.
 
-You can construct a [`DiscordButtonTag`](https://meta.denizenscript.com/Docs/ObjectTypes/DiscordButtonTag) with [`<discord_button>`](https://meta.denizenscript.com/Docs/tags/discord_button). You can then attach properties using the `with` style tags just like `DiscordEmbedTag` used. [`DiscordSelectionTag`](https://meta.denizenscript.com/Docs/ObjectTypes/DiscordSelectionTag) also works this way.
+Możesz skonstruować obiekt [`DiscordButtonTag`](https://meta.denizenscript.com/Docs/ObjectTypes/DiscordButtonTag) za pomocą [`<discord_button>`](https://meta.denizenscript.com/Docs/tags/discord_button). Następnie możesz dołączać właściwości przy użyciu tagów w stylu `with`, dokładnie tak jak przy `DiscordEmbedTag`. [`DiscordSelectionTag`](https://meta.denizenscript.com/Docs/ObjectTypes/DiscordSelectionTag) również działa w ten sposób.
 
-You can view the supported properties for a button [here](https://meta.denizenscript.com/Docs/Tags/discordbuttontag.with.as) and for a selection menu [here](https://meta.denizenscript.com/Docs/Tags/discordselectiontag.with.as).
+Wspierane właściwości dla przycisku możesz zobaczyć [tutaj](https://meta.denizenscript.com/Docs/Tags/discordbuttontag.with.as), a dla menu wyboru [tutaj](https://meta.denizenscript.com/Docs/Tags/discordselectiontag.with.as).
 
-The `rows` argument is a list of lists. The main lists represent the separate rows, while the lists inside represent the components on each row (similarly to columns on a grid). You can use `definemap` to represent the layered list more simply. For a single button, you can just input it directly without any list wrapping. This argument is found on both `discordinteraction` and `discordmessage`. Additionally, you can mix and match components in rows as you please. However, a message is still required!
+Argument `rows` to lista list. Główne listy reprezentują oddzielne rzędy, podczas gdy listy wewnątrz reprezentują komponenty w każdym rzędzie (podobnie do kolumn w siatce). Możesz użyć `definemap`, aby łatwiej przedstawić taką warstwową listę. Dla pojedynczego przycisku możesz go po prostu podać bezpośrednio bez owijania w listę. Argument ten znajduje się zarówno w `discordinteraction`, jak i `discordmessage`. Dodatkowo możesz dowolnie mieszać komponenty w rzędach. Wiadomość jest jednak wciąż wymagana!
 
-#### Buttons
+#### Przyciski
 
-For example, sending a message with a single button would look like:
+Na przykład wysłanie wiadomości z pojedynczym przyciskiem wyglądałoby tak:
 
 ```dscript_green
 buttons:
     type: task
     script:
-    - define click_me <discord_button.with[id].as[click_me].with[label].as[Click me!].with[style].as[success]>
-    - ~discordmessage id:mybot channel:<server.flag[discord_botspam]> rows:<[click_me]> Buttons!
+    - define click_me <discord_button.with[id].as[click_me].with[label].as[Kliknij mnie!].with[style].as[success]>
+    - ~discordmessage id:mojbot channel:<server.flag[discord_botspam]> rows:<[click_me]> Przyciski!
 ```
 
-An example with several buttons:
+Przykład z kilkoma przyciskami:
 
 ```dscript_green
 buttons:
@@ -283,17 +283,17 @@ buttons:
     script:
     - definemap buttons:
         1:
-            1: <discord_button.with[id].as[first].with[label].as[Click me!].with[style].as[primary]>
-            2: <discord_button.with[id].as[second].with[label].as[No, click me!].with[style].as[secondary]>
+            1: <discord_button.with[id].as[first].with[label].as[Kliknij mnie!].with[style].as[primary]>
+            2: <discord_button.with[id].as[second].with[label].as[Nie, mnie kliknij!].with[style].as[secondary]>
         2:
-            1: <discord_button.with[id].as[secondrow_first].with[label].as[This row's better!].with[style].as[danger]>
-            2: <discord_button.with[id].as[https://denizenscript.com].with[label].as[This column's best!].with[style].as[link]>
-    - ~discordmessage id:mybot channel:<server.flag[discord_botspam]> rows:<[buttons]> Buttons!
+            1: <discord_button.with[id].as[secondrow_first].with[label].as[Ten rząd jest lepszy!].with[style].as[danger]>
+            2: <discord_button.with[id].as[https://denizenscript.com].with[label].as[Ta kolumna rządzi!].with[style].as[link]>
+    - ~discordmessage id:mojbot channel:<server.flag[discord_botspam]> rows:<[buttons]> Przyciski!
 ```
 
-The ID should be unique to the button: it's how you'll identify one button over another. You'll see this with the `discord button clicked` event, which has an `id` switch much like the slash command event's `name` switch. The exception is when your button just needs to be a link - in that case, set the ID to the URL to open when the user clicks the button.
+ID powinno być unikalne dla przycisku: dzięki niemu odróżnisz jeden przycisk od drugiego. Zobaczysz to przy użyciu zdarzenia `discord button clicked`, które posiada przełącznik `id` (podobnie jak przełącznik `name` w zdarzeniu polecenia ukośnika). Wyjątkiem jest sytuacja, gdy Twój przycisk ma być po prostu linkiem – w takim przypadku ustaw ID na adres URL do otwarcia po kliknięciu.
 
-An example reply to a button press (for the single-button example):
+Przykład odpowiedzi na naciśnięcie przycisku (dla przykładu z jednym przyciskiem):
 
 ```dscript_green
 click_me:
@@ -301,45 +301,45 @@ click_me:
     events:
         on discord button clicked id:click_me:
         - ~discordinteraction defer interaction:<context.interaction>
-        - ~discordinteraction reply interaction:<context.interaction> "Hello, <context.interaction.user.name>!"
+        - ~discordinteraction reply interaction:<context.interaction> "Witaj, <context.interaction.user.name>!"
 ```
 
 ![](images/button_reply.png)
 
-#### Selection Menus
+#### Menu wyboru (Selection Menus)
 
-Selection menus function like a mixture of buttons and command options.
+Menu wyboru działają jak połączenie przycisków i opcji poleceń.
 
-The options input is a map-list of maps, where each inner map can have keys `label`, `value`, `description`, and `emoji`.
+Wejście opcji to mapa-lista map, gdzie każda mapa wewnętrzna może posiadać klucze `label`, `value`, `description` oraz `emoji`.
 
-The emoji is optional, and if you want to include it, the easiest way is to post the emoji on Discord with a `\` in front of it, like `\:smile:`, to get the raw form of the emoji, and then use that in the script.
+Emoji jest opcjonalne, a jeśli chcesz je dołączyć, najprostszym sposobem jest wysłanie emoji na Discordzie ze znakiem `\` przed nim, np. `\:smile:`, aby uzyskać surową formę emoji, a następnie użycie jej w skrypcie.
 
-The way selection menus work is easiest to see with an example script:
+Sposób działania menu wyboru najlepiej pokazać na przykładzie:
 
 ```dscript_green
 selection_menu:
     type: task
     script:
-    # Similar to command options
+    # Podobnie jak opcje polecenia
     - definemap options:
         1:
-            label: Good
+            label: Dobrze
             value: mood_good
-            description: I'm doing well.
+            description: Mam się nieźle.
             emoji: 🙂
         2:
-            label: Better
+            label: Lepiej
             value: mood_better
-            description: I'm doing wonderfully!
+            description: Czuję się wspaniale!
             emoji: 😃
         3:
-            label: Best
+            label: Najlepiej
             value: mood_best
-            description: I'm on top of the world!
+            description: Jestem na szczycie świata!
             emoji: 🤩
 
     - define menu <discord_selection.with[id].as[mood_menu].with[options].as[<[options]>]>
-    - ~discordmessage id:mybot channel:<server.flag[discord_botspam]> rows:<[menu]> "How are you today?"
+    - ~discordmessage id:mojbot channel:<server.flag[discord_botspam]> rows:<[menu]> "Jak się dzisiaj czujesz?"
 
 mood_menu:
     type: world
@@ -349,43 +349,43 @@ mood_menu:
 
         - choose <context.option.get[value]>:
             - case mood_good:
-                - define message "I'm glad."
+                - define message "Cieszę się."
             - case mood_better:
-                - define message "Wow, that's great!"
+                - define message "Wow, to świetnie!"
             - case mood_best:
-                - define message "Downright incredible!"
+                - define message "Po prostu niesamowicie!"
 
         - ~discordinteraction reply interaction:<context.interaction> <[message]>
 ```
 
 ![](images/selection_menu.gif)
 
-### Some Things To Try
+### Rzeczy do wypróbowania
 
-This guide page covers two small projects, plus the basics of message components. For more ideas, you might want to look back at the [What Can It Be Used For?](#what-can-it-be-used-for?) section. If you're looking for a challenge, you could try:
+Ta strona przewodnika obejmuje dwa małe projekty oraz podstawy komponentów wiadomości. Aby uzyskać więcej pomysłów, wróć do sekcji [Do czego można go użyć?](#do-czego-mozna-go-uzyc). Jeśli szukasz wyzwania, możesz spróbować:
 
-- Mixing components in messages
-- Replying to interactions privately (hint: docs!)
-- Making a "player info" command
+- Mieszania różnych komponentów w wiadomościach
+- Odpowiadania na interakcje prywatnie (podpowiedź: sprawdź dokumentację!)
+- Stworzenia polecenia „informacje o graczu” (player info)
 
-Be imaginative! Discord is yet another platform, full of unique concepts and possibilities, for you to be creative with.
+Użyj wyobraźni! Discord to kolejna platforma pełna unikalnych koncepcji i możliwości dla Twojej kreatywności.
 
-### Common Issues: When Something Went Wrong
+### Częste problemy: Gdy coś poszło nie tak
 
-If something has gone wrong while testing your bot, here are some common issues you might run into and how to fix them.
+Jeśli podczas testowania bota coś nie działa, oto kilka typowych problemów i sposobów ich rozwiązania:
 
-- First of all, if you're having any issues, make extra sure you enabled the `Server Members Intent` on the Discord bot page. A lot of things will break if that's turned off.
-- Make sure your bot has permissions to do what you're trying to make it do! The bot needs to be able to view the channel you're using, read messages in that channel, and be able to send messages there. When first testing your bot, more permissions are better permissions. Once you're putting your bot into real use, limit the bot to only the permissions it needs.
-- If you're unable to register slash commands (with a `50001: Missing Access` error in your console) you may have forgotten to enable the `applications.commands` scope when adding your bot to your server.
-- As with all Denizen issues, monitor your console - the debug output contains a lot of helpful information to diagnose precisely what went wrong.
-- If you're stuck or lost, ask for help on Discord. See also the general Denizen [solving problems you encounter page](/guides/first-steps/problem-solving)
+- Przede wszystkim upewnij się dwukrotnie, że włączyłeś `Server Members Intent` na stronie bota Discorda. Wiele rzeczy się zepsuje, jeśli ta opcja jest wyłączona.
+- Upewnij się, że Twój bot ma uprawnienia do tego, co próbujesz zrobić! Bot musi móc widzieć kanał, którego używasz, czytać na nim wiadomości i móc je tam wysyłać. Podczas pierwszych testów bota im więcej uprawnień, tym lepiej. Kiedy już wdrożysz bota do rzeczywistego użytku, ogranicz mu uprawnienia tylko do tych niezbędnych.
+- Jeśli nie możesz zarejestrować poleceń ukośnika (z błędem `50001: Missing Access` w konsoli), być może zapomniałeś włączyć zakres `applications.commands` podczas dodawania bota na serwer.
+- Podobnie jak przy wszystkich problemach z Denizen, monitoruj swoją konsolę – wyjście debugowania zawiera wiele pomocnych informacji pozwalających zdiagnozować, co dokładnie poszło nie tak.
+- Jeśli utkniesz lub się zgubisz, poproś o pomoc na Discordzie. Zobacz też ogólną stronę Denizen dotyczącą [rozwiązywania napotkanych problemów](/guides/first-steps/problem-solving).
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read some more about dDiscordBot, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się więcej o dDiscordBot, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-- [dDiscordBot commands](https://meta.denizenscript.com/Docs/Commands/discor)
-- [dDiscordBot tags](https://meta.denizenscript.com/Docs/Tags/discor)
-- [dDiscordBot events](https://meta.denizenscript.com/Docs/Events/discord)
-- [dDiscordBot GitHub page](https://github.com/DenizenScript/dDiscordBot)
-- [Discord's internal reference docs](https://discord.com/developers/docs/reference)
+- [Polecenia dDiscordBot](https://meta.denizenscript.com/Docs/Commands/discor)
+- [Tagi dDiscordBot](https://meta.denizenscript.com/Docs/Tags/discor)
+- [Zdarzenia dDiscordBot](https://meta.denizenscript.com/Docs/Events/discord)
+- [Strona dDiscordBot na GitHubie](https://github.com/DenizenScript/dDiscordBot)
+- [Wewnętrzna dokumentacja referencyjna Discorda](https://discord.com/developers/docs/reference)

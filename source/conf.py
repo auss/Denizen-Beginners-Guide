@@ -8,7 +8,7 @@ import recommonmark
 from recommonmark.transform import AutoStructify
 
 # Project Info
-project = "Denizen Beginner's Guide"
+project = "Przewodnik Początkującego Denizen"
 copyright = '2019-2025 The DenizenScript Team'
 author = 'The DenizenScript Team'
 version = '0.4'
@@ -19,14 +19,14 @@ extensions = ['recommonmark', 'sphinx_rtd_dark_mode']
 templates_path = ['_templates']
 source_suffix = '.md'
 master_doc = 'index'
-language = 'en'
+language = 'pl'
 exclude_patterns = []
 pygments_style = 'sphinx'
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 # Changes to HTML format
-html_title = "Denizen Beginner's Guide"
+html_title = "Przewodnik Początkującego Denizen"
 html_extra_path = ['_static_extra']
 
 # Disabled stuff

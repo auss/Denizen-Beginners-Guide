@@ -1,35 +1,32 @@
-Changing The Path: The If Command
+Zmiana ścieżki: Polecenie If
 ---------------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### What Is The 'If' Command?
+### Czym jest polecenie „If”?
 
-You learned how to use events to run a set of commands whenever a situation occurs on your server. You learned how to use tags to change what any command does based on the details of the situation.
-Now it's time to use the `if` command to combine the two concepts: choosing a set of commands to run based on the details of the situation.
+Nauczyłeś się używać zdarzeń do uruchamiania zestawu poleceń, gdy na serwerze wystąpi określona sytuacja. Nauczyłeś się używać tagów, aby zmieniać działanie dowolnego polecenia w zależności od szczegółów sytuacji.
+Teraz nadszedł czas, aby użyć polecenia `if`, aby połączyć te dwie koncepcje: wybór zestawu poleceń do uruchomienia na podstawie szczegółów sytuacji.
 
-The `if` command does exactly what it says on the tin: it says "*if* something is true, then run these commands. Otherwise, don't run them."
+Polecenie `if` (jeśli) robi dokładnie to, co sugeruje nazwa: mówi „*jeśli* coś jest prawdą, to uruchom te polecenia. W przeciwnym razie ich nie uruchamiaj”.
 
-### So What Does An If Command Look Like?
+### Jak wygląda polecenie If?
 
-Don't worry, `if` commands are pretty easy to write, and look just like anything else in a Denizen script does.
+Nie martw się, polecenia `if` są dość łatwe do napisania i wyglądają tak samo, jak wszystko inne w skryptach Denizen.
 
-Here's the basic format:
+Oto podstawowy format:
 ```dscript_blue
-- if (some condition here):
-    - (some commands)
-    - (go here)
+- if (jakiś warunek tutaj):
+    - (jakieś polecenia)
+    - (tutaj)
 ```
 
-As you can see, `if` is a command <span class="parens">(written just like any other at the start, with some condition(s) as its input arguments)</span>
-but with a `:` on the end <span class="parens">(just like you would have on an event line)</span>,
-and some commands spaced out and placed within. The thing to be extra careful about here is the spacing on the commands within.
-If the commands within don't get spaced out a step, Denizen won't know that they were meant to be in the `if`, and just run them regardless of the condition you give.
+Jak widzisz, `if` to polecenie <span class="parens">(pisane na początku jak każde inne, z warunkiem jako argumentem wejściowym)</span>, ale z dwukropkiem `:` na końcu <span class="parens">(podobnie jak w linii zdarzenia)</span> oraz z poleceniami umieszczonymi wewnątrz z odpowiednim wcięciem. Należy zachować szczególną ostrożność przy wcięciach poleceń wewnątrz bloku. Jeśli polecenia wewnątrz nie zostaną przesunięte o jeden poziom wcięcia, Denizen nie będzie wiedział, że miały należeć do bloku `if`, i po prostu uruchomi je niezależnie od podanego warunku.
 
-Let's see how this might look in a real script...
+Zobaczmy, jak może to wyglądać w prawdziwym skrypcie...
 ```dscript_green
 magic_healing_bell:
     type: world
@@ -37,91 +34,79 @@ magic_healing_bell:
         after player right clicks bell:
         - if <player.health_percentage> < 25:
             - heal
-            - actionbar "<&[base]>The bell has healed you!"
+            - actionbar "<&[base]>Dzwon cię uleczył!"
 ```
 
 ![](images/magic_bell.png)
 
-This handy sample script will instantly heal a player that clicks on a bell block, but *only if* their health is dangerously low.
-<span class="parens">(We'll expand on this sample script throughout this section, and when we get to the [Flags](flags) section we'll revisit this sample script to add a rate limit, so players can only heal once every few minutes).</span>
+Ten przydatny przykładowy skrypt natychmiast uleczy gracza, który kliknie blok dzwonu, ale *tylko jeśli* jego poziom zdrowia jest niebezpiecznie niski.
+<span class="parens">(Będziemy rozwijać ten przykład w tej sekcji, a gdy dotrzemy do sekcji [Flagi (Flags)](flags), dodamy do niego limit czasu, aby gracze mogli leczyć się tylko raz na kilka minut).</span>
 
-This script also displays an *actionbar* message to let the player know they've been healed, using the base text color defined in your Denizen `config.yml` file.
+Skrypt ten wyświetla również wiadomość na pasku akcji (actionbar), aby poinformować gracza o uleczeniu, używając podstawowego koloru tekstu zdefiniowanego w pliku `config.yml` wtyczki Denizen.
 
-### Conditions
+### Warunki
 
-There's a few different ways to make a condition in an `if` command.
-At its simplest, the condition could be a boolean tag <span class="parens">(one that returns 'true' or 'false')</span>, and that's enough right there. <span class="parens">(For example, `- if <player.on_fire>:`)</span>.
-The `if` sub-commands will run when the tag returns `true`, and won't when it returns `false`.
-You can also invert <span class="parens">(run when the tag is 'false', and don't run when it's 'true')</span> these simple boolean `if` commands using the `!` symbol <span class="parens">(which is read as "not")</span>.
-For example, `- if !<player.on_fire>:` will run only if the player is **not** on fire.
+Istnieje kilka różnych sposobów tworzenia warunków w poleceniu `if`.
+W najprostszym przypadku warunkiem może być tag logiczny (boolean) <span class="parens">(taki, który zwraca „true” lub „false”)</span> i to wystarczy. <span class="parens">(Na przykład: `- if <player.on_fire>:`)</span>.
+Podpolecenia `if` zostaną uruchomione, gdy tag zwróci `true`, a nie zostaną uruchomione, gdy zwróci `false`.
+Możesz również odwrócić działanie <span class="parens">(uruchomić, gdy tag to „false”, a nie uruchamiać, gdy to „true”)</span> tych prostych poleceń logicznych `if`, używając symbolu `!` <span class="parens">(czytanego jako „not” – nie)</span>.
+Na przykład: `- if !<player.on_fire>:` uruchomi się tylko wtedy, gdy gracz **nie** płonie.
 
-It could also be some value tag <span class="parens">(a tag that returns anything more complicated than a boolean)</span>, in which case it will be compared to some other value.
-The basic format of an `if` command that compares two values is `- if (first value) (comparison) (second value):` <span class="parens">(for example, `- if <player.name> == mcmonkey4eva:`)</span>.
-One or both values can be a tag. <span class="parens">(Technically, both values can also be static text, but that would mean the `if` command either always runs its sub-commands, or never does... that's not a very useful `if` command)</span>.
+Może to być również tag o określonej wartości <span class="parens">(tag, który zwraca coś bardziej złożonego niż wartość logiczna)</span>, w którym to przypadku zostanie on porównany z inną wartością.
+Podstawowy format polecenia `if` porównującego dwie wartości to `- if (pierwsza wartość) (porównanie) (druga wartość):` <span class="parens">(na przykład: `- if <player.name> == mcmonkey4eva:`)</span>.
+Jedna lub obie wartości mogą być tagami. <span class="parens">(Technicznie rzecz biorąc, obie wartości mogą być również tekstem statycznym, ale oznaczałoby to, że polecenie `if` albo zawsze uruchamia swoje podpolecenia, albo nigdy tego nie robi... a to mało przydatne polecenie)</span>.
 
-There are a few different comparison types available:
-- `==` to test equality <span class="parens">(`- if 3 == 3:` will run its commands, but `- if 3 == 4:` will not)</span> - you can read this as "if three is equal to three, then run some commands".
-
-<hr>
-
-- `!=` to test equality but expect the opposite result <span class="parens">(so, `- if 3 != 3:` will **not** run its commands, and `- if 3 != 4:` **will** run its commands)</span> - the `!` is read as "not",
-so you can read this like "if three **is not** equal to three, then run some commands." Of course in real usage, one or both of the values would be from a tag.
+Dostępnych jest kilka różnych typów porównań:
+- `==` służy do sprawdzania równości <span class="parens">(`- if 3 == 3:` uruchomi polecenia, ale `- if 3 == 4:` już nie)</span> – można to czytać jako „jeśli trzy równa się trzy, to uruchom polecenia”.
 
 <hr>
 
-- `>` (is greater than), `>=` (is greater than or equal to), `<` (is less than), and `<=` (is less than or equal to) to test numeric comparisons. Note that `>` and `<=` are opposites, and that `<` and `>=` are opposites.
-As a special additional note here: you might notice that `<` and `>` are the symbols used to indicate a tag normally, but are used for a different meaning here -
-this is fine, as you will never have both `<` and `>` in a single argument of a comparison, and thus the symbols will never be misinterpreted as a tag.
+- `!=` służy do sprawdzania nierówności <span class="parens">(zatem `- if 3 != 3:` **nie** uruchomi poleceń, a `- if 3 != 4:` **uruchomi** polecenia)</span> – znak `!` czyta się jako „nie”, więc można to czytać jako „jeśli trzy **nie równa się** trzy, to uruchom polecenia”. W rzeczywistym użyciu jedna lub obie wartości pochodziłyby z tagu.
 
 <hr>
 
-- `contains` and `in` for list containment checks, like `- if one|two contains one:` or `- if one in one|two:`
+- `>`, `>=`, `<` oraz `<=` służą do porównań liczbowych (większy niż, większy lub równy, mniejszy niż, mniejszy lub równy). Zauważ, że `>` i `<=` są przeciwieństwami, podobnie jak `<` i `>=`.
+Specjalna uwaga: możesz zauważyć, że znaki `<` i `>` są normalnie używane do oznaczania tagów, ale tutaj mają inne znaczenie – nie jest to problemem, ponieważ nigdy nie będziesz mieć jednocześnie `<` i `>` w pojedynczym argumencie porównania, więc symbole te nigdy nie zostaną błędnie zinterpretowane jako tag.
 
 <hr>
 
-- `matches` for advanced-matcher checks, like `- if <player.item_in_hand> matches diamond_sword:`
-
-### Combining Conditions: The Venti Mocha Frap With Extra Sugar and No Cream
-
-When a simple comparison just won't do, and you gotta get a few extra things included, don't worry: the `if` command will let you do that!
-
-There are two combination types available:
-- If you want a set of commands to run if multiple comparisons **are all** true, use `&&` <span class="parens">(read as "and" - the symbol itself is a double-ampersand)</span>.
-For example, `- if <player.on_fire> && <player.health_percentage> < 25:` will run its commands if a player is on fire *and* almost dead.
+- `contains` (zawiera) oraz `in` (w) służą do sprawdzania zawartości list, np. `- if one|two contains one:` lub `- if one in one|two:`
 
 <hr>
 
-- If you want a set of commands to run if **any one (or more)** of multiple comparisons is true, use `||` <span class="parens">(read as "or" - the symbol itself is a double-pipe)</span>.
-For example, `- if <player.on_fire> || <player.health_percentage> < 25:` will run its commands if a player is on fire <span class="parens">(regardless of their health)</span>,
-or will run its commands if the player's health is low <span class="parens">(regardless of whether they're on fire)</span>.
+- `matches` (pasuje do) służy do zaawansowanego dopasowywania, np. `- if <player.item_in_hand> matches diamond_sword:`
 
-If you have a lot of things you want to specify at once, you can simply chain these together in a row: `- if (condition one) && (condition two) && (condition three) && (condition four):`.
-There's only one complication: chaining together only ones if you have `&&` all the way down the chain, or you have `||` all the way down the chain.
-You can't have both in one chain... think about it, `- if (one) && (two) || (three) && (four):` ... what does that mean?
-Does that mean we must either have one and two, OR have three and four? It could also mean we must have one, two or three, and four.
-We as humans might be able to make a good guess as to which was intended, but Denizen is just software, it can't read minds.
+### Łączenie warunków: Venti Mocha Frap z dodatkowym cukrem i bez śmietanki
 
-The solution to this problem was hidden in the way I asked the question: if you look at the way I specified the two possible interpretations, you'll notice I carefully grouped parts together, and separated the other parts into a list.
-Denizen contains a syntax to do the very same: parentheses `()` with extra spaces can be used to mark groupings.
-So how do we use that?
+Gdy proste porównanie nie wystarcza i musisz uwzględnić kilka dodatkowych rzeczy, nie martw się: polecenie `if` na to pozwala!
 
-Here's a long but relatively simple example:
+Dostępne są dwa typy łączenia:
+- Jeśli chcesz, aby zestaw poleceń został uruchomiony, gdy **wszystkie** porównania są prawdziwe, użyj `&&` <span class="parens">(czytane jako „and” – i; symbol to podwójny ampersand)</span>.
+Na przykład: `- if <player.on_fire> && <player.health_percentage> < 25:` uruchomi polecenia, jeśli gracz płonie *oraz* jest bliski śmierci.
+
+<hr>
+
+- Jeśli chcesz, aby zestaw poleceń został uruchomiony, gdy **którekolwiek (jedno lub więcej)** z porównań jest prawdziwe, użyj `||` <span class="parens">(czytane jako „or” – lub; symbol to podwójna pionowa kreska, tzw. pipe)</span>.
+Na przykład: `- if <player.on_fire> || <player.health_percentage> < 25:` uruchomi polecenia, jeśli gracz płonie <span class="parens">(niezależnie od poziomu zdrowia)</span> lub jeśli zdrowie gracza jest niskie <span class="parens">(niezależnie od tego, czy płonie)</span>.
+
+Jeśli masz wiele rzeczy, które chcesz określić naraz, możesz po prostu łączyć je w szereg: `- if (warunek jeden) && (warunek dwa) && (warunek trzy) && (warunek cztery):`.
+Istnieje tylko jedna komplikacja: możesz łączyć je bez przeszkód, jeśli przez cały łańcuch używasz tylko `&&` albo tylko `||`. Nie możesz używać obu typów w jednym łańcuchu... pomyśl o tym: `- if (jeden) && (dwa) || (trzy) && (cztery):` ... co to właściwie znaczy? Czy oznacza to, że musimy mieć albo jeden i dwa, ALBO mieć trzy i cztery? Mogłoby to też oznaczać, że musimy mieć jeden, dwa lub trzy, oraz cztery. My jako ludzie możemy domyślać się intencji, ale Denizen to tylko oprogramowanie, nie potrafi czytać w myślach.
+
+Rozwiązanie tego problemu ukryło się w sposobie, w jaki zadałem pytanie: jeśli spojrzysz na to, jak opisałem te dwie interpretacje, zauważysz, że starannie pogrupowałem części razem. Denizen zawiera składnię, która pozwala na to samo: nawiasy `()` z dodatkowymi spacjami mogą służyć do zaznaczania grup. Jak tego użyć?
+
+Oto długi, ale stosunkowo prosty przykład:
 ```dscript_blue
 - if ( <player.name> == mcmonkey4eva && <player.health_percentage> > 90 ) || ( <player.on_fire> && <player.health_percentage> < 25 ):
-    - narrate "wow mcmonkey specifically is doing pretty well! That or somebody is dying from a fire..."
+    - narrate "Wow, mcmonkey ma się całkiem nieźle! Albo ktoś właśnie ginie w ogniu..."
 ```
 
-Using grouping as shown above, you can make any combination of conditions you might ever need.
-You can even put groups inside of other groups if you really want to, but be aware that going too crazy can make your script hard to read,
-and a better organization might be preferable <span class="parens">(see next sub-section below for one good alternative)</span>.
+Używając grupowania jak pokazano powyżej, możesz stworzyć dowolną kombinację warunków, jakiej tylko będziesz potrzebować. Możesz nawet umieszczać grupy wewnątrz innych grup, jeśli naprawdę chcesz, ale pamiętaj, że przesada może uczynić Twój skrypt trudnym do odczytania i lepsza może być inna organizacja <span class="parens">(sprawdź następną podsekcję poniżej jako dobrą alternatywę)</span>.
 
-### The Most Common Usage of 'If'
+### Najczęstsze użycie „If”
 
-The benefit of the `if` command in the 'magic healing bell' example earlier is pretty straight forward: it allowed us to narrow down exactly when a set of commands should run.
-Rather than just "whenever a player clicks a bell", it's now "whenever a player clicks a bell, *and* that player has low health".
-Narrowing down the requirements for commands to run is, generally speaking, the most common usage of an `if` command.
+Zaleta polecenia `if` w przykładzie z „magicznym leczniczym dzwonem” jest dość oczywista: pozwoliła nam dokładnie określić, kiedy zestaw poleceń powinien się uruchomić. Zamiast „zawsze, gdy gracz kliknie dzwon”, mamy teraz „zawsze, gdy gracz kliknie dzwon, *a ten gracz* ma niski poziom zdrowia”. Zawężanie wymagań dla poleceń jest ogólnie rzecz biorąc najczęstszym zastosowaniem polecenia `if`.
 
-You will very often see this in real scripts in a slightly different form, but accomplishing the same goal:
+W prawdziwych skryptach bardzo często zobaczysz to w nieco innej formie, ale realizującej ten sam cel:
 ```dscript_green
 magic_healing_bell:
     type: world
@@ -130,42 +115,32 @@ magic_healing_bell:
         - if <player.health_percentage> > 25:
             - stop
         - heal
-        - actionbar "<&[base]>The bell has healed you!"
+        - actionbar "<&[base]>Dzwon cię uleczył!"
 ```
 
-By using the `stop` command inside an `if`, we are able to stop the script from running the heal command if a player's health is greater than 25%.
-This is functionally the same as the original script, but expressed 'backwards'
-<span class="parens">(instead of "if the player has below 25% health, heal them" we instead say "if the player has above 25% health, they don't get healed").</span>
-This is very useful when you have multiple things you want to require before you want the actual script commands to be ran, as they can expressed neatly in order
-<span class="parens">(rather than getting stuck with a very long line listing all your conditions)</span>.
+Używając polecenia `stop` wewnątrz bloku `if`, możemy zatrzymać skrypt przed wykonaniem polecenia uleczenia, jeśli zdrowie gracza jest wyższe niż 25%. Jest to funkcjonalnie to samo co oryginalny skrypt, ale wyrażone „od tyłu” <span class="parens">(zamiast „jeśli gracz ma poniżej 25% zdrowia, ulecz go”, mówimy „jeśli gracz ma powyżej 25% zdrowia, nie zostaje uleczony”)</span>. Jest to bardzo przydatne, gdy masz wiele wymagań, które chcesz sprawdzić przed uruchomieniem właściwych poleceń skryptu, ponieważ można je zapisać schludnie jedno po drugim <span class="parens">(zamiast utknąć z bardzo długą linią wymieniającą wszystkie warunki)</span>.
 
-### A Fork In The Road
+### Rozwidlenie na drodze
 
-So far, we've explained the basics of the `if` command in terms of how to run a set of commands or not run them, based on some condition.
-This is great for adding extra requirements to an event before a set of commands runs, but that's not all that `if` can do!
-The if command, as we currently understand it, says "if this condition is true, then run these commands, otherwise don't."
-Let's expand that to instead say "if this condition is true, then run these commands, otherwise *run these different commands*."
-Now, our script can go down one of two paths depending on some tag-based condition.
-We'll do this using the `else` command.
+Do tej pory wyjaśniliśmy podstawy polecenia `if` w kontekście tego, jak uruchomić lub nie zestaw poleceń na podstawie warunku. To świetnie nadaje się do dodawania dodatkowych wymagań do zdarzenia, ale to nie wszystko, co `if` potrafi! Obecnie rozumiemy, że polecenie to mówi: „jeśli warunek jest prawdziwy, to uruchom te polecenia, w przeciwnym razie nie”. Rozszerzmy to na: „jeśli warunek jest prawdziwy, to uruchom te polecenia, w przeciwnym razie *uruchom te inne polecenia*”. Teraz nasz skrypt może pójść jedną z dwóch ścieżek, zależnie od warunku opartego na tagach. Zrobimy to za pomocą polecenia `else`.
 
 ![](images/bell_fork.png)
 
-### What Does An Else Command Look Like?
+### Jak wygląda polecenie Else?
 
-The `else` command looks almost the same as an `if`.
+Polecenie `else` (w przeciwnym razie) wygląda prawie tak samo jak `if`.
 
-Here's the basic format:
+Oto podstawowy format:
 ```dscript_blue
-- if (some condition here):
-    - (commands for when the condition is 'true')
+- if (jakiś warunek tutaj):
+    - (polecenia dla sytuacji 'prawda')
 - else:
-    - (commands for 'false')
+    - (polecenia dla sytuacji 'fałsz')
 ```
 
-That's pretty simple! It's just an `else` with no input parameters, formatted just like an `if`, and with the special requirement that it must be right after an `if`.
-Whenever the `if` command's condition is 'false', the commands in `else` will run.
+To całkiem proste! To po prostu `else` bez parametrów wejściowych, sformatowane tak samo jak `if`, z tym specjalnym wymogiem, że musi znajdować się bezpośrednio po bloku `if`. Zawsze, gdy warunek polecenia `if` jest fałszywy, zostaną uruchomione polecenia w bloku `else`.
 
-Let's make use of an else in our magic bell script...
+Wykorzystajmy `else` w naszym skrypcie magicznego dzwonu...
 ```dscript_green
 magic_healing_bell:
     type: world
@@ -173,16 +148,14 @@ magic_healing_bell:
         after player right clicks bell:
         - if <player.health_percentage> < 25:
             - heal
-            - actionbar "<&[base]>The bell has healed you!"
+            - actionbar "<&[base]>Dzwon cię uleczył!"
         - else:
-            - actionbar "<&[error]>The bell does nothing: you're healthy enough already."
+            - actionbar "<&[error]>Dzwon nic nie robi: jesteś już wystarczająco zdrowy."
 ```
 
-The existing script healed players with less than 25% health. Now it will also give a message to players that are healthy enough, so they don't get confused when the bell doesn't do anything.
+Dotychczasowy skrypt leczył graczy z poziomem zdrowia poniżej 25%. Teraz wyświetli również wiadomość graczom, którzy są zdrowi, aby nie czuli się zdezorientowani, gdy dzwon nic nie zrobi.
 
-You might ask "well, why don't I just use the `stop` command the way you showed earlier, and put the rejection message right before the `stop` command?" - And you can do that!
-That's a great way to do that. So what good is the else command? It's much more useful when you have things that go after the `if`/`else` commands, that need to run regardless of what happens with the `if`/`else`.
-Consider this script:
+Możesz zapytać: „no dobrze, dlaczego po prostu nie użyć polecenia `stop` w sposób pokazany wcześniej i nie umieścić wiadomości o odrzuceniu tuż przed poleceniem `stop`?”. I możesz to zrobić! To świetny sposób. Więc po co jest polecenie `else`? Jest ono znacznie bardziej przydatne, gdy masz instrukcje, które znajdują się *po* blokach `if`/`else` i które muszą zostać wykonane niezależnie od tego, co stało się wewnątrz tych bloków. Rozważ ten skrypt:
 
 ```dscript_green
 magic_healing_bell:
@@ -190,18 +163,16 @@ magic_healing_bell:
     events:
         after player right clicks bell:
         - if <player.health_percentage> > 90:
-            - actionbar "<&[error]>The bell does nothing: you're healthy enough already."
+            - actionbar "<&[error]>Dzwon nic nie robi: jesteś już wystarczająco zdrowy."
             - stop
         - if <player.health_percentage> < 25:
-            - actionbar "<&[base]>The bell has saved you!"
+            - actionbar "<&[base]>Dzwon cię uratował!"
         - else:
-            - actionbar "<&[base]>The bell has healed you!"
+            - actionbar "<&[base]>Dzwon cię uleczył!"
         - heal
 ```
 
-This script will reject the player if they have at least 90% health, and heal for anything below that.
-It gives a unique message depending on whether the player is almost dead, or just a bit low.
-If we didn't use an `else` command here, we would have had to do this:
+Ten skrypt odrzuci gracza, jeśli ma co najmniej 90% zdrowia, a w każdym innym przypadku go uleczy. Wyświetla unikalną wiadomość zależnie od tego, czy gracz jest bliski śmierci, czy ma tylko trochę mniej zdrowia. Gdybyśmy nie użyli tutaj polecenia `else`, musielibyśmy zrobić to tak:
 
 ```dscript_red
 magic_healing_bell:
@@ -209,47 +180,39 @@ magic_healing_bell:
     events:
         after player right clicks bell:
         - if <player.health_percentage> > 90:
-            - actionbar "<&[error]>The bell does nothing: you're healthy enough already."
+            - actionbar "<&[error]>Dzwon nic nie robi: jesteś już wystarczająco zdrowy."
             - stop
         - if <player.health_percentage> < 25:
-            - actionbar "<&[base]>The bell has saved you!"
+            - actionbar "<&[base]>Dzwon cię uratował!"
             - heal
             - stop
-        - actionbar "<&[base]>The bell has healed you!"
+        - actionbar "<&[base]>Dzwon cię uleczył!"
         - heal
 ```
 
-That's a lot worse! We had to write the `heal` command twice <span class="parens">(not to mention the extra `stop` command)</span>.
-If you're thinking "that's not too bad", just think about how much worse that might get in a real script where there's a lot more than just a single `heal` command that runs regardless of the condition.
-You'd be duplicating an entire list of commands - luckily, the `else` command lets us avoid that!
+To znacznie gorsze rozwiązanie! Musieliśmy napisać polecenie `heal` dwa razy <span class="parens">(nie wspominając o dodatkowym poleceniu `stop`)</span>. Jeśli myślisz „to nie jest takie złe”, pomyśl, o ile gorzej mogłoby to wyglądać w prawdziwym skrypcie, gdzie zamiast jednego polecenia `heal` jest cała lista instrukcji, które mają się uruchomić niezależnie od warunku. Musiałbyś duplikować całą tę listę – na szczęście polecenie `else` pozwala nam tego uniknąć!
 
-### Don't Forks Normally Have 3 or 4 Prongs?
+### Czy rozwidlenia nie mają zwykle 3 lub 4 zębów?
 
 ![](images/trifork.png)
 
-The `else` command is pretty handy as we've seen, but it actually has even more power to it!
-We started out with just an `if` command that lets you make one subset of code run or not run.
-We then expanded to the `else` command to let you run one of two possible subsets of code.
-You can probably guess what we're expanding to next: a way to choose one of many possible subsets of code.
-This is the `else if`!
+Polecenie `else` jest bardzo przydatne, jak widzieliśmy, ale ma w zanadrzu jeszcze więcej mocy! Zaczęliśmy od samego `if`, które pozwala uruchomić lub nie podzbiór kodu. Potem dodaliśmy `else`, aby wybierać jedną z dwóch ścieżek. Możesz pewnie zgadnąć, co będzie dalej: sposób na wybranie jednej z wielu możliwych ścieżek. To jest `else if`!
 
-### How Do You Write An 'Else If'?
+### Jak napisać „Else If”?
 
-Here's the basic format:
+Oto podstawowy format:
 ```dscript_blue
-- if (first condition here):
-    - (commands for when the first condition is 'true')
-- else if (second condition):
-    - (second condition 'true' commands)
+- if (pierwszy warunek tutaj):
+    - (polecenia dla pierwszego warunku 'prawda')
+- else if (drugi warunek):
+    - (polecenia dla drugiego warunku 'prawda')
 - else:
-    - (commands for when all conditions were 'false')
+    - (polecenia, gdy wszystkie warunki były 'fałszem')
 ```
 
-As you can see, it's pretty much just slapping an `if` inside of an `else`.
-You can chain `else if`s in a row as many times as like, the only limit is you must always start with a regular `if`.
-You do not have to have an `else` <span class="parens">(without the `if`)</span> but you can if you want, it just has to be kept at the very end if so.
+Jak widać, to zasadniczo wstawienie `if` wewnątrz bloku `else`. Możesz łączyć `else if` w szeregu dowolną ilość razy, jedynym ograniczeniem jest to, że musisz zawsze zacząć od zwykłego `if`. Nie musisz posiadać końcowego `else` (bez `if`), ale możesz jeśli chcesz – w takim przypadku musi on znajdować się na samym końcu.
 
-How might that go in real usage?
+Jak to może wyglądać w praktyce?
 
 ```dscript_green
 magic_healing_bell:
@@ -257,47 +220,39 @@ magic_healing_bell:
     events:
         after player right clicks bell:
         - if <player.health_percentage> > 90:
-            - actionbar "<&[error]>The bell does nothing: you're healthy enough already."
+            - actionbar "<&[error]>Dzwon nic nie robi: jesteś już wystarczająco zdrowy."
         - else if <player.health_percentage> < 25:
-            - actionbar "<&[error]>The bell can't save you: you're too far gone."
+            - actionbar "<&[error]>Dzwon nie może cię uratować: jesteś w zbyt złym stanie."
         - else:
-            - actionbar "<&[base]>The bell has healed you!"
+            - actionbar "<&[base]>Dzwon cię uleczył!"
             - heal
 ```
 
-This version of the magic bell script won't heal you if you're healthy already, and also won't save you from death - it will only heal you if you're moderately injured.
-Thanks to this new design, we don't need the `stop` command at all anymore, as the `heal` command only runs on one of the possible "branches".
+Ta wersja skryptu magicznego dzwonu nie uleczy Cię, jeśli jesteś już zdrowy, a także nie uratuje Cię przed śmiercią – uleczy Cię tylko, jeśli jesteś umiarkowanie ranny. Dzięki tej nowej konstrukcji nie potrzebujemy już wcale polecenia `stop`, ponieważ polecenie `heal` uruchamia się tylko w jednej z możliwych „gałęzi”.
 
-### Wait Who Was Talking About Trees?
+### Zaraz, kto mówił o drzewach?
 
 ![](images/logic_tree.png)
 
-If you have experience in advanced computer processing design - well, first of all, why are you bothering to read this guide? but more relevantly - you might recognize the term "branch" being used here.
-If not, you might still recognize the idea of visualizing paths as trees with many branches. If you don't have any idea what I'm on about, don't worry, I'll explain.
+Jeśli masz doświadczenie w projektowaniu zaawansowanych systemów komputerowych – cóż, po pierwsze: dlaczego w ogóle czytasz ten przewodnik? ale bardziej na temat: możesz rozpoznać termin „gałąź” (branch) używany tutaj. Jeśli nie, nadal możesz kojarzyć wizualizację ścieżek jako drzew z wieloma gałęziami. Jeśli nie masz pojęcia, o czym mówię, nie martw się, wyjaśnię.
 
-The different ways an if command might go are sometimes called "branches", usually when using this terminology the overall structure of a script is called a "tree".
-When a script is being ran, it starts at the "root" <span class="parens">(whatever the first command is)</span>,
-and it "branches out" any time you have an `if` command or similar <span class="parens">(any subset of commands that only sometimes runs)</span>.
+Różne drogi, którymi może pójść polecenie if, nazywa się czasem „gałęziami”, a przy użyciu tej terminologii ogólną strukturę skryptu nazywa się „drzewem”. Kiedy skrypt jest uruchamiany, zaczyna od „korzenia” (root) <span class="parens">(czyli pierwszego polecenia)</span> i „rozgałęzia się” za każdym razem, gdy napotka polecenie `if` lub podobne <span class="parens">(dowolny podzbiór poleceń, który uruchamia się tylko czasami)</span>.
 
-You don't have to know or use any of these terms or any others like it we introduce, but if you see someone using them and don't know what they're talking about, hopefully you'll remember that this subsection exists to come look back at!
+Nie musisz znać ani używać żadnego z tych terminów ani innych podobnych, które wprowadzamy, ale jeśli zobaczysz, że ktoś ich używa i nie będziesz wiedział, o czym mówi, miejmy nadzieję, że zapamiętasz o istnieniu tej podsekcji i tutaj zajrzysz!
 
-Another common phrasing you might want to be aware of is "pass" and "fail" - an `if` command "passes" when its conditions are true <span class="parens">(and its sub-commands run)</span>.
-The `if` has "failed" when its conditions are false <span class="parens">(and its sub-commands don't run)</span>.
+Inne popularne sformułowania, o których warto wiedzieć, to „pass” (zaliczenie) i „fail” (niepowodzenie) – polecenie `if` „zalicza”, gdy jego warunki są prawdziwe <span class="parens">(i podpolecenia się uruchamiają)</span>. Polecenie `if` „kończy się niepowodzeniem”, gdy warunki są fałszywe <span class="parens">(i podpolecenia się nie uruchamiają)</span>.
 
-### Going Beyond
+### Idąc dalej
 
-If you're sitting here thinking "well this is all well and good, but there's so many more complicated ways I want to branch my scripts",
-well... you've reached the end of the general overview of the `if` command here. Depending on what you want to do,
-you might just go ahead and stick an `if` command inside of another `if` command <span class="parens">(nothing's going to stop you, other than than your script starting to look big and scary)</span>,
-or if that's not good enough... well keep reading through the guide, one of the upcoming sections will probably have what you're looking for <span class="parens">(like the [Loops section](/guides/basics/loops))</span>.
+Jeśli siedzisz tu i myślisz: „no dobrze, to wszystko brzmi nieźle, ale chcę rozgałęziać skrypty na znacznie bardziej skomplikowane sposoby”, cóż... dotarłeś do końca ogólnego omówienia polecenia `if`. Zależnie od tego, co chcesz osiągnąć, możesz po prostu wstawić polecenie `if` wewnątrz innego polecenia `if` <span class="parens">(nic Cię nie powstrzyma, poza tym, że Twój skrypt zacznie wyglądać na wielki i groźny)</span>, albo jeśli to nie wystarczy... czytaj dalej przewodnik, jedna z kolejnych sekcji prawdopodobnie będzie zawierać to, czego szukasz <span class="parens">(np. sekcja [Pętle (Loops)](/guides/basics/loops))</span>.
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read a lot more about the if command, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się znacznie więcej o poleceniu if, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-Note: most users, especially those learning from the Denizen for the first time, should just continue on to the next guides page. These references might be of interest to later come back to after you've learned Denizen as far as this guide teaches.
+Uwaga: większość użytkowników, zwłaszcza tych uczących się Denizen po raz pierwszy, powinna po prostu przejść do następnej strony przewodnika. Referencje te mogą być interesujące do późniejszego powrotu, gdy już nauczysz się Denizen w stopniu, jaki przewiduje ten przewodnik.
 
-- [If command doc](https://meta.denizenscript.com/Docs/Commands/if)
-- [Else command doc](https://meta.denizenscript.com/Docs/Commands/else)
-- [Comparable language doc](https://meta.denizenscript.com/Docs/Languages/comparable)
-- [Operator language doc](https://meta.denizenscript.com/Docs/Languages/operator)
+- [Dokumentacja polecenia if](https://meta.denizenscript.com/Docs/Commands/if)
+- [Dokumentacja polecenia else](https://meta.denizenscript.com/Docs/Commands/else)
+- [Dokumentacja języka Comparable](https://meta.denizenscript.com/Docs/Languages/comparable)
+- [Dokumentacja języka Operator](https://meta.denizenscript.com/Docs/Languages/operator)

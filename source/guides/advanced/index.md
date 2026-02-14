@@ -1,7 +1,7 @@
-Advanced Scripting
-------------------
+Zaawansowane skryptowanie
+-------------------------
 
-**TODO: Warning about learning the basics before opening this section.**
+**TODO: Ostrzeżenie o konieczności opanowania podstaw przed przejściem do tej sekcji.**
 
 ``` toctree::
     :maxdepth: 1

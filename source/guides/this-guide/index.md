@@ -1,5 +1,5 @@
-This Guide
-----------
+O tym przewodniku
+-----------------
 
 ``` toctree::
     :maxdepth: 1

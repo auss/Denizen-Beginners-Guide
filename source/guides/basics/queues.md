@@ -1,154 +1,154 @@
-The Queue System
-----------------
+System kolejek (Queues)
+---------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### Preface
+### Wstęp
 
-The primary purpose of this page is to introduce you to the concept of *the queue system*. This system is very important for the basic level of scripting, however it is somewhat complex on the inside and enables many advanced features. As such, many of the advanced parts will be mentioned or noted in parentheses throughout the page.
+Głównym celem tej strony jest wprowadzenie Cię w koncepcję *systemu kolejek* (queue system). System ten jest niezwykle ważny nawet na podstawowym poziomie skryptowania, choć wewnętrznie jest dość złożony i umożliwia korzystanie z wielu zaawansowanych funkcji. Z tego powodu wiele zaawansowanych aspektów zostanie wspomnianych lub opisanych w nawiasach w treści tej strony.
 
-If you're following this guide for the first time, you don't need to understand every part of the queue system, you just need to understand the basic ideas of what queues are, but you should still read through all the information on this page to get a general sense of the breadth of the system's impact on Denizen.
+Jeśli śledzisz ten przewodnik po raz pierwszy, nie musisz rozumieć każdej części systemu kolejek. Musisz jedynie pojąć podstawową ideę tego, czym są kolejki, ale mimo to powinieneś przeczytać wszystkie informacje na tej stronie, aby poczuć ogólny zakres wpływu tego systemu na działanie Denizen.
 
-### What Is A Queue?
+### Czym jest kolejka?
 
-In Denizen, the word '**script**' can refer to a few different things - a `.dsc` file, a container within it <span class="parens">(such as a `world` script container)</span>, or the sub-section of a script container that lists out commands to be run. For the purposes of this page, we'll be using the word 'script' to refer to that last meaning. A script might be just a single `narrate` command, or a long list of commands to be ran one after another, potentially even with `wait`s to delay between commands, `run`s to fire off other scripts, etc.
+W Denizen słowo „**skrypt**” może odnosić się do kilku różnych rzeczy: pliku `.dsc`, kontenera wewnątrz niego <span class="parens">(takiego jak kontener skryptu `world`)</span> lub podsekcji kontenera skryptu, która zawiera listę poleceń do wykonania. Na potrzeby tej strony będziemy używać słowa „skrypt” w tym ostatnim znaczeniu. Skryptem może być pojedyncze polecenie `narrate` lub długa lista poleceń do wykonania jedno po drugim, potencjalnie z użyciem `wait` dla opóźnień między poleceniami, `run` do uruchamiania innych skryptów itp.
 
-When you run a script, that starts a **queue**. A queue can be thought of as a currently-running instance of a script. Exactly what this means may not be obvious at first, but the effect it has on how Denizen works is significant.
+Kiedy uruchamiasz skrypt, startuje **kolejka** (queue). Kolejkę można traktować jako aktualnie działającą instancję skryptu. To, co to dokładnie oznacza, może nie być od razu oczywiste, ale wpływ, jaki ma to na sposób działania Denizen, jest znaczący.
 
-Queues are separate, temporary, unique instances, that run and wait separately, and store separate sets of temporary data <span class="parens">(definitions, etc)</span>.
+Kolejki to oddzielne, tymczasowe, unikalne instancje, które działają i czekają niezależnie od siebie oraz przechowują osobne zestawy danych tymczasowych <span class="parens">(definicje itp.)</span>.
 
-To help understand queues, let's work through some examples. We'll give a few different examples, so if you don't grasp it at first, continue reading, and you might understand it after the next example.
+Aby lepiej zrozumieć kolejki, przeanalizujmy kilka przykładów. Podamy ich kilka, więc jeśli nie załapiesz od razu, czytaj dalej – być może zrozumiesz po kolejnym przykładzie.
 
-#### Phrasing Note
+#### Uwaga terminologiczna
 
-Often when talking about things attached to specific queues, the word "script" will still be used - we'll say for example that a script has a definition, even though in reality the queue has the definition, and the script just has the raw command that will later be ran in a queue to set a definition. It's often easier to just say the script did it, and only worry about the script vs. queue distinction when it needs to be exactly specified to avoid confusion.
+Często mówiąc o rzeczach przypisanych do konkretnych kolejek, wciąż używa się słowa „skrypt” – powiemy na przykład, że skrypt ma definicję, choć w rzeczywistości to kolejka posiada definicję, a skrypt ma tylko surowe polecenie, które zostanie później wykonane w kolejce w celu ustawienia tej definicji. Często łatwiej jest po prostu powiedzieć, że skrypt to zrobił, a przejmować się rozróżnieniem skrypt vs kolejka tylko wtedy, gdy musi to być precyzyjnie określone, by uniknąć pomyłek.
 
-### Ex-Sustained
+### Ex-Sustained (Utrzymana egzekucja)
 
-Let's start by using the `/ex` command and the `/exs` command to get an idea of what a 'queue' is.
+Zacznijmy od użycia poleceń `/ex` oraz `/exs`, aby poczuć, czym jest „kolejka”.
 
-In your game, type the following two commands:
-First: `/ex define example <player.name>`
-Then: `/ex narrate <[example]>`
+W grze wpisz następujące dwa polecenia:
+Najpierw: `/ex define example <player.name>`
+Następnie: `/ex narrate <[example]>`
 
-You'll see that this outputs an error and fails to fill. You defined the def `example` in the first command, and then tried to narrate it in the second, but it didn't work.
+Zobaczysz, że drugie polecenie wyrzuci błąd i nie wypełni tagu. Zdefiniowałeś `example` w pierwszym poleceniu, a potem próbowałeś go wyświetlić w drugim, ale to nie zadziałało.
 
 ![](images/queue_ex_fail.png)
 
-Why didn't that work? Because each usage of the `/ex` command is its own separate *queue*. The definition made in the first command is stored in the first command's queue, and is not accessible to the second command's queue.
+Dlaczego tak się stało? Ponieważ każde użycie polecenia `/ex` to jego własna, oddzielna *kolejka*. Definicja stworzona w pierwszym poleceniu jest zapisana w kolejce tego pierwszego polecenia i nie jest dostępna dla kolejki drugiego polecenia.
 
-Now, let's try using `/exs` - where `/ex` means "execute", `/exs` means "execute-sustained", as in it sustains a single queue.
+Teraz spróbujmy użyć `/exs` – gdzie `/ex` oznacza „execute” (wykonaj), a `/exs` oznacza „execute-sustained” (wykonaj w sposób ciągły), co oznacza, że utrzymuje on pojedynczą kolejkę.
 
-First type: `/exs define example <player.name>`
-Then: `/exs narrate <[example]>`
+Najpierw wpisz: `/exs define example <player.name>`
+Następnie: `/exs narrate <[example]>`
 
-This time, you'll see your name narrated back as intended. Because both commands ran in the same sustained queue, the second command actually knows about the first command's definition.
+Tym razem zobaczysz swoje imię wyświetlone tak, jak zamierzano. Ponieważ oba polecenia zostały uruchomione w tej samej, utrzymanej kolejce, drugie polecenie faktycznie „wie” o definicji z pierwszego.
 
 ![](images/queue_exs_success.png)
 
-### Sample Script
+### Przykładowy skrypt
 
-Let's use an actual prewritten script to understand the distinction between a 'script' and a 'queue'.
+Użyjmy prawdziwego, napisanego wcześniej skryptu, aby zrozumieć różnicę między „skryptem” a „kolejką”.
 
 ```dscript_green
 queue_demo:
     type: task
     script:
     - define choice <util.random_decimal>
-    - narrate "<queue.id> is an instance of <script.name> and chose <[choice]>"
+    - narrate "<queue.id> jest instancją <script.name> i wybrał <[choice]>"
     - wait 5s
-    - narrate "<queue.id> remembers that it chose <[choice]>"
+    - narrate "<queue.id> pamięta, że wybrał <[choice]>"
 ```
 
-Load this script in, and then in-game enter the command `/ex run queue_demo` twice rapidly.
+Załaduj ten skrypt, a następnie w grze wpisz dwukrotnie, szybko po sobie, polecenie `/ex run queue_demo`.
 
-You should see output like this:
+Powinieneś zobaczyć wynik podobny do tego:
 
 ![](images/queue_demo_script.png)
 
-In the above screenshot, you can see that two queues started, one labeled "`QUEUE_DEMO_4_MakeupToday`" and one labeled "`QUEUE_DEMO_7_ReferenceEfficient`". These IDs are generated from a combination of the script name, a numeric ID <span class="parens">(a number that counts up by 1 each time a new queue is started)</span>, and two words from a random word generator. In the console debug log, you can see that the queue IDs also have random colors assigned to the random words <span class="parens">("`MakeupToday`" has white then magenta, "`ReferenceEfficient`" has orange then green)</span>, to help quickly distinguish between queues in debug logs.
-<span class="parens">(Note: you can customize the queue id format in your `Denizen/config.yml` if you wish.)</span>
+Na powyższym zrzucie ekranu widać, że wystartowały dwie kolejki, jedna oznaczona jako „`QUEUE_DEMO_4_MakeupToday`” i druga jako „`QUEUE_DEMO_7_ReferenceEfficient`”. Te identyfikatory (ID) są generowane z połączenia nazwy skryptu, numerycznego ID <span class="parens">(liczba, która rośnie o 1 za każdym razem, gdy startuje nowa kolejka)</span> oraz dwóch słów z generatora losowych wyrazów. W logu konsoli zobaczysz, że ID kolejek mają również przypisane losowe kolory do tych wyrazów <span class="parens">(„`MakeupToday`” ma biały, potem purpurowy, „`ReferenceEfficient`” ma pomarańczowy, potem zielony)</span>, co pomaga szybko odróżnić kolejki w logach debugowania.
+<span class="parens">(Uwaga: możesz dostosować format ID kolejki w pliku `Denizen/config.yml`, jeśli chcesz)</span>.
 
-The queue labeled "`MakeupToday`" chose a random number of "`0.315`...", while "`ReferenceEfficient`" chose "`0.251`...".
+Kolejka oznaczona „`MakeupToday`” wybrała losową liczbę „`0.315`...”, podczas gdy „`ReferenceEfficient`” wybrała „`0.251`...”.
 
-Both queues started from the same `task` script, `queue_demo`, but are independent of each other. They ran at slightly separate times <span class="parens">(depending on how fast you repeated the run command)</span>, they each chose a separate random number and stored it in their own separate copy of the `choice` definition, both waited 5 seconds from when they uniquely started, and then gave the final narrate each at their own time, each showing their own separate ID and separate random number choice.
+Obie kolejki wystartowały z tego samego skryptu typu `task` o nazwie `queue_demo`, ale są od siebie niezależne. Działały w nieco innym czasie <span class="parens">(zależnie od tego, jak szybko powtórzyłeś polecenie run)</span>, każda wybrała osobną losową liczbę i zapisała ją w swojej własnej, oddzielnej kopii definicji `choice`, obie odczekały 5 sekund od momentu swojego unikalnego startu, a następnie wyświetliły końcową wiadomość we własnym czasie, każda pokazując swoje własne ID i swój własny wybór liczby.
 
-You can also see that each usage of `/ex` had its own queue, which exclusively executed the `run` command then finished, separately from the queue created for the running task script.
+Możesz też zauważyć, że każde użycie `/ex` miało swoją własną kolejkę, która wyłącznie wykonała polecenie `run`, a następnie zakończyła się, niezależnie od kolejki stworzonej dla działającego skryptu zadania.
 
-### Queues Are Separate
+### Kolejki są oddzielne
 
-Each queue is separate from every other queue. This means they run/start/stop separately, and they track data separately.
+Każda kolejka jest oddzielona od każdej innej kolejki. Oznacza to, że działają/startują/zatrzymują się niezależnie oraz niezależnie śledzą dane.
 
-#### Starting Separately
+#### Startowanie niezależnie
 
-As we demonstrated earlier, you can `/ex run ...` a script multiple times and have the same script start a new queue multiple times, even while the previous times were still going. Those prior queues have no relation to the new queue.
+Jak pokazaliśmy wcześniej, możesz wywołać `/ex run ...` dla skryptu wielokrotnie i sprawić, że ten sam skrypt wystartuje nową kolejkę wiele razy, nawet podczas gdy poprzednie wciąż trwają. Te wcześniejsze kolejki nie mają żadnego związku z nową kolejką.
 
-#### Running Separately
+#### Działanie niezależnie
 
-In our above sample script, we saw that the queues each waited separately. If it wasn't obvious right away, try running `/ex run queue_demo`, then wait a couple seconds, then run it a second time. You should see the first queue start, then a pause, then the second queue start, then a pause, then the first queue finishes, then another pause equivalent to how long you waited between starting, then the second queue finishes. Each queue kept track of its `wait` time separately.
+W naszym powyższym przykładowym skrypcie widzieliśmy, że kolejki czekały niezależnie od siebie. Jeśli nie było to od razu oczywiste, spróbuj uruchomić `/ex run queue_demo`, odczekaj dwie sekundy, a potem uruchom to drugi raz. Powinieneś zobaczyć start pierwszej kolejki, pauzę, start drugiej kolejki, kolejną pauzę, zakończenie pierwszej kolejki, jeszcze jedną pauzę równą czasowi, który odczekałeś między startami, a na końcu zakończenie drugiej kolejki. Każda kolejka śledziła swój czas `wait` oddzielnie.
 
-#### Stopping Separately
+#### Zatrzymywanie się niezależnie
 
-Each queue can stop separately. As seen above, the first queue stopped and was done, but the second queue kept going.
+Każda kolejka może zatrzymać się oddzielnie. Jak widzieliśmy wyżej, pierwsza kolejka zatrzymała się i zakończyła pracę, ale druga działała dalej.
 
-In a script you can at any time use the `stop` command to stop a queue - it will only stop the queue that has reached that command, other queues of the same script will not stop until they also reach that `stop` command.
+W skrypcie możesz w dowolnym momencie użyć polecenia `stop`, aby zatrzymać kolejkę – zatrzyma ono tylko tę kolejkę, która dotarła do tego polecenia; inne kolejki tego samego skryptu nie zatrzymają się, dopóki same nie dotrą do swojego polecenia `stop`.
 
-#### Separate Data
+#### Oddzielne dane
 
-Each queue has its own separate set of data attached to it. The most straightforward example of this is definitions - as you saw in the sample script above, the `choice` definition was attached uniquely to each queue.
+Każda kolejka ma przypisany własny, oddzielny zestaw danych. Najprostszym tego przykładem są definicje – jak widziałeś w powyższym skrypcie, definicja `choice` była przypisana unikalnie do każdej kolejki.
 
-This also means the *attached player and NPC* are unique to the queue - the same script can run multiple times for multiple different players, and each player will have their own queue.
+Oznacza to również, że *przypisany gracz i NPC* są unikalni dla kolejki – ten sam skrypt może działać wielokrotnie dla wielu różnych graczy i każdy gracz będzie miał swoją własną kolejkę.
 
-This also includes *context data*, such as in a `world` script, the same event can run many times with different context data in each queue.
+Dotyczy to również *danych kontekstowych*, np. w skrypcie typu `world` to samo zdarzenie może zostać uruchomione wiele razy z różnymi danymi kontekstowymi w każdej kolejce.
 
-This also includes [the `save` argument](https://meta.denizenscript.com/Docs/Languages/the%20save%20argument).
+Obejmuje to również [argument `save`](https://meta.denizenscript.com/Docs/Languages/the%20save%20argument).
 
-### Queues Are Temporary
+### Kolejki są tymczasowe
 
-Queues only exist as long as they are running. The moment a queue is finished, it is gone forever <span class="parens">(though you can still in some advanced use cases grab determination values or other information from a stored reference to the `QueueTag` instance)</span>.
+Kolejki istnieją tylko tak długo, jak długo trwają. W momencie zakończenia kolejki znika ona na zawsze <span class="parens">(choć w niektórych zaawansowanych przypadkach można wciąż pobierać wartości determinacji lub inne informacje z zapisanego odniesienia do instancji `QueueTag`)</span>.
 
-Queues necessarily cannot continue to exist after a server restart - when the server shuts down, all queues are lost. This means you can't have a queue `wait` to run more commands after a server restart - what you can do instead, however, is use the [`RunLater` command](https://meta.denizenscript.com/Docs/Commands/runlater) to schedule a script to be activated in the future, even after restarts.
+Kolejki siłą rzeczy nie mogą istnieć po restarcie serwera – gdy serwer się wyłącza, wszystkie kolejki zostają utracone. Oznacza to, że nie możesz sprawić, by kolejka „poczekała” (`wait`) na wykonanie kolejnych poleceń po restarcie serwera. To, co możesz zrobić w zamian, to użyć [polecenia `RunLater`](https://meta.denizenscript.com/Docs/Commands/runlater), aby zaplanować uruchomienie skryptu w przyszłości, nawet po restartach.
 
-### Queues Are Unique
+### Kolejki są unikalne
 
-Each queue is inherently unique. Accordingly, each queue has a unique ID - this means that no other queue can have the same ID at the same time. Note that this refers to the generated words, but does not contain the generated colors <span class="parens">(the colors are exclusively for debugging clarity)</span>.
+Każda kolejka jest z natury unikalna. W związku z tym każda kolejka posiada unikalny identyfikator ID – oznacza to, że żadna inna kolejka nie może mieć w tym samym czasie takiego samego identyfikatora. Zauważ, że dotyczy to generowanych słów, ale nie obejmuje generowanych kolorów <span class="parens">(kolory służą wyłącznie przejrzystości debugowania)</span>.
 
-After a queue is gone, A queue with the same ID cannot generate again until the server restarts. <span class="parens">(Warning: if you disable the numeric ID portion in your config, it is possible, albeit rare, for a queue to generate the same ID as one that has already stopped earlier in the server run, but not while a queue is still running with that ID.)</span>
+Po zniknięciu kolejki, kolejka o tym samym ID nie może zostać wygenerowana ponownie aż do restartu serwera. <span class="parens">(Ostrzeżenie: jeśli wyłączysz numeryczną część ID w swojej konfiguracji, możliwe jest, choć rzadkie, że kolejka wygeneruje takie samo ID jak ta, która już wcześniej zakończyła działanie podczas tej samej sesji serwera, ale nigdy w czasie, gdy inna kolejka o tym samym ID wciąż trwa)</span>.
 
-After a server restart, queue IDs that are the same as previous ones may generate <span class="parens">(if you have the random-words part of the queue ID generator enabled, duplicate IDs will be very rare even after a restart)</span>. This is another reason that queue references should not be stored long-term.
+Po restarcie serwera mogą wygenerować się identyfikatory ID kolejek takie same jak poprzednie <span class="parens">(jeśli masz włączoną część generatora z losowymi słowami, powtórne identyfikatory będą bardzo rzadkie nawet po restarcie)</span>. Jest to kolejny powód, dla którego odniesienia do kolejek nie powinny być przechowywane długoterminowo.
 
-### Queues Only Sometimes Overlap
+### Kolejki tylko czasem na siebie nachodzą
 
-If a queue never uses the `wait` command or any other source of delay, the queue can complete instantly. "Instantly" doesn't mean that no real time passes, but does mean that no in-game time passes. In other words, nothing else on the server runs, either in Denizen or in minecraft, until the queue is done. The whole server waits for the commands in the queue to execute.
+Jeśli kolejka nigdy nie używa polecenia `wait` ani żadnego innego źródła opóźnienia, może zakończyć się natychmiast. „Natychmiast” nie oznacza, że nie upływa czas rzeczywisty, ale oznacza, że nie upływa czas wewnątrz gry. Innymi słowy, nic innego na serwerze nie jest przetwarzane – ani w Denizen, ani w Minecraft – dopóki kolejka nie skończy pracy. Cały serwer czeka na wykonanie poleceń z danej kolejki.
 
-If, however, you give the queue a source of delay <span class="parens">(a `wait` command, a `~` waitable, etc.)</span>, then the queue will instead instantly run commands until it reaches the delay, then pause the queue and allow the rest of the server to run. This includes any other queues that are themselves waiting to run more commands. Once the specified delay is done, the queue will resume, and instantly run the waiting commands until either it finishes or it reaches another command that causes a delay.
+Jeśli jednak podasz kolejce źródło opóźnienia <span class="parens">(polecenie `wait`, element oczekujący `~` itp.)</span>, kolejka będzie zamiast tego natychmiast wykonywać polecenia aż do momentu napotkania opóźnienia, po czym wstrzyma swoje działanie i pozwoli reszcie serwera pracować. Dotyczy to również innych kolejek, które same czekają na wykonanie kolejnych poleceń. Gdy określone opóźnienie dobiegnie końca, kolejka wznowi działanie i natychmiast wykona oczekujące polecenia, aż albo skończy, albo dotrze do kolejnego polecenia powodującego opóźnienie.
 
-#### Technical Note 1: Queues vs Threads
+#### Uwaga techniczna 1: Kolejki a wątki
 
-If you have experience in other programming languages, you're probably thinking that queues sound similar to threads. This is true, they are similar, however they are not the same. The most important distinction is that while a queue is running non-delayed commands, no other queue can run. This is in contrast to multithreading, where multiple threads can run simultaneously, and have to be cautious about interacting with data that other threads might also be interacting with.
+Jeśli masz doświadczenie w innych językach programowania, prawdopodobnie myślisz, że kolejki brzmią podobnie do wątków (threads). To prawda, są one podobne, jednak nie są tym samym. Najważniejszą różnicą jest to, że podczas gdy kolejka wykonuje polecenia bez opóźnień, żadna inna kolejka nie może działać. Jest to przeciwieństwo wielowątkowości (multithreading), gdzie wiele wątków może działać jednocześnie i muszą one ostrożnie operować na danych, z których inne wątki również mogą korzystać.
 
-Queues can reliably read/modify any data without worry about conflict. The only exception is if you read some data, then `wait`, then perform actions based on that earlier data - the source might have changed during the `wait`. For example, if you read that a block's material is a door, then `wait`, then `switch` the door open, it's possible a player broke the door down during the wait, and thus the switch command will now produce an error.
+Kolejki mogą niezawodnie odczytywać/modyfikować dowolne dane bez obaw o konflikty. Jedynym wyjątkiem jest sytuacja, gdy odczytasz jakieś dane, potem użyjesz `wait`, a następnie wykonasz akcje oparte na tych wcześniejszych danych – źródło mogło ulec zmianie podczas czekania. Na przykład, jeśli odczytasz, że materiał bloku to drzwi, potem odczekasz chwilę (`wait`), a następnie wykonasz polecenie `switch`, aby je otworzyć, możliwe jest, że gracz zniszczył te drzwi podczas Twojego czekania i w rezultacie polecenie switch wyrzuci teraz błąd.
 
-#### Technical Note 2: InstantQueue vs TimedQueue
+#### Uwaga techniczna 2: InstantQueue a TimedQueue
 
-You might sometimes see `Forcing queue (NAME) into a timed queue...` in your debug log. This is because, internally, most queues are "instant" queues by default, and can become "timed" queues if they need to wait, such as when the `wait` command is used. The separation between queue times largely only exists for internal/technical reasons - so you don't really need to worry about this, just know that that type of debug output is normal and just the internal system doing its job.
+Możesz czasem zobaczyć w logu debugowania komunikat `Forcing queue (NAZWA) into a timed queue...`. Dzieje się tak, ponieważ wewnętrznie większość kolejek jest domyślnie kolejkami natychmiastowymi („instant”), a mogą stać się kolejkami czasowymi („timed”), jeśli muszą poczekać, np. przy użyciu polecenia `wait`. Rozróżnienie między rodzajami kolejek istnieje głównie z powodów wewnętrznych/technicznych – nie musisz się tym martwić, po prostu wiedz, że taki komunikat debugowania jest normalny i oznacza po prostu, że system wewnętrzny wykonuje swoją pracę.
 
-### Queues Aren't Always From A Script
+### Kolejki nie zawsze pochodzą ze skryptu
 
-While we usually speak about queues in terms of a single script that they were created from, there are exceptions.
+Choć zazwyczaj mówimy o kolejkach w kontekście pojedynczego skryptu, z którego zostały stworzone, istnieją wyjątki.
 
-The first exception is of course the `/ex` and `/exs` commands, where they are created from a command typed directly into your in-game chat window.
+Pierwszym wyjątkiem są oczywiście polecenia `/ex` oraz `/exs`, gdzie kolejki są tworzone z polecenia wpisanego bezpośrednio w oknie czatu w grze.
 
-The second exception is when the `inject` command is used, which will be explained further on the [Run Options page](/guides/basics/run-options).
+Drugim wyjątkiem jest użycie polecenia `inject`, co zostanie wyjaśnione szerzej na [stronie opcji uruchamiania (Run Options)](/guides/basics/run-options).
 
-As a related side note: any command that runs in Denizen is always inside a queue, however tags can sometimes be parsed outside of any queue.
+Powiązana uwaga dodatkowa: każde polecenie uruchamiane w Denizen zawsze znajduje się wewnątrz jakiejś kolejki, jednak tagi mogą być czasem przetwarzane poza jakąkolwiek kolejką.
 
-### Is That Queue Running?
+### Czy ta kolejka działa?
 
-As a more advanced example of what you can do with the queue system, here's a sample script that runs another queue and keeps track of whether it's still running or not.
+Jako bardziej zaawansowany przykład tego, co można zrobić z systemem kolejek, oto przykładowy skrypt, który uruchamia inną kolejkę i śledzi, czy wciąż ona działa.
 
 ```dscript_green
 start_a_queue:
@@ -156,9 +156,9 @@ start_a_queue:
     script:
     - run wild_queue save:myqueue
     - while <entry[myqueue].created_queue.is_valid>:
-        - narrate "Queue has <entry[myqueue].created_queue.determination.size> determinations thus far"
+        - narrate "Kolejka posiada jak dotąd <entry[myqueue].created_queue.determination.size> determinacji"
         - wait 1s
-    - narrate "The queue finished and determined: <entry[myqueue].created_queue.determination.formatted>"
+    - narrate "Kolejka zakończyła się i ustaliła: <entry[myqueue].created_queue.determination.formatted>"
 
 wild_queue:
     type: task
@@ -170,32 +170,32 @@ wild_queue:
         - wait 0.5s
 ```
 
-Use `/ex run start_a_queue` to try this script sample.
+Użyj `/ex run start_a_queue`, aby wypróbować ten przykład.
 
-This demonstrates running a separate queue, then tracking whether it's still running, and what determinations it has made. The "`wild_queue`" example just runs for a random length of time determining random values as it goes.
+Pokazuje on uruchomienie oddzielnej kolejki, a następnie śledzenie, czy wciąż trwa i jakie decyzje (determinations) podjęła. Przykład „`wild_queue`” po prostu działa przez losowy czas, ustalając losowe wartości w trakcie swojego trwania.
 
-Note that the first narrate can sometimes be immediately "the queue finished...", and when not it's always "Queue has 1 ..."
+Zauważ, że pierwsza narracja może czasem od razu brzmieć „Kolejka zakończyła się...”, a gdy tak nie jest, zawsze brzmi „Kolejka posiada jak dotąd 1 ...”
 
-This is because the `run` command *instantly* runs the new queue - so the queue of the `start_a_queue` task pauses and waits for `wild_queue` to either finish to itself pause - then, once `wild_queue` has paused, control of the server immediately returns to the `start_a_queue` script's queue, which proceeds to run the `while` command, and the first `narrate`, and then reaches its own `wait` command, at which point the server is finally allowed to process other things, including vanilla minecraft game logic.
+Dzieje się tak, ponieważ polecenie `run` uruchamia nową kolejkę *natychmiastowo* – zatem kolejka zadania `start_a_queue` wstrzymuje się i czeka, aż `wild_queue` albo skończy, albo sama się wstrzyma. Gdy `wild_queue` zostanie wstrzymana, kontrola nad serwerem natychmiast wraca do kolejki skryptu `start_a_queue`, która przechodzi do wykonania polecenia `while` i pierwszej `narrate`, a następnie dociera do własnego polecenia `wait`. W tym momencie serwer może wreszcie przetworzyć inne rzeczy, w tym standardową logikę gry Minecraft.
 
-If `wild_queue` passes the first `random_chance` and stops, then the sequence of events is: `start_a_queue` runs `wild_queue`, `wild_queue` starts a loop, makes one determination, then stops, then `start_a_queue` tries the `while` command but doesn't loop, then runs its final `narrate`, then stops - then and only then, the rest of the game is allowed to continue running.
+Jeśli `wild_queue` przejdzie pomyślnie pierwszą szansę `random_chance` i zatrzyma się, sekwencja zdarzeń wygląda tak: `start_a_queue` uruchamia `wild_queue`, `wild_queue` startuje pętlę, podejmuje jedną decyzję, zatrzymuje się, następnie `start_a_queue` sprawdza warunek `while` ale nie wchodzi w pętlę, wykonuje swoją końcową `narrate` i kończy pracę – wtedy i tylko wtedy reszta gry może kontynuować działanie.
 
-### Denizen Is Fast
+### Denizen jest szybki
 
-As a final note, some sections of the above page discusses the concept of the server pausing and waiting for queues to finish. This might give the impression that your game might freeze or lag, however the important thing to understand is that we are speaking about processor-level timescales - computers are very fast, the average modern processes runs literal billions of things per second. The time the server sits waiting for a queue is usually a few nanoseconds, or sometimes a few milliseconds. Almost everything processed on the server will normally cause the server to wait until it's done - this is just how computers usually work, they go through things in order <span class="parens">(excluding when multithreading is used, which doesn't apply to minecraft servers, which are largely single-threaded)</span>.
+Na koniec warto zauważyć, że niektóre sekcje powyższej strony omawiają koncepcję wstrzymywania pracy serwera i czekania na zakończenie kolejek. Może to sprawiać wrażenie, że gra może się „zamrozić” lub lagować, jednak ważne jest, aby zrozumieć, że mówimy o skalach czasowych na poziomie procesora – komputery są bardzo szybkie, przeciętny nowoczesny procesor wykonuje dosłownie miliardy operacji na sekundę. Czas, w którym serwer czeka na kolejkę, to zazwyczaj kilka nanosekund, czasem kilka milisekund. Prawie wszystko przetwarzane na serwerze normalnie powoduje, że serwer czeka na zakończenie danej operacji – tak po prostu działają komputery, przetwarzają one rzeczy w określonej kolejności <span class="parens">(wyłączając sytuacje, gdy używana jest wielowątkowość, co nie dotyczy serwerów Minecraft, które są w dużej mierze jednowątkowe)</span>.
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read a lot more about queues, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się znacznie więcej o kolejkach, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-Note: most users, especially those learning from the Denizen for the first time, should just continue on to the next guides page. These references might be of interest to later come back to after you've learned Denizen as far as this guide teaches.
+Uwaga: większość użytkowników, zwłaszcza tych uczących się Denizen po raz pierwszy, powinna po prostu przejść do następnej strony przewodnika. Referencje te mogą być interesujące do późniejszego powrotu, gdy już nauczysz się Denizen w stopniu, jaki przewiduje ten przewodnik.
 
-- [The ex and exs commands](https://meta.denizenscript.com/Docs/Languages/ex%20command)
-- [QueueTag object type](https://meta.denizenscript.com/Docs/ObjectTypes/queuetag)
-- [QueueTag tag list](https://meta.denizenscript.com/Docs/Tags/queuetag)
-- [ScriptTag.queues tag](https://meta.denizenscript.com/Docs/Tags/ScriptTag.queues)
-- [util.queues tag](https://meta.denizenscript.com/Docs/Tags/util.queues)
-- [RunLater command](https://meta.denizenscript.com/Docs/Commands/runlater)
-- [The Player and NPC arguments language doc](https://meta.denizenscript.com/Docs/Languages/the%20player%20and%20npc%20arguments)
-- [the save argument language doc](https://meta.denizenscript.com/Docs/Languages/the%20save%20argument)
-- [waitable commands language doc](https://meta.denizenscript.com/Docs/Languages/waitable)
+- [Polecenia ex oraz exs](https://meta.denizenscript.com/Docs/Languages/ex%20command)
+- [Typ obiektu QueueTag](https://meta.denizenscript.com/Docs/ObjectTypes/queuetag)
+- [Lista tagów QueueTag](https://meta.denizenscript.com/Docs/Tags/queuetag)
+- [Tag ScriptTag.queues](https://meta.denizenscript.com/Docs/Tags/ScriptTag.queues)
+- [Tag util.queues](https://meta.denizenscript.com/Docs/Tags/util.queues)
+- [Polecenie RunLater](https://meta.denizenscript.com/Docs/Commands/runlater)
+- [Dokumentacja języka „The Player and NPC arguments”](https://meta.denizenscript.com/Docs/Languages/the%20player%20and%20npc%20arguments)
+- [Dokumentacja języka „the save argument”](https://meta.denizenscript.com/Docs/Languages/the%20save%20argument)
+- [Dokumentacja języka „waitable commands”](https://meta.denizenscript.com/Docs/Languages/waitable)

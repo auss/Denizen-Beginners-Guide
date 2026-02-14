@@ -1,195 +1,195 @@
-Special Memory: Notable Objects
--------------------------------
+Pamięć specjalna: Obiekty zanotowane (Notable Objects)
+------------------------------------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### Some Objects Are Noteworthy
+### Niektóre obiekty są godne uwagi
 
-Some of your objects, on your server, are pretty noteworthy! That spawn location is pretty important! That town region is the center of player activity!
+Niektóre z obiektów na Twoim serwerze są bardzo ważne! Lokalizacja spawnu jest kluczowa! Region miasta to centrum aktywności graczy!
 
-You probably need to reference some of these objects very very often. For that matter, you probably need to reference them in key places like event lines - you might want, for example, an event that fires when a player enters or exits your town region, that shows them a welcome/farewell message. There's a lot of use cases like this.
+Prawdopodobnie musisz odwoływać się do tych obiektów bardzo, bardzo często. Co więcej, musisz się do nich odwoływać w kluczowych miejscach, takich jak linie zdarzeń (events) – możesz chcieć na przykład, aby zdarzenie uruchamiało się, gdy gracz wchodzi lub wychodzi z regionu miasta, wyświetlając mu wiadomość powitalną lub pożegnalną. Istnieje mnóstwo takich przypadków użycia.
 
-The best tool for handling these cases is the **Notable Objects** system in Denizen.
+Najlepszym narzędziem do obsługi tych sytuacji jest system **Obiektów zanotowanych** (Notable Objects) w Denizen.
 
-#### Some Object Types Are Notable
+#### Niektóre typy obiektów mogą być „zanotowane”
 
-Just a few key object types in Denizen are part of the notable system. This includes locations, areas, and inventories.
+Tylko kilka kluczowych typów obiektów w Denizen jest częścią systemu obiektów zanotowanych. Obejmuje to lokalizacje (locations), obszary (areas) oraz ekwipunki (inventories).
 
-When an object type is "notable", this means that you can make a "note" of any object of that type. A "note" is essentially a globally unique reference name for that object. Think of it like a variant of a server flag, where the note name is the flag name and the object itself is the flag value.
+Kiedy typ obiektu jest „zanotowany” (notable), oznacza to, że możesz stworzyć „notatkę” (note) dla dowolnego obiektu tego typu. „Notatka” to zasadniczo unikalna w skali globalnej nazwa referencyjna dla tego obiektu. Myśl o tym jak o wariancie flagi serwera, gdzie nazwa notatki to nazwa flagi, a sam obiekt to wartość flagi.
 
-#### Why Not Just Use Server Flags Then?
+#### Dlaczego więc nie użyć po prostu flag serwera?
 
-Noted objects have a few key advantages over simple server flags:
+Zanotowane obiekty mają kilka kluczowych przewag nad zwykłymi flagami serwera:
 
-- When an object is noted, *that object* is noted, not a copy of it. This means that if you adjust the object, you're actually changing the object in the note, and do not have to re-use the `note` command <span class="parens">(vs with a flag, you have to re-use the flag command after making any changes to put the result back in the flag)</span>.
-- Objects know their own note name. For example, a normal `LocationTag` identifies like `l@0,64,0,world`, but if you note that location with the name `spawn`, it will identify from there on as `l@spawn`. You can also check the note name of any location with `<[some_location].note_name>`.
-- Notes can be referenced by name alone. If you have that `LocationTag` noted with name `spawn`, you can do commands like `- teleport <player> spawn` to send a player to spawn - the name `spawn` alone is enough for Denizen to know what you mean. <span class="parens">(vs with a flag, you would have to do `- teleport <player> <server.flag[spawn]>`, with that whole tag to clarify what you're referring to)</span>.
-- Notes can be referenced in event lines. If you have a `CuboidTag` noted as `main_town`, you can write events like `on player breaks block in:main_town:`, which automatically limits the `breaks block` event to only fire when the block is inside the town as defined by your noted area. This is the most important use case for notes, and will be explored more farther down in this guide page.
-- Notes have a reliable persistent unique state. This is just an overcomplicated way of saying, if you note an `InventoryTag`, that inventory can be opened by multiple players, who can then move items around in it, and every player will see everyone else's changes, and after the server restarts everything in the inventory will still be however the players left it, completely automatically.
+- Kiedy obiekt jest zanotowany, zanotowany zostaje *ten konkretny obiekt*, a nie jego kopia. Oznacza to, że jeśli dostosujesz ten obiekt, faktycznie zmieniasz obiekt w notatce i nie musisz ponownie używać polecenia `note` <span class="parens">(w przeciwieństwie do flagi, gdzie po wprowadzeniu zmian musiałbyś ponownie użyć polecenia flag, aby zapisać wynik z powrotem)</span>.
+- Obiekty znają swoją własną nazwę notatki. Na przykład zwykły `LocationTag` identyfikuje się jako `l@0,64,0,world`, ale jeśli zanotujesz tę lokalizację pod nazwą `spawn`, od tej pory będzie identyfikować się jako `l@spawn`. Możesz również sprawdzić nazwę notatki dowolnej lokalizacji za pomocą tagu `<[jakas_lokalizacja].note_name>`.
+- Do notatek można odwoływać się za pomocą samej nazwy. Jeśli masz `LocationTag` zanotowany jako `spawn`, możesz używać poleceń typu `- teleport <player> spawn`, aby wysłać gracza na spawn – sama nazwa `spawn` wystarczy, aby Denizen wiedział, o co Ci chodzi <span class="parens">(w przypadku flagi musiałbyś napisać `- teleport <player> <server.flag[spawn]>`, używając całego tagu dla wyjaśnienia)</span>.
+- Do notatek można odwoływać się w liniach zdarzeń. Jeśli masz `CuboidTag` zanotowany jako `main_town`, możesz pisać zdarzenia typu `on player breaks block in:main_town:`, co automatycznie ogranicza zdarzenie `breaks block` tylko do sytuacji, gdy blok znajduje się wewnątrz miasta zdefiniowanego przez Twój zanotowany obszar. Jest to najważniejszy przypadek użycia notatek, który omówimy szerzej w dalszej części tej strony.
+- Notatki posiadają niezawodny, trwały i unikalny stan. To tylko skomplikowany sposób na powiedzenie, że jeśli zanotujesz `InventoryTag`, ekwipunek ten może być otwarty przez wielu graczy, którzy mogą w nim przekładać przedmioty, a każdy gracz będzie widział zmiany innych. Po restarcie serwera wszystko w tym ekwipunku pozostanie dokładnie tak, jak zostawili to gracze – całkowicie automatycznie.
 
-### So How Do I Make A Note?
+### Więc jak zrobić notatkę?
 
-Well, as with most such non-beginner-level questions in Denizen, the answer is take the word you used to ask the question, and put it in [the documentation search](https://meta.denizenscript.com/). In this case, you will sure enough find the `note` command, which does exactly what it says on the tin.
+Cóż, jak w przypadku większości pytań wykraczających poza poziom początkujący w Denizen, odpowiedzią jest wzięcie słowa, o które pytasz, i wpisanie go w [wyszukiwarkę dokumentacji](https://meta.denizenscript.com/). W tym przypadku bez trudu znajdziesz polecenie `note`, które robi dokładnie to, co sugeruje nazwa.
 
-The basic syntax of the `note` command is `- note [<object>/remove] [as:<name>]`
+Podstawowa składnia polecenia `note` to: `- note [<obiekt>/remove] [as:<nazwa>]`
 
-The `object` input of course takes any object that is of any notable object type. The `as:<name>` input of course takes the name you want the note to have.
+Wejście `obiekt` przyjmuje oczywiście dowolny obiekt będący typem zanotowalnym. Wejście `as:<nazwa>` to nazwa, jaką chcesz nadać notatce.
 
-Let's try an example.
+Spróbujmy przykładu.
 
-### Noting A Location
+### Notowanie lokalizacji
 
-Location notes aren't the most useful type of note, but they're quick and easy to make, and can make many scripts cleaner and simpler.
+Notatki lokalizacji nie są najbardziej użytecznym typem notatek, ale są szybkie i łatwe do zrobienia, a mogą uczynić wiele skryptów czystszymi i prostszymi.
 
-Go ahead and stand at an important spot in your world <span class="parens">(or just slap a gold block on the ground in the middle of nowhere and declare that's important for the sake of trying the command out)</span>, and type `/ex note <player.location> as:importantspot`
+Stań w ważnym miejscu w swoim świecie <span class="parens">(albo po prostu postaw złoty blok na środku pustkowia i uznaj go za ważny na potrzeby testu)</span> i wpisz: `/ex note <player.location> as:wazne_miejsce`
 
 ![](images/ex_note.png)
 
-Generally `/ex` is used for testing, but in this case it's actually all you need. After having done the `/ex note`, that note exists forever on your server <span class="parens">(until you remove it)</span>, and has all the correct data it needs already.
+Zazwyczaj `/ex` służy do testów, ale w tym przypadku to właściwie wszystko, czego potrzebujesz. Po wykonaniu `/ex note` ta notatka istnieje na Twoim serwerze na zawsze <span class="parens">(dopóki jej nie usuniesz)</span> i posiada już wszystkie poprawne dane.
 
-Now, let's go ahead and use `/ex` again, this time to test the note. Step away from the location, and then type `/ex teleport <player> importantspot`. If everything went as expected, you'll be teleported back to the exact same spot.
+Teraz użyjmy `/ex` ponownie, aby przetestować notatkę. Odejdź kawałek od tego miejsca i wpisz `/ex teleport <player> wazne_miejsce`. Jeśli wszystko poszło zgodnie z planem, zostaniesz przeteleportowany dokładnie w to samo miejsce.
 
-You can from now on use the same `/ex note` for any important location with any name you want, and use the simple syntax of typing the name into a `teleport` command <span class="parens">(or a `modifyblock` command or any other command that takes a location)</span> in a script or testing in an `/ex`. Bear in mind, you can also use `- note` in a script if you want to dynamically create notes.
+Od teraz możesz używać tej samej komendy `/ex note` dla dowolnej ważnej lokalizacji z dowolną nazwą i stosować prostą składnię wpisywania nazwy do polecenia `teleport` <span class="parens">(lub `modifyblock`, lub dowolnego innego przyjmującego lokalizację)</span> w skrypcie lub w testach `/ex`. Pamiętaj, że możesz również używać `- note` bezpośrednio w skrypcie, jeśli chcesz tworzyć notatki dynamicznie.
 
-#### Common Questions With Noted Locations
+#### Częste pytania dotyczące zanotowanych lokalizacji
 
-When you got teleported to the exact same spot in the example above, you might have noticed it's the **exact** same spot. If you were on the edge of a block, you're teleported to that edge, if you were facing downward at the time, you're now facing downward. If you want to change this result, the first obvious solution is just change where you're standing and re-make the note. If you want to be a bit more perfectionist about it, you can also of course just change the tag you used when creating the note. For example, to center the location, just use `/ex note <player.location.center> as:importantspot`. If you want to flatten out the angles, you can use for example `/ex note <player.location.with_pitch[0].with_yaw[90]> as:importantspot`.
+Kiedy zostałeś przeteleportowany w to samo miejsce w powyższym przykładzie, mogłeś zauważyć, że jest to **dokładnie** to samo miejsce. Jeśli stałeś na krawędzi bloku, zostaniesz tam przeniesiony; jeśli patrzyłeś w dół, po teleportacji wciąż będziesz patrzeć w dół. Jeśli chcesz to zmienić, najprostszym rozwiązaniem jest po prostu stanąć inaczej i ponownie stworzyć notatkę. Jeśli chcesz być bardziej precyzyjny, możesz oczywiście zmienić tag użyty przy tworzeniu notatki. Na przykład, aby wyśrodkować lokalizację w bloku, użyj `/ex note <player.location.center> as:wazne_miejsce`. Jeśli chcesz wyrównać kąty patrzenia, możesz użyć np. `/ex note <player.location.with_pitch[0].with_yaw[90]> as:wazne_miejsce`.
 
-You might be interested in noting the location of a lever, button, door, or etc. for use in the `switch` command, to have a script automatically activate something, and find it's hard to accurately note the location just by standing in it. What do you do? Simple! Just point your cursor at the block and type `/ex note <player.cursor_on> as:lever`. The `cursor_on` tag will return the location of the block you're pointing at, rather than where you're standing.
+Możesz być zainteresowany zanotowaniem lokalizacji dźwigni, przycisku, drzwi itp. do użytku w poleceniu `switch`, aby skrypt automatycznie coś aktywował. Może się jednak okazać trudne precyzyjne zanotowanie lokalizacji tylko przez stanie w niej. Co zrobić? To proste! Skieruj kursor na blok i wpisz `/ex note <player.cursor_on> as:dzwignia`. Tag `cursor_on` zwróci lokalizację bloku, na który wskazujesz, zamiast miejsca, w którym stoisz.
 
-### Noting An Area
+### Notowanie obszaru
 
-The perhaps most important, or at least most common, type of object to note is an area object. This is a category of object types that includes `CuboidTag`, `EllipsoidTag`, and `PolygonTag` - different ways of confining a section in the world - inside a box, inside a round area, or inside a many-cornered polygon.
+Prawdopodobnie najważniejszym, a na pewno najczęstszym typem obiektu do zanotowania jest obiekt obszaru (area). Jest to kategoria typów obiektów obejmująca `CuboidTag`, `EllipsoidTag` oraz `PolygonTag` – różne sposoby ograniczania wycinka świata: wewnątrz prostopadłościanu, obszaru kulistego lub wielokąta o wielu wierzchołkach.
 
-The command and syntax for noting areas is the same as with locations, the only difference is how you make the object.
+Polecenie i składnia do notowania obszarów są takie same jak w przypadku lokalizacji, jedyną różnicą jest sposób tworzenia obiektu.
 
-#### Noting Cuboids
+#### Notowanie prostopadłościanów (Cuboids)
 
-Cuboids are an extremely common way to define areas. If you've ever used WorldGuard, you're probably familiar with the basic idea of a cuboid. A cuboid has two corners, and contains every block in the box-shape space between those two corners. Note that cuboid boundaries are defined in terms of blocks, and cannot have decimal values.
+Prostopadłościany (cuboids) to niezwykle powszechny sposób definiowania obszarów. Jeśli kiedykolwiek korzystałeś z WorldGuard, prawdopodobnie znasz podstawową ideę cuboida. Cuboid posiada dwa narożniki i zawiera każdy blok w przestrzeni o kształcie pudełka pomiędzy tymi dwoma punktami. Zauważ, że granice cuboida są definiowane w oparciu o bloki i nie mogą mieć wartości dziesiętnych.
 
-For a very quick and simple example of creating a cuboid, you could simply stand in one corner of a room, stare at the opposite corner, and type `/ex note <player.location.to_cuboid[<player.cursor_on>]> as:myroom`.
+Dla bardzo szybkiego przykładu stworzenia cuboida: stań w jednym rogu pokoju, spójrz na przeciwległy róg i wpisz `/ex note <player.location.to_cuboid[<player.cursor_on>]> as:moj_pokoj`.
 
 ![](images/basic_cuboid_note.png)
 
-To test that it worked, you can walk around the room and type `/ex narrate <player.location.is_within[myroom]>` ... for as long as you're in the room, it should output `true`, and once you leave the room, it should output `false`.
+Aby sprawdzić, czy zadziałało, przejdź się po pokoju i wpisz `/ex narrate <player.location.is_within[moj_pokoj]>` ... dopóki jesteś w pokoju, powinno wyświetlać `true` (prawda), a gdy go opuścisz – `false` (fałsz).
 
-### Convenience Script
+### Skrypt pomocniczy
 
-You're probably thinking: "**that's such an awkward way of doing it, I want a magic wand to just click and be done**" and you're in luck! This is Denizen after all, noting areas involves tags and commands, this is a problem easily solved by a script. In fact, being such a common request, there's a high quality premade script to do exactly this - give you a magic wand to click and note areas with. You can download it [here from the Denizen forum resources section](https://forum.denizenscript.com/resources/area-selector-tool.1/).
+Prawdopodobnie myślisz teraz: „**To taki niewygodny sposób, chcę magiczną różdżkę, żeby po prostu kliknąć i gotowe**” – i masz szczęście! To w końcu Denizen, a notowanie obszarów wiąże się z tagami i poleceniami, co jest problemem łatwym do rozwiązania przez skrypt. W rzeczywistości, jako że jest to częsta prośba, istnieje wysokiej jakości gotowy skrypt do tego celu – daje Ci on magiczną różdżkę do klikania i notowania obszarów. Możesz go pobrać [tutaj z sekcji zasobów forum Denizen](https://forum.denizenscript.com/resources/area-selector-tool.1/).
 
 ![](images/cuboid_wand.png)
 
-To use it, simply download the `.dsc` file and put it in your scripts folder. Give the file a look-through in your script editor if you'd like, to see what's it doing, how it does it, etc. When you're ready, go into your server and type `/ex reload` to load the script, then `/seltool` to get the magic wand. You can then left click any block to start a selection, and right click to expand it. It will automatically create particle highlights to show you the selected region thus far. When you have an area selected, type `/selnote myareaname`. You now have a noted cuboid named `myareaname`.
+Aby go użyć, po prostu pobierz plik `.dsc` i umieść go w swoim folderze ze skryptami. Możesz przejrzeć ten plik w edytorze, jeśli chcesz zobaczyć, jak działa. Kiedy będziesz gotowy, wejdź na serwer i wpisz `/ex reload`, aby załadować skrypt, a następnie `/seltool`, aby otrzymać różdżkę. Możesz wtedy kliknąć lewym przyciskiem myszy na dowolny blok, aby zacząć zaznaczanie, i prawym przyciskiem, aby je rozszerzyć. Skrypt automatycznie stworzy podświetlenie cząsteczkowe (particles), aby pokazać Ci zaznaczony obszar. Gdy masz zaznaczony region, wpisz `/selnote nazwa_mojego_obszaru`. Właśnie stworzyłeś zanotowany cuboid o tej nazwie.
 
-#### Using An Area Note
+#### Używanie zanotowanego obszaru
 
-So, how can we make use of this area note? First, of course, you can use it in tags like the `is_within` tag demonstrated earlier. You can also use them in commands - a common example for cuboids is the `schematic` command takes a cuboid as input. But the most common usage is in events.
+Jak możemy wykorzystać taką notatkę obszaru? Po pierwsze, oczywiście w tagach, takich jak pokazany wcześniej `is_within`. Możesz ich również używać w poleceniach – częstym przykładem dla cuboidów jest polecenie `schematic`, które przyjmuje cuboid jako wejście. Jednak najczęstszym zastosowaniem są zdarzenia (events).
 
-One common event usage of area notes is the *area enter/exit event*. This is used with the syntax `[on/after] player [enters/exits] <note-name>:`. Let's try a script using this:
+Jednym z popularnych zdarzeń korzystających z notatek obszaru jest *zdarzenie wejścia/wyjścia z obszaru*. Używa się go ze składnią `[on/after] player [enters/exits] <nazwa-notatki>:`. Wypróbujmy skrypt to wykorzystujący:
 
 ```dscript_green
 cuboid_note_sample:
     type: world
     events:
-        after player enters myroom:
-        - narrate "hi <player.name> welcome to my room!!!"
-        after player exits myroom:
+        after player enters moj_pokoj:
+        - narrate "cześć <player.name>, witaj w moim pokoju!!!"
+        after player exits moj_pokoj:
         - ratelimit <player> 10s
-        - narrate "oh bye <player.name>"
+        - narrate "no to pa <player.name>"
 ```
 
-With this script loaded, you can walk into the area noted as `myroom` and receive a greeting every time. When you walk out, you receive a `bye` message, but no more often than 10 seconds apart from the last `bye`, using the `ratelimit` command to reduce spam.
+Z tym załadowanym skryptem, za każdym razem gdy wejdziesz w obszar zanotowany jako `moj_pokoj`, otrzymasz powitanie. Gdy wyjdziesz, otrzymasz wiadomość pożegnalną, ale nie częściej niż co 10 sekund od ostatniego pożegnania, dzięki użyciu polecenia `ratelimit`.
 
-Another extremely common usage of area notes is the `in:<area>` switch. When looking through event documentation, you'll see many of the events have a line that says `Has Location: True - This adds the switches 'in:<area>', 'location_flagged:<flag>', ...`. For any such event, you can create something like the following example:
+Innym niezwykle powszechnym zastosowaniem notatek obszaru jest przełącznik `in:<area>`. Przeglądając dokumentację zdarzeń, zobaczysz, że wiele z nich posiada linię `Has Location: True - This adds the switches 'in:<area>', 'location_flagged:<flag>', ...`. Dla każdego takiego zdarzenia możesz stworzyć coś na wzór poniższego przykładu:
 
 ```dscript_green
 in_area_sample:
     type: world
     events:
-        after player places block in:myroom:
-        - narrate "hey <player.name>! get that block outta here!"
+        after player places block in:moj_pokoj:
+        - narrate "hej <player.name>! zabieraj ten blok stąd!"
 ```
 
-With this script, any time you place a block in my room, a mystical voice will yell at you to knock it off. If you place a block anywhere else, nothing happens.
+Dzięki temu skryptowi za każdym razem, gdy postawisz blok w moim pokoju, mistyczny głos wrzaśnie na Ciebie, żebyś przestał. Jeśli postawisz blok gdziekolwiek indziej, nic się nie stanie.
 
-Limiting events in this way is useful for countless scenarios. You can use it to implement protected regions - some areas stop you from placing/breaking blocks with a `determine cancelled`, or stop PvP, or something like that. You can have some areas just work a little different - maybe fishing in the special lake brings twice as much loot, using a `player fishes in:special_lake` event. Maybe players that die in your arena region respawn instantly at the arena entrance rather than the global spawn. The only limits are your imagination!
+Ograniczanie zdarzeń w ten sposób jest przydatne w niezliczonych scenariuszach. Możesz go użyć do implementacji chronionych regionów – niektóre obszary mogą powstrzymywać Cię przed stawianiem/niszczeniem bloków za pomocą `determine cancelled` lub blokować PvP itp. Możesz sprawić, by w pewnych miejscach rzeczy działały inaczej – np. łowienie ryb w specjalnym jeziorze daje dwa razy więcej łupów, używając zdarzenia `player fishes in:specjalne_jezioro`. Może gracze ginący w regionie areny powinni odradzać się natychmiast przy wejściu na arenę zamiast na globalnym spawnie? Jedynym ograniczeniem jest Twoja wyobraźnia!
 
-#### Noting Ellipsoids
+#### Notowanie elipsoid (Ellipsoids)
 
-Ellipsoid notes work larger the same as cuboids, they're just rounder. Also unlike cuboids, ellipsoids values can have decimal points on them.
+Notatki elipsoid działają niemal tak samo jak cuboidy, są tylko bardziej zaokrąglone. Również w przeciwieństwie do cuboidów, wartości elipsoid mogą posiadać miejsca dziesiętne.
 
-I'll cut to the chase here, you can basically do all the same things, just use the word `ellipsoid` instead of `cuboid`. If you use the premade script linked above, just use `/seltool ellipsoid` or `/etool` to get the wand, left click to start, right click to expand, and `/selnote` to make a note of it.
+Przejdę od razu do rzeczy: możesz robić w zasadzie to samo, używając słowa `ellipsoid` zamiast `cuboid`. Jeśli używasz wspomnianego wcześniej gotowego skryptu, użyj `/seltool ellipsoid` lub `/etool`, aby otrzymać różdżkę, lewym przyciskiem zacznij, prawym rozszerz, a potem `/selnote`, aby to zanotować.
 
 ![](images/ellipsoid_note.png)
 
-You can use ellipsoids in events and commands in just the same was as cuboids.
+Możesz używać elipsoid w zdarzeniach i poleceniach dokładnie tak samo jak cuboidów.
 
-#### Noting Polygons
+#### Notowanie wielokątów (Polygons)
 
-Polygons are a little bit more complicated. Polygons are defined by a minimum and maximum Y (height) value, and a list of corners. Corners should mark the outer boundaries of the polygon. If edges of the polygon overlap each other, the polygon will have holes in it. Polygon locations are allowed to have decimal point values.
+Wielokąty (polygons) są nieco bardziej skomplikowane. Są definiowane przez minimalną i maksymalną wartość Y (wysokość) oraz listę wierzchołków (corners). Wierzchołki powinny wyznaczać zewnętrzne granice wielokąta. Jeśli krawędzie wielokąta będą na siebie nachodzić, wielokąt będzie miał w sobie dziury. Lokalizacje wierzchołków mogą mieć wartości dziesiętne.
 
-Outside of their complicated formation, they're otherwise used the same as cuboids and ellipsoids - there are commands and tags that operate with polygons, and any event input that takes an "area" accepts a polygon just the same as an ellipsoid or a cuboid.
+Poza skomplikowanym procesem tworzenia, są one używane tak samo jak cuboidy i elipsoidy – istnieją polecenia i tagi operujące na wielokątach, a każde wejście zdarzenia przyjmujące „obszar” (area) akceptuje wielokąt tak samo jak elipsoidę czy prostopadłościan.
 
-If you use the premade selector tool script, you can use `/seltool polygon` or `/ptool` to get the wand, then left click the first corner of a region, and right click each additional corner. Be careful which blocks you select, make sure you keep moving in a single rotational direction (clockwise or counter-clockwise) around the area, make sure you don't turn backwards or bend in on yourself, don't keep going past the start point. Once you've placed at least 3 corners, particles will start appearing. If you want to expand the polygon up or down, simply fly to the height you need and use `/selheight`. If this is all confusing... well just give it a try and experiment a little, you'll probably understand after you've tried it and see the particle boundaries of your region. If you get lost, don't be afraid to join the [Discord](https://discord.gg/Q6pZGSR) and ask for help.
+Jeśli używasz gotowego skryptu selector tool, możesz wpisać `/seltool polygon` lub `/ptool`, aby otrzymać różdżkę, następnie lewym przyciskiem myszy zaznacz pierwszy wierzchołek regionu, a prawym każdy kolejny. Uważaj, które bloki wybierasz – upewnij się, że poruszasz się w jednym kierunku rotacji (zgodnie lub przeciwnie do wskazówek zegara) wokół obszaru, nie zawracaj ani nie krzyżuj linii ze sobą, nie zaznaczaj punktów poza punktem startowym. Gdy postawisz przynajmniej 3 wierzchołki, zaczną pojawiać się cząsteczki. Jeśli chcesz rozszerzyć wielokąt w górę lub w dół, po prostu podleć na żądaną wysokość i wpisz `/selheight`. Jeśli to wszystko brzmi myląco... cóż, po prostu spróbuj i poeksperymentuj chwilę – prawdopodobnie zrozumiesz, gdy zobaczysz granice cząsteczkowe swojego regionu. Jeśli się zgubisz, nie bój się dołączyć do naszego [Discorda](https://discord.gg/Q6pZGSR) i poprosić o pomoc.
 
 ![](images/polygon_note.png)
 
-### Noting An Inventory
+### Notowanie ekwipunku
 
-To note an inventory, you need an inventory constructor. This can be either an inventory script or a generic constructor.
+Aby zanotować ekwipunek, potrzebujesz konstruktora ekwipunku. Może to być skrypt typu `inventory` lub konstruktor generyczny.
 
-Here's an example of an inventory script:
+Oto przykład skryptu ekwipunku:
 
 ```dscript_green
 my_inventory_script:
     type: inventory
     inventory: chest
     size: 27
-    title: Backpack
+    title: Plecak
 ```
 
-To use a generic constructor, you would type something like `<inventory[generic[size=27;title=MyInv]]>`. This is a bit messy, so inventory scripts are better, but can be handy for quick test inventories.
+Aby użyć konstruktora generycznego, wpisałbyś coś w stylu `<inventory[generic[size=27;title=MojEkw]]>`. Jest to nieco nieczytelne, więc skrypty ekwipunku są lepsze, ale generyki bywają przydatne do szybkich testów.
 
-To create a note from an inventory, the command looks like `/ex note <inventory[my_inventory_script]> as:my_inv_note`. This uses the `inventory` constructor tag to clarify to the `note` command what type of object we're trying to create a note of.
+Aby stworzyć notatkę z ekwipunku, polecenie wygląda tak: `/ex note <inventory[my_inventory_script]> as:notatka_mojego_ekw`. Używa to tagu konstruktora `inventory`, aby wyjaśnić poleceniu `note`, jakiego typu obiekt próbujemy zanotować.
 
-An inventory script represents a way to construct an inventory - each time you open `my_inventory_script` it *generates* a new inventory. An inventory note, however, is a single actual inventory.
+Skrypt ekwipunku reprezentuje sposób na skonstruowanie ekwipunku – za każdym razem, gdy otwierasz `my_inventory_script`, *generuje* on nowy ekwipunek. Natomiast notatka ekwipunku to jeden, konkretny, rzeczywisty ekwipunek.
 
-What that means in practice, is if multiple players run `- inventory open d:my_inventory_script`, they will each see their own separate inventory. If, however, multiple players run `- inventory open d:my_inv_note`, they will all have the same inventory open. That means if one player moves an item, every other player also sees that item move.
+Oznacza to w praktyce, że jeśli wielu graczy uruchomi `- inventory open d:my_inventory_script`, każdy z nich zobaczy swój własny, oddzielny ekwipunek. Jeśli jednak wielu graczy uruchomi `- inventory open d:notatka_mojego_ekw`, wszyscy będą mieli otwarty ten sam ekwipunek. Oznacza to, że jeśli jeden gracz przełoży przedmiot, każdy inny gracz również zobaczy, że ten przedmiot się poruszył.
 
-A noted inventory's contents are persistent. This means that if you move items by hand in the inventory note, then close and re-open the inventory note, the contents will be the same. Even if you restart the server, you will still see the contents as they were when you last changed them. A common use case for this is a backpack script - a pairing of a simple inventory script like the example above, and a command script like `/backpack` that opens an inventory note unique to the player - usually generated with a name like `- note <inventory[my_backpack_script]> as:backpack_<player.uuid>` and opened like `- inventory open d:backpack_<player.uuid>`. This means each player gets their own persistent backpack - like having a second enderchest.
+Zawartość zanotowanego ekwipunku jest trwała. Oznacza to, że jeśli ręcznie przełożysz przedmioty w notatce ekwipunku, zamkniesz go i otworzysz ponownie, zawartość będzie taka sama. Nawet jeśli zrestartujesz serwer, wciąż zobaczysz zawartość taką, jaką zostawiłeś przy ostatniej zmianie. Częstym przypadkiem użycia jest skrypt plecaka – połączenie prostego skryptu ekwipunku (jak powyżej) i skryptu polecenia typu `/backpack`, który otwiera notatkę ekwipunku unikalną dla gracza – zazwyczaj generowaną z nazwą typu `- note <inventory[my_backpack_script]> as:plecak_<player.uuid>` i otwieraną przez `- inventory open d:plecak_<player.uuid>`. Dzięki temu każdy gracz otrzymuje swój własny trwały plecak – jakby miał drugą skrzynię kresu (enderchest).
 
-Inventory note names can be used in events as well, in all the same places that inventory script names can be used. For example, `after player opens my_inventory_script:` and `after player opens my_inv_note:` would both run whenever the note is opened (because the note was generated from the script, so both example event lines are applicable).
+Nazw notatek ekwipunku można używać również w zdarzeniach, we wszystkich tych samych miejscach, w których można używać nazw skryptów ekwipunku. Na przykład `after player opens my_inventory_script:` oraz `after player opens notatka_mojego_ekw:` oba zostaną uruchomione, gdy notatka zostanie otwarta (ponieważ notatka została wygenerowana ze skryptu, więc obie linie zdarzeń mają zastosowanie).
 
 ![](images/backpack_inv.png)
 
-### Editing A Note
+### Edytowanie notatki
 
-There are two ways to edit a note:
+Istnieją dwa sposoby edycji notatki:
 
-The first way is to simply overwrite the note with a new note command. Don't like the placement of your `LocationTag` note named `spawn`? Just go `/ex note <player.location> as:spawn` again in a better position.
+Pierwszy to po prostu nadpisanie notatki nowym poleceniem note. Nie podoba Ci się umiejscowienie Twojej notatki `LocationTag` o nazwie `spawn`? Po prostu wpisz `/ex note <player.location> as:spawn` ponownie w lepszej pozycji.
 
-The second way can be handy for some advanced usages, especially with inventory notes: the `adjust` command. Any mechanism used on a noted object will apply to the actual original object in the note directly. With the `adjust` command you will need to clarify the object type of your input with a constructor tag. For example, to change the title of a noted inventory, `/ex adjust <inventory[my_inv_note]> title:NewTitle`. You can also use other commands on the object freely. For example, `/ex give stick to:my_inv_note` will add a stick into that noted inventory.
+Drugi sposób bywa przydatny w zaawansowanych zastosowaniach, szczególnie przy notatkach ekwipunku: polecenie `adjust`. Każdy mechanizm użyty na zanotowanym obiekcie zostanie nałożony bezpośrednio na oryginalny obiekt w notatce. Przy poleceniu `adjust` będziesz musiał sprecyzować typ obiektu wejściowego za pomocą tagu konstruktora. Na przykład, aby zmienić tytuł zanotowanego ekwipunku: `/ex adjust <inventory[notatka_mojego_ekw]> title:NowyTytul`. Możesz też swobodnie używać innych poleceń na obiekcie. Na przykład `/ex give stick to:notatka_mojego_ekw` doda patyk do tego zanotowanego ekwipunku.
 
-### Removing A Note
+### Usuwanie notatki
 
-If you no longer need a note, removing it is simple: `/ex note remove as:<name>`. Instead of having an object, type the literal word `remove`. That's all there is to it, the note for the name you gave is no longer noted.
+Jeśli notatka nie jest już potrzebna, jej usunięcie jest proste: `/ex note remove as:<nazwa>`. Zamiast podawać obiekt, wpisz dosłownie słowo `remove`. To wszystko – notatka o podanej nazwie przestaje być zanotowana.
 
-Be aware that this doesn't inherently destroy an underlying object. For example, if you remove an inventory note, but some player has that inventory open, it will remain open and valid until they close it, just the note name no longer refers to it.
+Pamiętaj, że nie niszczy to automatycznie samego obiektu bazowego. Na przykład, jeśli usuniesz notatkę ekwipunku, ale jakiś gracz ma ten ekwipunek otwarty, pozostanie on otwarty i poprawny dopóki gracz go nie zamknie – po prostu nazwa notatki już do niego nie prowadzi.
 
-### Common Questions
+### Częste pytania
 
-- **Will anything bad happen if I use the `note` command with a name that already exists?** That will remove the existing note and save your new one. Nothing will break, unless you needed that original note.
-- **How should I name my notes?** Generally, well, however you want. The key thing to remember is that every script on your server has the same list of notes, so you'll want to name things in a way that avoids the risk of two different scripts trying to use the same note name. So the example names of `importantspot` and `lever` probably aren't very good names for actual use. You might go for names more like `quest_savethecows_lever` <span class="parens">(this example imagines your server has a scripted quest named 'save the cows', and the lever is specifically related to that quest)</span>. However, often with notes, simple names do work out - for example, a noted location named `spawn` is pretty reasonable to have - how many spawn points could one server have? Also do of course as always observe general clean name rules - use simple words, no spaces, no weird capitalization, no symbols other than an underscore `_`. That part's not *required*, it's just a suggestion to keep things clean.
+- **Czy stanie się coś złego, jeśli użyję polecenia `note` z nazwą, która już istnieje?** Spowoduje to usunięcie istniejącej notatki i zapisanie nowej. Nic się nie popsuje, chyba że potrzebowałeś tej pierwotnej notatki.
+- **Jak powinienem nazywać swoje notatki?** Ogólnie – jak tylko chcesz. Kluczową rzeczą do zapamiętania jest to, że każdy skrypt na Twoim serwerze widzi tę samą listę notatek, więc warto nazywać je tak, aby uniknąć ryzyka użycia tej samej nazwy przez dwa różne skrypty. Zatem przykładowe nazwy jak `wazne_miejsce` czy `dzwignia` prawdopodobnie nie są najlepszymi nazwami do rzeczywistego użytku. Możesz wybrać nazwy typu `zadanie_ratujkrowy_dzwignia` <span class="parens">(ten przykład zakłada, że Twój serwer ma oskryptowane zadanie o nazwie „ratuj krowy”, a dźwignia jest ściśle z nim powiązana)</span>. Jednak często w przypadku notatek proste nazwy się sprawdzają – na przykład zanotowana lokalizacja o nazwie `spawn` jest całkiem sensowna – ile punktów spawnu może mieć jeden serwer? Oczywiście zawsze przestrzegaj ogólnych zasad czystego nazewnictwa – używaj prostych słów, bez spacji, bez dziwnej wielkości liter, bez symboli innych niż podkreślnik `_`. Nie jest to *wymagane*, ale zalecane dla zachowania porządku.
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read some more about notable objects, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się więcej o obiektach zanotowanych, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-- [Note command doc](https://meta.denizenscript.com/Docs/Commands/note)
-- [Inventory script containers doc](https://meta.denizenscript.com/Docs/Languages/inventory%20script%20containers)
-- [Cuboid selector wand script](https://forum.denizenscript.com/resources/cuboid-selector-tool.1/)
-- [Ellipsoid selector wand script](https://forum.denizenscript.com/resources/ellipsoid-selector-tool.3/)
-- [Polygon selector wand script](https://forum.denizenscript.com/resources/polygon-selector-tool.2/)
+- [Dokumentacja polecenia Note](https://meta.denizenscript.com/Docs/Commands/note)
+- [Dokumentacja kontenerów skryptów ekwipunku](https://meta.denizenscript.com/Docs/Languages/inventory%20script%20containers)
+- [Skrypt różdżki do zaznaczania prostopadłościanów](https://forum.denizenscript.com/resources/cuboid-selector-tool.1/)
+- [Skrypt różdżki do zaznaczania elipsoid](https://forum.denizenscript.com/resources/ellipsoid-selector-tool.3/)
+- [Skrypt różdżki do zaznaczania wielokątów](https://forum.denizenscript.com/resources/polygon-selector-tool.2/)

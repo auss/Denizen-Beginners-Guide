@@ -1,33 +1,33 @@
-What Can Denizen Do With Citizens?
+Co Denizen potrafi zrobić z Citizens?
 ----------------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### Two-Way Connection
+### Połączenie dwukierunkowe
 
-The integration Denizen has with Citizens actually works in two ways:
+Integracja Denizen z Citizens w rzeczywistości działa na dwa sposoby:
 
-- First, as you can guess, Denizen has a lot of scripting commands/tags/etc, specific to Citizens.
+- Po pierwsze, jak można się domyślić, Denizen posiada wiele poleceń/tagów/itp. specyficznych dla Citizens.
 
-- But in addition to that, Denizen also adds a variety of additional tools directly into Citizens. For example: `/npc mirrorskin` is a command made available by Denizen (which makes the NPC automatically mirror the viewing player's skin). Several "basic usage" commands are provided by Denizen, such as `/npc sit`, `/npc sneak`, and `/npc invisible`. Denizen also provides several basic handy traits, like the `health` trait or the `fishing` trait.
+- Ale oprócz tego, Denizen dodaje również szereg dodatkowych narzędzi bezpośrednio do Citizens. Na przykład: `/npc mirrorskin` to polecenie udostępnione przez Denizen (które sprawia, że NPC automatycznie odzwierciedla skórkę gracza, który na niego patrzy). Denizen udostępnia kilka poleceń "podstawowego użycia", takich jak `/npc sit`, `/npc sneak` i `/npc invisible`. Denizen zapewnia również kilka podstawowych, przydatnych cech (traits), takich jak cecha `health` czy cecha `fishing`.
 
-- The two ways can also work together sometimes, such as [this handy script](https://forum.denizenscript.com/viewtopic.php?f=13&t=241) that allows users to do `/npc skin --url [url here]` to set an NPC's skin from an image URL, or on a more simple level [this quick helper script](https://forum.denizenscript.com/viewtopic.php?f=13&t=149) that allows users to add commands that an NPC will execute when it's right-clicked <span class="parens">(these are both now built-in to Citizens, but previously those scripts were the only way to do it)</span>.
+- Te dwa sposoby mogą czasem współpracować, jak np. [ten przydatny skrypt](https://forum.denizenscript.com/viewtopic.php?f=13&t=241), który pozwala użytkownikom na wykonanie `/npc skin --url [url tutaj]`, aby ustawić skórkę NPC z adresu URL obrazka, lub na prostszym poziomie [ten szybki skrypt pomocniczy](https://forum.denizenscript.com/viewtopic.php?f=13&t=149), który pozwala użytkownikom dodawać polecenia, które NPC wykona po kliknięciu prawym przyciskiem myszy <span class="parens">(obie te funkcje są teraz wbudowane w Citizens, ale wcześniej te skrypty były jedynym sposobem na ich realizację)</span>.
 
-### Questing
+### Tworzenie zadań (Questing)
 
-Of course, the most popular usage of the Denizen-Citizens connection is having NPCs that give and take part in RPG-style questing. Denizen has a fairly powerful set of systems dedicated to this specific task <span class="parens">(but still generic enough that it can be used for other cases)</span>.
+Oczywiście najpopularniejszym zastosowaniem połączenia Denizen-Citizens jest posiadanie NPC, którzy zlecają i biorą udział w zadaniach w stylu RPG. Denizen posiada dość potężny zestaw systemów dedykowanych temu konkretnemu zadaniu <span class="parens">(ale wciąż na tyle ogólnych, że można je wykorzystać w innych przypadkach)</span>.
 
-### Conversations
+### Rozmowy
 
-The tools made available most ideally for RPG-style questing are also a great fit for anything that fits the model of players having a conversation with an NPC. This includes, for example, a conversation being the access point for an NPC's shop <span class="parens">(which would then be handled by an inventory GUI Denizen script or similar)</span>.
+Narzędzia udostępnione głównie z myślą o zadaniach w stylu RPG świetnie nadają się również do wszystkiego, co pasuje do modelu prowadzenia przez graczy rozmowy z NPC. Obejmuje to na przykład rozmowę będącą punktem dostępu do sklepu NPC <span class="parens">(który byłby następnie obsługiwany przez skrypt Denizen z GUI ekwipunku lub podobny)</span>.
 
-### Cutscenes
+### Scenki przerywnikowe (Cutscenes)
 
-One neat thing that's achieved less often but always at least a thought-about-doing for many servers, is NPC-driven cutscenes. With a few careful usages of the `walk` command, perhaps the `rotate` command, and optionally the spectator functionality, it's pretty simple to write a Denizen script that uses NPCs to act out a scene in front of players.
+Jedną z ciekawych rzeczy, które są realizowane rzadziej, ale zawsze są brane pod uwagę na wielu serwerach, są scenki przerywnikowe prowadzone przez NPC. Przy kilku starannych użyciach polecenia `walk`, być może polecenia `rotate` i opcjonalnie funkcjonalności widza (spectator), dość prosto jest napisać skrypt Denizen, który wykorzystuje NPC do odegrania sceny przed graczami.
 
-### Uniqueness
+### Wyjątkowość
 
-With Citizens on your server, you have statues. If you install Sentinel, you can have some guards. With Denizen included, you can have a unique server that feels truly alive. The only limit is how much dialogue/cutscene pathing/etc. you're willing to write!
+Z Citizens na serwerze masz posągi. Jeśli zainstalujesz Sentinel, możesz mieć strażników. Z dołączonym Denizen możesz mieć unikalny serwer, który wydaje się naprawdę żywy. Jedynym ograniczeniem jest to, ile dialogów/ścieżek scenek itp. jesteś gotów napisać!

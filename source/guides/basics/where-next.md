@@ -1,25 +1,25 @@
-Where Next
+Co dalej
 ----------
 
-Congratulations, you've reached the end of the basics section! If you've been following the guide the whole way through to here, you should now understand the majority of the basics of Denizen.
+Gratulacje, dotarłeś do końca sekcji podstaw! Jeśli podążałeś za przewodnikiem przez cały czas, powinieneś już rozumieć większość podstawowych koncepcji Denizen.
 
-There is, of course, still a lot you haven't yet learned as well. So, where do you go from here? Well, it depends on your own needs and plans.
+Oczywiście wciąż pozostaje wiele rzeczy, których jeszcze się nie nauczyłeś. Gdzie więc skierować swoje kroki teraz? Cóż, to zależy od Twoich potrzeb i planów.
 
-What do you plan to do with Denizen?
+Co planujesz zrobić z Denizen?
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### I Want To Write NPC-Driven Quests/Shops/Interactions
+### Chcę pisać zadania/sklepy/interakcje oparte na NPC
 
-The place to go next for you is definitely the [NPCs section](/guides/npcs/index). There, you'll learn how to attach Denizen scripts to NPCs, make use of NPC-specific script features, and combine in the basics you've already learned to build full scripts, including example guide NPCs, kill quests, etc.
+Następnym krokiem dla Ciebie jest zdecydowanie sekcja [NPC](/guides/npcs/index). Dowiesz się tam, jak przypisywać skrypty Denizen do NPC, jak korzystać z funkcji skryptowych specyficznych dla NPC oraz jak łączyć poznane już podstawy w celu budowania pełnych skryptów, w tym przykładowych przewodników NPC, zadań typu „zabij X potworów” itp.
 
-### I Want To Obtain A Mastery of Scripting, To Totally Control My Server
+### Chcę osiągnąć mistrzostwo w skryptowaniu, aby całkowicie kontrolować mój serwer
 
-Wow! Many learn enough to achieve great things, but few achieve total mastery. If you hope to achieve this (or to at least get close), the biggest thing you're going to need to do is simply... spend time. Write lots of scripts, read lots of documentation, and try lots of experiments. If mastery is your goal, you probably already are planning to follow every single page in this guide, but just to get you going in the right direction, the next section to focus on for you will be [the advanced section](/guides/advanced/index) which will teach some more advanced features and techniques that can be used to take you much farther and give you the first glimpse into things like the infamous one-line do-everything magic tags that the scripting masters on our [Discord](https://discord.gg/Q6pZGSR) like to show off with.
+Wow! Wielu uczy się wystarczająco dużo, by osiągać wielkie rzeczy, ale niewielu osiąga całkowite mistrzostwo. Jeśli masz nadzieję to osiągnąć (lub przynajmniej się do tego zbliżyć), najważniejszą rzeczą, którą musisz zrobić, jest po prostu... poświęcenie czasu. Pisz dużo skryptów, czytaj dużo dokumentacji i przeprowadzaj mnóstwo eksperymentów. Jeśli mistrzostwo jest Twoim celem, prawdopodobnie już planujesz przerobić każdą stronę tego przewodnika, ale aby wskazać Ci właściwy kierunek: kolejną sekcją, na której powinieneś się skupić, będzie [sekcja zaawansowana](/guides/advanced/index). Nauczy Cię ona bardziej zaawansowanych funkcji i technik, które pozwolą Ci pójść znacznie dalej i dadzą pierwszy wgląd w rzeczy takie jak niesławne, jednolinijkowe „magiczne tagi do wszystkiego”, którymi lubią chwalić się mistrzowie skryptowania na naszym [Discordzie](https://discord.gg/Q6pZGSR).
 
-### I Just Want More Fine-Tuned Control of My Server
+### Chcę po prostu mieć większą kontrolę nad moim serwerem
 
-Well, good news: you've already gained the tools you need for this! Using the right combinations of events, commands, and tags, you can achieve a whole lot. The next thing for you to do now is probably start thinking of some of the simpler sounding things you want to achieve, and go search [the documentation](https://meta.denizenscript.com/Docs/Events/) for relevant events/commands/etc. that would be used for script idea. After you've done a few simple scripts, you'll grow in confidence and be able to achieve more-and-more interesting script ideas. Remember: don't be afraid to ask on [Discord](https://discord.gg/Q6pZGSR) for help if you get stuck!
+Cóż, mamy dobre wiadomości: zdobyłeś już narzędzia, których do tego potrzebujesz! Używając odpowiednich kombinacji zdarzeń, poleceń i tagów, możesz osiągnąć naprawdę wiele. Następną rzeczą, którą powinieneś teraz zrobić, jest prawdopodobnie zastanowienie się nad prostszymi rzeczami, które chcesz osiągnąć, i przeszukanie [dokumentacji](https://meta.denizenscript.com/Docs/Events/) w poszukiwaniu odpowiednich zdarzeń/poleceń/itp. potrzebnych do realizacji Twojego pomysłu. Po napisaniu kilku prostych skryptów poczujesz się pewniej i będziesz mógł realizować coraz ciekawsze projekty. Pamiętaj: nie bój się prosić o pomoc na [Discordzie](https://discord.gg/Q6pZGSR), jeśli utkniesz!

@@ -1,21 +1,21 @@
-Denizen Beginner's Guide
+Przewodnik Początkującego Denizen
 ------------------------
 
-A guide for new users of [Denizen](https://www.spigotmc.org/resources/denizen.21039/)!
+Przewodnik dla nowych użytkowników [Denizen](https://www.spigotmc.org/resources/denizen.21039/)!
 
-If you're not familiar with Denizen, check out the [Background](/guides/background/index) section.
+Jeśli nie znasz Denizen, sprawdź sekcję [Wprowadzenie](/guides/background/index).
 
-If you're not sure if learning Denizen is for you, check out the [New Users FAQ](/guides/background/new-user-faq) page, which will answer common questions for uncertain new users.
+Jeśli nie masz pewności, czy nauka Denizen jest dla Ciebie, sprawdź stronę [FAQ dla nowych użytkowników](/guides/background/new-user-faq), która odpowie na typowe pytania niepewnych nowych użytkowników.
 
-When you're ready to get started, open the [First Steps](/guides/first-steps/index) section, and follow the guide page by page through to the end of the basics section (note: FOLLOW, not read. Try the example scripts yourself and play with the ideas you learn!).
+Kiedy będziesz gotowy, aby zacząć, otwórz sekcję [Pierwsze kroki](/guides/first-steps/index) i postępuj zgodnie z przewodnikiem strona po stronie aż do końca sekcji podstaw (uwaga: POSTĘPUJ zgodnie z instrukcjami, a nie tylko czytaj. Wypróbuj przykładowe skrypty samodzielnie i baw się pomysłami, których się nauczysz!).
 
-**WARNING:** This guide is very much still a work in progress, several pages are placeholdered with older tutorial videos.
+**OSTRZEŻENIE:** Ten przewodnik jest wciąż w trakcie tworzenia, kilka stron jest zastąpionych starszymi filmami instruktażowymi.
 
-Please join us on [Discord](https://discord.gg/Q6pZGSR) to discuss or get further help with Denizen!
+Dołącz do nas na [Discordzie](https://discord.gg/Q6pZGSR), aby porozmawiać lub uzyskać dalszą pomoc dotyczącą Denizen!
 
-See also the [Denizen homepage and links directory](https://denizenscript.com/).
+Zobacz także [stronę główną Denizen i katalog linków](https://denizenscript.com/).
 
-## Contents:
+## Spis treści:
 
 ``` toctree::
     :maxdepth: 2
@@ -30,7 +30,7 @@ See also the [Denizen homepage and links directory](https://denizenscript.com/).
     guides/expanding/index
 ```
 
-## Also, Special Sections
+## Również sekcje specjalne
 
 ``` toctree::
     :maxdepth: 2

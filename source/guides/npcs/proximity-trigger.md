@@ -1,15 +1,15 @@
-Proximity Triggers (PARTIAL)
-------------------
+Wyzwalacze zbliżeniowe (Proximity Triggers) (CZĘŚCIOWY OPIS)
+---------------------------------------------------------
 
-**TODO: Write-up explaining proximity triggers, including entry, exit, and move triggers. Remind the user to activate it with `trigger` in `on assignment`.**
+**TODO: Opis wyjaśniający wyzwalacze zbliżeniowe, w tym wyzwalacze wejścia (entry), wyjścia (exit) oraz ruchu (move). Przypomnij użytkownikowi o aktywacji wyzwalacza za pomocą `trigger` w `on assignment`.**
 
-### Placeholder
+### Placeholder (Miejsce na treść)
 
-Until this page is written, you can view the [old tutorial video here](https://one.denizenscript.com/denizen/vids/Proximity%20Triggers).
+Dopóki ta strona nie zostanie napisana, możesz obejrzeć [stary film instruktażowy tutaj](https://one.denizenscript.com/denizen/vids/Proximity%20Triggers).
 
-### Sample Script
+### Przykładowy skrypt
 
-Here's a quick sample of a modern interact script with some basic proximity triggers.
+Oto szybki przykład nowoczesnego skryptu interakcji z podstawowymi wyzwalaczami zbliżeniowymi.
 
 ```dscript_green
 my_assignment:
@@ -27,22 +27,22 @@ my_interact:
             proximity trigger:
                 entry:
                     script:
-                    - chat "Hello, <player.name>!"
+                    - chat "Witaj, <player.name>!"
                 exit:
                     script:
-                    - chat "Farewell, <player.name>!"
+                    - chat "Żegnaj, <player.name>!"
                 move:
                     script:
                     - ratelimit <player> 10s
-                    - chat "Still hanging around, <player.name>?"
+                    - chat "Nadal tu krążysz, <player.name>?"
 ```
 
-This script can be assigned to your selected NPC via `/ex assignment set script:my_assignment`
+Ten skrypt można przypisać do wybranego przez Ciebie NPC za pomocą polecenia `/ex assignment set script:my_assignment`
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read a lot more about proximity triggers, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się znacznie więcej o wyzwalaczach zbliżeniowych, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-Note: most users, especially those learning from the Denizen for the first time, should just continue on to the next guides page. These references might be of interest to later come back to after you've learned Denizen as far as this guide teaches.
+Uwaga: większość użytkowników, zwłaszcza tych uczących się Denizen po raz pierwszy, powinna po prostu przejść do następnej strony przewodnika. Referencje te mogą być interesujące do późniejszego powrotu, gdy już nauczysz się Denizen w stopniu, jaki przewiduje ten przewodnik.
 
-- [Proximity triggers language doc](https://meta.denizenscript.com/Docs/Languages/proximity%20triggers)
+- [Dokumentacja języka Proximity Triggers](https://meta.denizenscript.com/Docs/Languages/proximity%20triggers)

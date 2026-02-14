@@ -1,37 +1,37 @@
-Do That Again: Loops
---------------------
+Zrób to jeszcze raz: Pętle (Loops)
+----------------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### What Is A 'Loop'?
+### Czym jest „pętla”?
 
-All the scripts up until now had a single directional flow from top to bottom. An exact order was listed and commands were executed one after the other, maybe skipping a few if you had an `if` command.
-However, what if you wanted to do those commands you just wrote again? Well you have a few options. The most straightforward approach would simply be writing those same commands again. While this may work if you only wanted it repeated twice, or if there is only one line you want repeated, this can get out of hand really quickly.
+Wszystkie skrypty, które widziałeś do tej pory, miały jednokierunkowy przepływ od góry do dołu. Podana była dokładna kolejność, a polecenia wykonywały się jedno po drugim, ewentualnie pomijając kilka, jeśli użyłeś polecenia `if`.
+Co jednak, gdybyś chciał wykonać te same polecenia jeszcze raz? Masz kilka opcji. Najprostszym podejściem byłoby po prostu napisanie tych samych poleceń ponownie. Choć może to zadziałać, jeśli chcesz powtórzyć coś tylko dwa razy lub jeśli jest to tylko jedna linijka, bardzo szybko może to wymknąć się spod kontroli.
 
-Luckily you don't have to do this, Denizen has 3 different loop commands that repeat a block of commands:
-- `repeat` to repeat a block a set number of times
-- `foreach` to repeat a block based on a list input, once for each entry in the list
-- `while` to repeat a block until a condition is met, like an `if` command that keeps going over and over until it stops passing
+Na szczęście nie musisz tego robić. Denizen posiada 3 różne polecenia pętli, które powtarzają blok instrukcji:
+- `repeat` – powtarza blok określoną liczbę razy
+- `foreach` – powtarza blok dla każdego elementu z podanej listy
+- `while` – powtarza blok, dopóki warunek jest spełniony (jak polecenie `if`, które wykonuje się w kółko, dopóki warunek nie przestanie być prawdziwy)
 
-### The Repeat Command
+### Polecenie Repeat
 
-The most basic use of a loop is to simply run a block of commands again, which the repeat command is best suited for.
+Najbardziej podstawowym zastosowaniem pętli jest po prostu ponowne uruchomienie bloku poleceń, do czego najlepiej nadaje się polecenie `repeat`.
 
-The `repeat` command, as its name implies, repeats a block of commands multiple times.
+Polecenie `repeat`, jak sugeruje nazwa, powtarza blok poleceń wielokrotnie.
 
-The basic format of a repeat command is:
+Podstawowy format polecenia repeat to:
 
 ```dscript_blue
-- repeat (number of times):
-    - (commands here)
+- repeat (liczba powtórzeń):
+    - (polecenia tutaj)
 ```
 
-This structure is similar to the `if` command, where you end the `repeat` command with a `:`. The commands that get looped need to also be indented in to let Denizen know that these are the commands you want to be looped.
+Struktura ta jest podobna do polecenia `if` – kończysz linię `repeat` dwukropkiem `:`. Polecenia, które mają być powtarzane, muszą być wcięte, aby Denizen wiedział, że należą do pętli.
 
-Here is what it might look like in a real script:
+Oto jak może to wyglądać w prawdziwym skrypcie:
 
 ```dscript_green
 my_lightning_task:
@@ -39,18 +39,18 @@ my_lightning_task:
     script:
     - repeat 5:
         - strike <player.location>
-        - narrate "you have been struck by lightning!"
+        - narrate "zostałeś trafiony piorunem!"
         - wait 1s
-    - narrate "no more lightning"
+    - narrate "koniec piorunów"
 ```
-Try this out in-game by running `/ex run my_lightning_task`.
+Wypróbuj to w grze, wpisując `/ex run my_lightning_task`.
 
-This will loop 5 times, wherein the player will be struck by lightning as well as be told "you have been struck by lightning!"
-There is also a `wait` command at the end of the block. This pauses the script for a certain amount of time (in this example 1 second). This is important in many cases so that the commands don't run instantly after one another. In this example, without the wait it would seem as if the lightning strikes happened all at once.
+Pętla wykona się 5 razy, podczas których gracz zostanie trafiony piorunem i otrzyma wiadomość „zostałeś trafiony piorunem!”.
+Na końcu bloku znajduje się również polecenie `wait` (czekaj). Wstrzymuje ono działanie skryptu na określony czas (w tym przykładzie na 1 sekundę). Jest to ważne w wielu przypadkach, aby polecenia nie uruchamiały się błyskawicznie jedno po drugim. W tym przykładzie, bez czekania, odniosłoby się wrażenie, że wszystkie pioruny uderzyły jednocześnie.
 
-Once the loop is done, the script continues, ending with "no more lightning."
+Gdy pętla się zakończy, skrypt toczy się dalej, kończąc się wiadomością „koniec piorunów”.
 
-What if you wanted to let the player know how many times they have been struck? You could add a definition that tracks the amount of loops, but `repeat` already does that for you. All you need to add is the `as:` argument to the repeat command like so:
+A co, jeśli chciałbyś poinformować gracza, ile razy już został trafiony? Mógłbyś dodać definicję śledzącą liczbę powtórzeń, ale `repeat` robi to już za Ciebie. Wystarczy dodać argument `as:` do polecenia repeat w ten sposób:
 
 ```dscript_green
 my_lightning_task:
@@ -58,19 +58,19 @@ my_lightning_task:
     script:
     - repeat 5 as:count:
         - strike <player.location>
-        - narrate "you have been struck by lightning <[count]> times!"
+        - narrate "zostałeś trafiony piorunem już <[count]> razy!"
         - wait 1s
-    - narrate "no more lightning"
+    - narrate "koniec piorunów"
 ```
 
-The narrate will now say "you have been struck by lightning 1 times!", "you have been struck by lightning 2 times!", etc. up to 5.
+Narracja będzie teraz mówić: „zostałeś trafiony piorunem już 1 razy!”, „zostałeś trafiony piorunem już 2 razy!” itd., aż do 5.
 
-### The Foreach Command
+### Polecenie Foreach
 
-While the repeat command is handy, you'll often find yourself wanting to loop over the contents of a list and do something with each entry in it.
+Choć polecenie repeat jest poręczne, często będziesz chciał przejść przez zawartość listy i zrobić coś z każdym jej elementem.
 
-Let's say we want to tell the player where all the cows around them are located.
-With the repeat command, you might do something like this:
+Załóżmy, że chcemy powiedzieć graczowi, gdzie znajdują się wszystkie krowy wokół niego.
+Używając polecenia repeat, mógłbyś zrobić coś takiego:
 
 ```dscript_red
 my_cow_task:
@@ -79,59 +79,59 @@ my_cow_task:
     - define cows <player.location.find_entities[cow].within[30]>
     - repeat <[cows].size> as:index:
         - define cow <[cows].get[<[index]>]>
-        - narrate "There's a cow just <[cow].location.distance[<player.location>].round> blocks away!"
+        - narrate "Krowa jest zaledwie o <[cow].location.distance[<player.location>].round> bloków stąd!"
         - playeffect effect:fireworks_spark at:<[cow].location> visibility:50 quantity:100 data:0 offset:3
 ```
 
-However, there is a much better way using the `foreach` command.
-The name "foreach" means literally "for each entry in the list, ..." and works exactly how this name implies - it re-runs the block of commands once for each entry in the list.
+Istnieje jednak znacznie lepszy sposób z użyciem polecenia `foreach`.
+Nazwa „foreach” oznacza dosłownie „dla każdego [elementu listy]...” i działa dokładnie tak, jak to brzmi – uruchamia blok poleceń raz dla każdego wpisu na liście.
 
-`foreach` has the same structure as repeat:
+`foreach` ma taką samą strukturę jak repeat:
 
 ```dscript_blue
-- foreach (some list) as:(definition to store each entry):
-    - (commands here)
+- foreach (jakaś lista) as:(definicja przechowująca element):
+    - (polecenia tutaj)
 ```
 
-Here's how we can simplify that script with a `foreach` loop:
+Oto jak możemy uprościć ten skrypt za pomocą pętli `foreach`:
 
 ```dscript_green
 my_cow_task:
     type: task
     script:
     - foreach <player.location.find_entities[cow].within[30]> as:cow:
-        - narrate "There's a cow <[cow].location.distance[<player.location>].round> blocks away!"
+        - narrate "Krowa jest o <[cow].location.distance[<player.location>].round> bloków stąd!"
         - playeffect effect:fireworks_spark at:<[cow].location> visibility:50 quantity:100 data:0 offset:3
 ```
 
-Try this in-game via `/ex run my_cow_task` while standing near some cows.
+Wypróbuj to w grze przez `/ex run my_cow_task`, stojąc w pobliżu krów.
 
-Much better. Most notably, we don't have have to get the entry `cow` from the list: it's already defined.
+Znacznie lepiej. Co najważniejsze, nie musimy ręcznie pobierać elementu `cow` z listy: jest on już zdefiniowany.
 
-Additionally, foreach has a built-in definition of `<[loop_index]>` that keeps track of how many times it has looped. For an example of using that:
+Dodatkowo, foreach posiada wbudowaną definicję `<[loop_index]>`, która śledzi, po raz który pętla się wykonuje. Przykład użycia:
 
 ```dscript_green
 my_cow_task:
     type: task
     script:
     - foreach <player.location.find_entities[cow].within[30]> as:cow:
-        - narrate "<[loop_index]> - There's a cow <[cow].location.distance[<player.location>].round> blocks away!"
+        - narrate "<[loop_index]> - Krowa jest o <[cow].location.distance[<player.location>].round> bloków stąd!"
         - playeffect effect:fireworks_spark at:<[cow].location> visibility:50 quantity:100 data:0 offset:3
 ```
 
-The narrate will now be prefaced with a "1- ", "2- ", etc. as the loop goes on.
+Wiadomości będą teraz poprzedzone „1- ”, „2- ” itd. w miarę trwania pętli.
 
-### The While Command
+### Polecenie While
 
-You might encounter a situation where you don't know how many times you're going to loop, but you know when to stop. You can achieve this with a while loop. It's like an `if` command that runs the block below it as long as the condition is true.
+Możesz napotkać sytuację, w której nie wiesz, ile razy pętla ma się powtórzyć, ale wiesz, kiedy powinna przestać. Możesz to osiągnąć za pomocą pętli `while`. Jest ona jak polecenie `if`, które uruchamia blok poniżej tak długo, jak warunek pozostaje prawdziwy.
 
 ```dscript_blue
-- while (condition):
-    - (commands here)
+- while (warunek):
+    - (polecenia tutaj)
 ```
-The condition format is the same as the `if` command; [see that guide page](/guides/basics/if-command) for more details on its structure.
+Format warunku jest taki sam jak w poleceniu `if`; [sprawdź stronę tego przewodnika](/guides/basics/if-command), aby dowiedzieć się więcej o jego strukturze.
 
-Now, lets see an example of a `while` loop...
+Zobaczmy teraz przykład pętli `while`...
 
 ```dscript_green
 my_move_task:
@@ -139,23 +139,23 @@ my_move_task:
     script:
     - define location <player.location>
     - while <player.is_online> && <[location].distance[<player.location>]> < 3:
-        - narrate "You're too close, move away!"
+        - narrate "Jesteś za blisko, odsuń się!"
         - wait 2s
 ```
 
-You can try this in-game via `/ex run my_move_task`. This task, when run, will repeatedly tell you to move away until you have moved 3 blocks from where you first were.
+Możesz to wypróbować w grze przez `/ex run my_move_task`. To zadanie po uruchomieniu będzie wielokrotnie kazało Ci się odsunąć, dopóki nie znajdziesz się 3 bloki od miejsca, w którym byłeś na początku.
 
-Just like the `repeat` command, we have a `wait` command at the end of the loop. While it's only useful in some cases with `repeat` loops, you should almost always use it with `while` loops. Without one, it will try to check the condition constantly and repeatedly until it stops, which can cause the server to freeze until the while stops, or even crash if it never stops.
+Podobnie jak w poleceniu `repeat`, na końcu pętli mamy polecenie `wait`. Choć w pętlach `repeat` bywa ono przydatne tylko w niektórych przypadkach, w pętlach `while` powinieneś używać go niemal zawsze. Bez niego skrypt będzie próbował sprawdzać warunek ciągle i wielokrotnie, co może spowodować „zamrożenie” serwera do czasu zakończenia pętli, a nawet jego awarię, jeśli pętla nigdy się nie skończy.
 
-A word of warning: `while` loops should be avoided if possible. It is very easy to make what is known as an "infinite loop", as in a loop that never has a chance to stop. Once it's running, it's difficult to force it to stop beyond just stopping the server.
+Słowo ostrzeżenia: pętli `while` należy w miarę możliwości unikać. Bardzo łatwo jest stworzyć tzw. „nieskończoną pętlę”, czyli taką, która nigdy nie ma szansy się zatrzymać. Gdy taka pętla już ruszy, trudno ją zatrzymać inaczej niż przez wyłączenie serwera.
 
-Additionally, some users write commands like `while true` to achieve scripts that intentionally run forever - this is not an ideal method, usually you should use [the `delta time` event](https://meta.denizenscript.com/Docs/Events/delta%20time) to achieve this.
+Dodatkowo, niektórzy użytkownicy piszą polecenia typu `while true`, aby uzyskać skrypty działające celowo w nieskończoność – nie jest to idealna metoda. Zazwyczaj do tego celu powinieneś używać [zdarzenia `delta time`](https://meta.denizenscript.com/Docs/Events/delta%20time).
 
-### Stop The Loop
+### Zatrzymywanie pętli
 
-Sometimes in loops you only want to keep looping until you reach a certain point. However, you may not want to stop the script entirely. While `stop` is used to stop scripts, `repeat/foreach/while stop` is used to stop the relevant loop.
+Czasami w pętlach chcesz kontynuować powtarzanie tylko do osiągnięcia pewnego punktu, ale nie chcesz przerywać całego skryptu. Podczas gdy `stop` służy do przerywania skryptów, `repeat/foreach/while stop` służy do przerywania samej pętli.
 
-For instance, in the first example, if we wanted to stop striking lightning if the player had less than 5 health, we would do as follows:
+Na przykład w pierwszym przykładzie, gdybyśmy chcieli przestać ciskać piorunami, jeśli gracz ma mniej niż 5 punktów życia, zrobilibyśmy to tak:
 
 ```dscript_green
 my_lightning_task:
@@ -163,33 +163,33 @@ my_lightning_task:
     script:
     - repeat 5 as:count:
         - strike <player.location>
-        - narrate "you have been struck by lightning <[count]> times!"
+        - narrate "zostałeś trafiony piorunem już <[count]> razy!"
         - if <player.health> < 5:
             - repeat stop
         - wait 1s
-    - narrate "no more lightning"
+    - narrate "koniec piorunów"
 ```
-Since we're using `repeat stop`, only the loop ends; the end `narrate` line still runs.
+Ponieważ używamy `repeat stop`, kończy się tylko pętla; końcowa linia `narrate` wciąż zostanie wykonana.
 
-It can also be used in `foreach` loops. For instance, if we wanted to stop looping if we found a baby cow in the example above:
+Można to również stosować w pętlach `foreach`. Na przykład, gdybyśmy w przykładzie powyżej chcieli przestać szukać krów po znalezieniu małej krowy:
 
 ```dscript_green
 my_cow_task:
     type: task
     script:
     - foreach <player.location.find_entities[cow].within[30]> as:cow:
-        - narrate "There's a cow <[cow].location.distance[<player.location>].round> blocks away!"
+        - narrate "Krowa jest o <[cow].location.distance[<player.location>].round> bloków stąd!"
         - playeffect effect:fireworks_spark at:<[cow].location> visibility:50 quantity:100 data:0 offset:3
         - if <[cow].is_baby>:
-            - narrate "omg its a baby!!"
+            - narrate "o mój boże, to cielaczek!!"
             - foreach stop
 ```
 
-### Next Please
+### Następny proszę
 
-There are times when you want to skip to the next loop without finishing the current iteration. For this, you can use `repeat/foreach/while next`.
+Zdarzają się sytuacje, w których chcesz pominąć resztę aktualnego powtórzenia i przejść od razu do następnego kroku pętli. Do tego służy `repeat/foreach/while next`.
 
-Take the `foreach` example we had, lets say we want to skip over all baby cows. While you can put the whole block inside an `if` command like so...
+Weźmy przykład z `foreach`. Załóżmy, że chcemy pominąć wszystkie małe krowy. Choć możesz umieścić cały blok wewnątrz polecenia `if` w ten sposób...
 
 ```dscript_green
 my_cow_task:
@@ -197,11 +197,11 @@ my_cow_task:
     script:
     - foreach <player.location.find_entities[cow].within[30]> as:cow:
         - if !<[cow].is_baby>:
-            - narrate "<[loop_index]> - There's a cow just <[cow].location.distance[<player.location>].round> blocks away!"
+            - narrate "<[loop_index]> - Krowa jest o <[cow].location.distance[<player.location>].round> bloków stąd!"
             - playeffect effect:fireworks_spark at:<[cow].location> visibility:50 quantity:100 data:0 offset:3
 ```
 
-You could instead use `next`:
+Możesz zamiast tego użyć `next`:
 
 ```dscript_green
 my_cow_task:
@@ -210,16 +210,16 @@ my_cow_task:
     - foreach <player.location.find_entities[cow].within[30]> as:cow:
         - if <[cow].is_baby>:
             - foreach next
-        - narrate "There's a cow <[cow].location.distance[<player.location>].round> blocks away!"
+        - narrate "Krowa jest o <[cow].location.distance[<player.location>].round> bloków stąd!"
         - playeffect effect:fireworks_spark at:<[cow].location> visibility:50 quantity:100 data:0 offset:3
 ```
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read a lot more about loops, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się znacznie więcej o pętlach, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-Note: most users, especially those learning from the Denizen for the first time, should just continue on to the next guides page. These references might be of interest to later come back to after you've learned Denizen as far as this guide teaches.
+Uwaga: większość użytkowników, zwłaszcza tych uczących się Denizen po raz pierwszy, powinna po prostu przejść do następnej strony przewodnika. Referencje te mogą być interesujące do późniejszego powrotu, gdy już nauczysz się Denizen w stopniu, jaki przewiduje ten przewodnik.
 
-- [Foreach command doc](https://meta.denizenscript.com/Docs/Commands/foreach)
-- [Repeat command doc](https://meta.denizenscript.com/Docs/Commands/repeat)
-- [While command doc](https://meta.denizenscript.com/Docs/Commands/while)
+- [Dokumentacja polecenia Foreach](https://meta.denizenscript.com/Docs/Commands/foreach)
+- [Dokumentacja polecenia Repeat](https://meta.denizenscript.com/Docs/Commands/repeat)
+- [Dokumentacja polecenia While](https://meta.denizenscript.com/Docs/Commands/while)

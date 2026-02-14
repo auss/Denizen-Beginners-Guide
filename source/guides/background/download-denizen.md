@@ -1,33 +1,33 @@
-How Do I Download Denizen?
+Jak pobrać Denizen?
 --------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### Requirements
+### Wymagania
 
-Before you use Denizen at all, there is one basic requirement: You need to be running a Spigot server on a recent minecraft version.
+Zanim w ogóle zaczniesz korzystać z Denizen, istnieje jeden podstawowy wymóg: musisz posiadać serwer Spigot na nowszej wersji Minecrafta.
 
-That means a Spigot server or fork thereof (like Paper), as opposed to a vanilla server, a Forge server, or some other platform.
+Oznacza to serwer Spigot lub jego fork (taki jak Paper), a nie serwer typu vanilla, serwer Forge czy inną platformę.
 
-What constitutes a "recent version" changes with time of course, but generally that means the current version of minecraft - but if you're one or two major versions behind, that's fine. Note that you must always be on the latest *minor* version though. Minecraft versions are of the format `1.major.minor`, so for example in `1.15.2`, `15` is major and `2` is minor. If `1.15.2` is the current latest version, then `1.15.2` is a good version, but `1.15.1` is unsupported, and `1.15` (implied `.0`) is also unsupported. `1.14.4` (ie, latest minor version of the previous major version) is also supported. Major versions older than this are also supported sometimes.
+To, co stanowi "nowszą wersję", oczywiście zmienia się z czasem, ale ogólnie oznacza to aktualną wersję Minecrafta – ale jeśli jesteś o jedną lub dwie główne wersje do tyłu, to też w porządku. Pamiętaj jednak, że zawsze musisz być na najnowszej wersji *podrzędnej* (minor). Wersje Minecrafta mają format `1.major.minor`, więc na przykład w `1.15.2`, `15` to wersja główna (major), a `2` to wersja podrzędna (minor). Jeśli `1.15.2` jest aktualną najnowszą wersją, to `1.15.2` jest dobrą wersją, ale `1.15.1` jest nieobsługiwana, a `1.15` (domyślnie `.0`) również jest nieobsługiwana. `1.14.4` (czyli najnowsza wersja podrzędna poprzedniej wersji głównej) jest również wspierana. Wersje główne starsze od tych również bywają czasem wspierane.
 
-At time of writing, the supported versions are `1.21.1`, `1.20.6`, `1.19.4`, `1.18.2`, `1.17.1`. Note that these versions are just examples, and this page will not necessarily be updated with new Minecraft releases. Check the Discord's news and changelog channels for information about current version support.
+W momencie pisania tego tekstu wspierane wersje to `1.21.1`, `1.20.6`, `1.19.4`, `1.18.2`, `1.17.1`. Zauważ, że te wersje to tylko przykłady, a ta strona niekoniecznie będzie aktualizowana przy każdym nowym wydaniu Minecrafta. Sprawdzaj kanały news i changelog na Discordzie, aby uzyskać informacje o aktualnie wspieranych wersjach.
 
-### Chocolate Or Vanilla?
+### Stabilne czy rozwojowe? (Chocolate or Vanilla?)
 
-Denizen downloads come in two "flavors": Release, and Development.
+Pliki do pobrania Denizen występują w dwóch "smakach": Wydania stabilne (Release) i Rozwojowe (Development).
 
-Release builds are expected to be stable and reliable, while dev builds are expected to be unstable and potentially even have major server-breaking issues in some builds.
+Oczekuje się, że wersje Release będą stabilne i niezawodne, podczas gdy wersje dev mogą być niestabilne i potencjalnie powodować nawet poważne błędy psujące serwer w niektórych kompilacjach.
 
-Generally, your main public/live server should use only the release builds. Your test/dev servers *can* use dev builds, but are often better off running release builds. If you choose to use a dev build on your test server, you are expected to update the build every few days at most - if you ask for help on our support channels while running a dev build from more than a few days ago, the first thing we'll tell you is to stop running dev builds as they're clearly not for you.
+Zasadniczo Twój główny publiczny/aktywny serwer powinien korzystać wyłącznie z wersji Release. Twoje serwery testowe/rozwojowe *mogą* korzystać z wersji dev, ale często lepiej jest na nich również używać wersji Release. Jeśli zdecydujesz się na korzystanie z wersji dev na serwerze testowym, oczekuje się, że będziesz aktualizować kompilację co najwyżej co kilka dni – jeśli poprosisz o pomoc na naszych kanałach wsparcia, korzystając z wersji dev sprzed więcej niż kilku dni, pierwszą rzeczą, którą Ci powiemy, będzie zaprzestanie używania wersji dev, ponieważ najwyraźniej nie są one dla Ciebie.
 
-[Release Builds Can Be Downloaded Here](https://ci.citizensnpcs.co/job/Denizen/)
+[Wersje stabilne (Release) można pobrać tutaj](https://ci.citizensnpcs.co/job/Denizen/)
 
-[Developmental Builds Can Be Downloaded Here](https://ci.citizensnpcs.co/job/Denizen_Developmental/)
+[Wersje rozwojowe (Developmental) można pobrać tutaj](https://ci.citizensnpcs.co/job/Denizen_Developmental/)
 
-### Don't Touch That Spigot Resource
+### Nie dotykaj tego zasobu na Spigot
 
-We maintain a Spigot Resources [here](https://www.spigotmc.org/resources/denizen.21039/) page for the sake of public visibility, but it is not updated often and its builds should not be used. Updates are only pushed to Spigot for the purpose of keeping the resource page alive.
+Prowadzimy stronę zasobów na Spigot [tutaj](https://www.spigotmc.org/resources/denizen.21039/) w celu zapewnienia publicznej widoczności, ale nie jest ona często aktualizowana i nie powinno się korzystać z jej kompilacji. Aktualizacje są wysyłane na Spigot tylko po to, aby utrzymać stronę zasobów przy życiu.

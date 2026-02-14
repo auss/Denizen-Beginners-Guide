@@ -1,410 +1,409 @@
-Common Mistakes
----------------
+Częste błędy
+-------------
 
-There are a few common mistakes and not-very-obvious expectations about how to handle things that we've seen while helping new Denizen users. To help you master Denizen more quickly, we've listed a few of these issues and what to do about them below.
+Istnieje kilka powszechnych błędów oraz niezbyt oczywistych oczekiwań dotyczących obsługi różnych rzeczy, które zaobserwowaliśmy, pomagając nowym użytkownikom Denizen. Aby pomóc Ci szybciej opanować Denizen, wymieniliśmy poniżej kilka z tych kwestii wraz z informacją, co z nimi zrobić.
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### Display Text vs. Data
+### Tekst wyświetlany a Dane
 
-An important distinction to learn is the difference between *display text* and *real data*.
+Ważnym rozróżnieniem, którego należy się nauczyć, jest różnica między *tekstem wyświetlanym* (display text) a *rzeczywistymi danymi* (real data).
 
-- **Real Data** is actual internal data, formatted for your scripts to process as easily as possible.
-- **Display Text** is some message you display for users to see, often generated using real data.
+- **Rzeczywiste Dane** to faktyczne dane wewnętrzne, sformatowane tak, aby skrypty mogły je przetwarzać jak najłatwiej.
+- **Tekst Wyświetlany** to wiadomość wyświetlana użytkownikom, często generowana na podstawie rzeczywistych danych.
 
-As a general principle, real data can be used to generate display text, but display text should never be used to generate real data.
+Zasada ogólna brzmi: rzeczywiste dane mogą służyć do generowania tekstu wyświetlanego, ale tekst wyświetlany nigdy nie powinien służyć do generowania rzeczywistych danych.
 
-The following are some examples of ways users have been seen mixing up *real data* and *display text*.
+Oto kilka przykładów sytuacji, w których użytkownicy mylą *rzeczywiste dane* z *tekstem wyświetlanym*.
 
-#### Item Lore Is Not Data
+#### Lore przedmiotu to nie dane
 
-One common mixup between real data and display text is *item lore*.
+Częstym błędem jest traktowanie *opisu przedmiotu* (lore) jako źródła danych.
 
-It's natural to think "well, my item has a lore line that says `Bonus Damage: +15`, so I need to get that `+15` from the lore during the damage event to actually apply it!" This, however, is working backwards: that would be converting display text to data, when you should only ever convert data to display text, never the reverse.
+Naturalne wydaje się myślenie: „Skoro mój przedmiot ma w opisie linię `Dodatkowe Obrażenia: +15`, to muszę wyciągnąć to `+15` z opisu podczas zdarzenia zadawania obrażeń, aby je faktycznie zastosować!”. Jest to jednak działanie od tyłu: byłaby to konwersja tekstu wyświetlanego na dane, podczas gdy należy robić tylko odwrotnie.
 
-Custom real data for an item can be stored in a few different places:
-- Item flags <span class="parens">(accessed like `<[item].flag[flagname]>`)</span>
-- Item script keys <span class="parens">(accessed like `<[item].script.data_key[keyname]>`)</span>
-- Vanilla minecraft features like the Attributes system
+Własne rzeczywiste dane dla przedmiotu mogą być przechowywane w kilku miejscach:
+- Flagi przedmiotu <span class="parens">(dostępne przez `<[item].flag[nazwa_flagi]>`)</span>
+- Klucze skryptu przedmiotu <span class="parens">(dostępne przez `<[item].script.data_key[nazwa_klucza]>`)</span>
+- Standardowe funkcje Minecrafta, takie jak system atrybutów (Attributes)
 
-After you store the data in the proper place, you can then display that data in the lore. From there, always write tags/etc. based on the real data you stored, not the lore - that's for the human players to read, not your scripts!
+Po zapisaniu danych we właściwym miejscu możesz je wyświetlić w opisie (lore). Od tego momentu zawsze pisz tagi itp. w oparciu o rzeczywiste dane, które zapisałeś, a nie o opis – ten jest dla graczy, nie dla Twoich skryptów!
 
-#### Players Are Not Their Names
+#### Gracze to nie ich imiona
 
-Historically in Minecraft, players were unique based on their name. This meant that "Steve" was theoretically always going to be "Steve". There was one true "Steve", nobody else could be "Steve" and "Steve" could never take on another name. This changed around the era of Minecraft 1.7, when UUIDs became the unique identifier of a player, and players were from there on allowed to change their names.
+Historycznie w Minecraft gracze byli unikalni na podstawie swojego imienia. Oznaczało to, że „Steve” teoretycznie zawsze miał być „Steve'em”. Był jeden prawdziwy „Steve”, nikt inny nie mógł nim być, a on sam nie mógł zmienić imienia. Zmieniło się to w okolicach wersji 1.7, kiedy to identyfikatory UUID stały się unikalnym znacznikiem gracza, a graczom pozwolono na zmianę imion.
 
-Never track a player's name internally. The `<player.name>` tag should exclusively be used for outputting a clean name in a `narrate` command or similar output meant to be read by players. As that's all a name is meant for: human reading. It is not meant for any internal tracking. It is not unique nor reliable.
+Nigdy nie śledź imienia gracza wewnętrznie w skryptach. Tag `<player.name>` powinien być używany wyłącznie do wyświetlania czytelnego imienia w poleceniu `narrate` lub podobnym wyjściu przeznaczonym dla graczy. Tylko do tego służy imię: do czytania przez ludzi. Nie służy ono do żadnego wewnętrznego śledzenia. Nie jest unikalne ani wiarygodne.
 
-\* Note that there is one exception to this: the `execute` command runs external plugin commands, which will likely expect either a name or UUID as input, not a Denizen object.
+\* Uwaga: istnieje jeden wyjątek: polecenie `execute` uruchamia polecenia zewnętrznych wtyczek, które prawdopodobnie oczekują imienia lub UUID jako wejścia, a nie obiektu Denizen.
 
-#### So, A Player Is Their UUID?
+#### Więc gracz to jego UUID?
 
-A player is **not** just their UUID. A player isn't a name, a UUID, a location, or anything else. A player is a player.
+Gracz **nie jest** po prostu swoim UUID. Gracz nie jest imieniem, UUID, lokalizacją ani niczym innym. Gracz to gracz.
 
-Similarly, an NPC is **not** just their ID. An NPC is an NPC.
+Podobnie NPC **nie jest** po prostu swoim ID. NPC to NPC.
 
-In fact, nothing is *just* that little piece of information that uniquely identifies it.
+W rzeczywistości nic nie jest *tylko* tym małym skrawkiem informacji, który go unikalnie identyfikuje.
 
-#### The Object System
+#### System obiektów (Object System)
 
-An important part of the way Denizen functions is the **object system**.
+Ważną częścią sposobu działania Denizen jest **system obiektów**.
 
-An "object" in the world of software is a representation of something specific that can be tracked by a **lookup** identifier, that exists as more than just that lookup data. That's a bit confusing, so what does that mean in real usage? That means an "entity object" is a real full entity, with its AI and its health and its name and its specific place in the world and everything else that makes it what it is. The entity can be quickly looked up if you use the UUID, but the true entity itself is so much more than just a short set of numbers and letters. <span class="parens">(Note for the curious: in most software programming languages, the unique identifier of an object is its memory address)</span>.
+„Obiekt” w świecie oprogramowania to reprezentacja czegoś konkretnego, co można śledzić za pomocą identyfikatora **wyszukiwania** (lookup identifier), ale co istnieje jako coś więcej niż tylko te dane wyszukiwania. Brzmi to skomplikowanie, więc co oznacza w praktyce? Oznacza to, że „obiekt encji” to rzeczywista, pełna encja (byt), ze swoją sztuczną inteligencją, zdrowiem, imieniem, konkretnym miejscem w świecie i wszystkim innym, co sprawia, że jest tym, czym jest. Encję można szybko wyszukać za pomocą UUID, ale prawdziwa encja sama w sobie to znacznie więcej niż krótki ciąg cyfr i liter. <span class="parens">(Uwaga dla ciekawskich: w większości języków programowania unikalnym identyfikatorem obiektu jest jego adres w pamięci)</span>.
 
-In Denizen, whenever you look at an object in debug or with a `narrate` command <span class="parens">(or wherever else in text)</span>, the unique identifier is visible, with a prefix identifying what type of object it is (that's called **Object Notation**). This is **not** meant to be the object itself, but rather a lookup identifier so you or the system can read it and figure out what object was being referred to.
+W Denizen, ilekroć patrzysz na obiekt w debugu lub za pomocą polecenia `narrate` <span class="parens">(lub gdziekolwiek indziej w tekście)</span>, widoczny jest unikalny identyfikator z prefiksem określającym typ obiektu (nazywa się to **notacją obiektu** – Object Notation). **Nie ma** ona być samym obiektem, lecz identyfikatorem wyszukiwania, abyś Ty lub system mogli go odczytać i dowiedzieć się, o jaki obiekt chodzi.
 
-It's important when writing scripts to make sure you work with *the actual object* and not with some text that contains the lookup identifier.
+Pisząc skrypty, ważne jest, aby upewnić się, że pracujesz na *rzeczywistym obiekcie*, a nie na tekście zawierającym identyfikator wyszukiwania.
 
-A few examples of where this might come into play:
-- A player object is placed into a line of text. Say for example `"Player:<player>"` is stored somewhere. When you read that text out, you may assume that `<[THAT_TEXT].after[:]>` is going to return the player object - but it won't. It will return plain text of the unique player identifier. You would have to convert it into a player object again, using either `<player[<[THAT_TEXT].after[:]>]>` or `<[THAT_TEXT].after[:].as[player]>` <span class="parens">(though in some contexts, Denizen may automatically fix this for you)</span>.
-- In some cases, reading directly from data storage <span class="parens">(YAML, Flags, SQL, etc.)</span> might return the plain text identifier of whatever object was inserted into it. When this happens, you again have to convert it back into the real object using the relevant conversion tags.
-- Generally when user input is given (in for example a command script). A unique identifier or even a non-unique one may be used, and you will have to do more complex real-object-finding. As a particular example of this, when a command script has a player input option, generally you can trust that users aren't going to type out the exact perfect object identifier. The tag `server.match_player` is useful for converting the human-input player name into a real player object.
+Kilka przykładów, gdzie może to mieć znaczenie:
+- Obiekt gracza zostaje umieszczony w linii tekstu. Powiedzmy, że gdzieś zapisano `"Player:<player>"`. Kiedy odczytasz ten tekst, możesz założyć, że `<[TEN_TEKST].after[:]>` zwróci obiekt gracza – ale tak się nie stanie. Zwróci on czysty tekst unikalnego identyfikatora gracza. Musiałbyś go ponownie skonwertować na obiekt gracza, używając albo `<player[<[TEN_TEKST].after[:]>]>` albo `<[TEN_TEKST].after[:].as[player]>` <span class="parens">(choć w niektórych kontekstach Denizen może to automatycznie naprawić za Ciebie)</span>.
+- W niektórych przypadkach odczyt bezpośrednio z magazynu danych <span class="parens">(YAML, Flagi, SQL itp.)</span> może zwrócić tekstowy identyfikator obiektu, który został tam wstawiony. W takiej sytuacji ponownie musisz skonwertować go z powrotem na rzeczywisty obiekt za pomocą odpowiednich tagów konwersji.
+- Zazwyczaj gdy podawane są dane od użytkownika (np. w skrypcie polecenia). Może zostać użyty unikalny identyfikator lub nawet nieunikalny, a Ty będziesz musiał wykonać bardziej złożone operacje wyszukiwania rzeczywistego obiektu. Jako konkretny przykład: gdy skrypt polecenia ma opcję wpisania gracza, zazwyczaj można założyć, że użytkownicy nie wpiszą idealnego identyfikatora obiektu. Tag `server.match_player` jest przydatny do konwersji wpisanego przez człowieka imienia gracza na rzeczywisty obiekt gracza.
 
-### Don't Trust Players
+### Nie ufaj graczom
 
 ![](images/cheatingplayer.png)
 
-When you're writing scripts, you can generally assume that the system is going to process what you wrote as you wrote it. If you used a flag command to set a flag on a linked player, you can pretty safely trust that `player.flag` will then return the value of that flag.
+Kiedy piszesz skrypty, możesz zazwyczaj założyć, że system przetworzy to, co napisałeś, dokładnie tak, jak napisałeś. Jeśli użyłeś polecenia flag do ustawienia flagi na przypisanym graczu, możesz bezpiecznie założyć, że `player.flag` zwróci później wartość tej flagi.
 
-Players, however, are not machines. They're human. Humans make mistakes - humans also sometimes like to cheat. When scripting user-input, you must prepare for and account for this.
+Gracze nie są jednak maszynami. Są ludźmi. Ludzie popełniają błędy – ludzie czasem też lubią oszukiwać. Tworząc skrypty obsługujące dane od użytkownika, musisz się na to przygotować i to uwzględnić.
 
-Let's demonstrate the difference between a bad script that trusts players, and a good script that doesn't, using a "pay" command that you might have with an economy system.
+Zademonstrujmy różnicę między złym skryptem, który ufa graczom, a dobrym skryptem, który tego nie robi, na przykładzie polecenia „pay” (zapłać) w systemie ekonomii.
 
 ```dscript_red
 pay_command:
     type: command
     name: pay
-    usage: /pay [player] [amount]
-    description: Pays the specified player.
+    usage: /pay [gracz] [kwota]
+    description: Płaci określonemu graczowi.
     script:
     - money take quantity:<context.args.get[2]>
     - money give players:<server.match_player[<context.args.get[1]>]> quantity:<context.args.get[2]>
-    - narrate "<blue>You paid <gold><server.match_player[<context.args.get[1]>].name> <green>$<context.args.get[2]>"
+    - narrate "<blue>Zapłaciłeś <gold><server.match_player[<context.args.get[1]>].name> <green>$<context.args.get[2]>"
 ```
 
-That script is nice and simple. Only takes 3 lines, and does everything it needs to do... if the player using it uses it exactly as specified without any mistakes or intent to abuse the system.
+Ten skrypt jest ładny i prosty. Zajmuje tylko 3 linie i robi wszystko, co trzeba... jeśli gracz używa go dokładnie tak, jak określono, bez żadnych pomyłek ani zamiaru nadużycia systemu.
 
-Let's see what that script looks like if we validate all user input with care. Read the comments in the script to see what was being prevented.
+Zobaczmy, jak ten skrypt wygląda, jeśli starannie zweryfikujemy wszystkie dane od użytkownika. Przeczytaj komentarze w skrypcie, aby zobaczyć, przed czym się zabezpieczamy.
 
 ```dscript_green
 pay_command:
     type: command
     name: pay
-    usage: /pay [player] [amount]
-    description: Pays the specified player.
-    # Users might be jailed or similar and have their permissions taken away,
-    # so let's be sure to require a permission to use the command.
+    usage: /pay [gracz] [kwota]
+    description: Płaci określonemu graczowi.
+    # Użytkownicy mogą być w więzieniu itp. i mieć odebrane uprawnienia,
+    # więc upewnijmy się, że wymagamy uprawnienia do użycia polecenia.
     permission: myscript.pay
     script:
-    # Players might just type "/pay" without remembering the input arguments,
-    # so if they do, just tell them what the input is and stop there.
+    # Gracze mogą po prostu wpisać "/pay", nie pamiętając argumentów,
+    # więc jeśli tak zrobią, po prostu powiedz im, jak użyć komendy i przerwij.
     - if <context.args.size> < 2:
-        - narrate "<red>/pay [player] [amount]"
+        - narrate "<red>/pay [gracz] [kwota]"
         - stop
-    # Use a fallback in case the player name given is invalid.
+    # Użyj fallbacka na wypadek, gdyby podane imię gracza było nieprawidłowe.
     - define target <server.match_player[<context.args.get[1]>].if_null[null]>
-    # A user might mess up typing a player name.
-    # If there's no matched player, just tell them and stop there.
+    # Użytkownik może pomylić się przy wpisywaniu imienia gracza.
+    # Jeśli nie dopasowano gracza, poinformuj o tym i przerwij.
     - if <[target]> == null:
-        - narrate "<red>Unknown player '<yellow><context.args.get[1]><red>'."
+        - narrate "<red>Nieznany gracz '<yellow><context.args.get[1]><red>'."
         - stop
     - define amount <context.args.get[2]>
-    # A user might mess up typing the number.
-    # If they did mess up, tell them that and stop there.
+    # Użytkownik może pomylić się przy wpisywaniu liczby.
+    # Jeśli tak się stało, poinformuj go i przerwij.
     - if !<[amount].is_decimal>:
-        - narrate "<red>Invalid amount input (not a number)."
+        - narrate "<red>Nieprawidłowa kwota (to nie jest liczba)."
         - stop
-    # A user might try to cheat by paying a negative value
-    # (so that they receive money instead of lose it).
-    # So, validate that the number is positive.
-    # Also exclude zero at the same time as there's no reason to pay $0.
+    # Użytkownik może próbować oszukiwać, wpłacając ujemną wartość
+    # (aby otrzymać pieniądze zamiast je stracić).
+    # Zweryfikuj więc, czy liczba jest dodatnia.
+    # Wykluczamy też zero, bo nie ma sensu płacić $0.
     - if <[amount]> <= 0:
-        - narrate "<red>Amount must be more than zero."
+        - narrate "<red>Kwota musi być większa od zera."
         - stop
-    # A user might try to pay more than they have, either as a cheat or by accident.
-    # Make sure they can afford it and stop if they can't.
+    # Użytkownik może próbować zapłacić więcej niż posiada, przez oszustwo lub pomyłkę.
+    # Upewnij się, że go na to stać i przerwij, jeśli nie.
     - if <player.money> < <[amount]>:
-        - narrate "<red>You do not have <green>$<[amount]><red>."
+        - narrate "<red>Nie posiadasz <green>$<[amount]><red>."
         - stop
     - money take quantity:<[amount]>
     - money give players:<[target]> quantity:<[amount]>
-    - narrate "<blue>You paid <gold><[target].name> <green>$<[amount]>"
+    - narrate "<blue>Zapłaciłeś <gold><[target].name> <green>$<[amount]>"
 ```
 
-That's an awful lot of things that needed checking! Unfortunately, good user-input scripts tend to get pretty long from all the input validation that's needed. Luckily, nobody should be able to break these longer scripts!
+To strasznie dużo rzeczy do sprawdzenia! Niestety dobre skrypty obsługujące dane od użytkownika stają się dość długie przez całą tę walidację. Na szczęście nikt nie powinien być w stanie popsuć tych dłuższych skryptów!
 
-### Don't Compare Raw Objects
+### Nie porównuj surowych obiektów
 
-Raw object comparison is one that seems at first natural to do, and you don't realize the problems until they bite you much later on.
+Porównywanie surowych obiektów to coś, co na początku wydaje się naturalne, a problemy wychodzą na jaw dopiero znacznie później.
 
-"Raw object comparison" refers to use an `if` command or similar to compare a raw Denizen object to something else (often plain text of the object identity).
+„Porównywanie surowych obiektów” odnosi się do używania polecenia `if` lub podobnego do porównania surowego obiektu Denizen z czymś innym (często czystym tekstem identyfikującym obiekt).
 
-This looks, for example, like this:
+Wygląda to na przykład tak:
 ```dscript_red
 - if <player.item_in_hand> == i@diamond_sword:
-    - narrate "You have a diamond sword!"
+    - narrate "Masz diamentowy miecz!"
 ```
 
-At first glance, this looks mostly fine. If you test it in-game, it will probably even work. So what's the problem?!
+Na pierwszy rzut oka wygląda to całkiem nieźle. Jeśli przetestujesz to w grze, prawdopodobnie nawet zadziała. Więc w czym problem?!
 
-#### Not Always Just A Sword
+#### Nie zawsze to tylko miecz
 
 ![](images/bigfancysword.png)
 
-The first problem with this is that non-unique objects in Denizen <span class="parens">(those that are identified by their details, like an item is, as opposed to objects that identify by some ID, like entities do)</span>, often include secondary details in specific circumstances, even if they didn't in your early testing.
+Pierwszym problemem jest to, że nieunikalne obiekty w Denizen <span class="parens">(te identyfikowane przez swoje szczegóły, jak przedmiot, w przeciwieństwie do obiektów identyfikowanych przez ID, jak encje)</span> często zawierają dodatkowe szczegóły w specyficznych okolicznościach, nawet jeśli nie było ich podczas wczesnych testów.
 
-The if command in the example above will stop working the moment a player uses their sword a bit, as the durability value will change and now they'll have `i@diamond_sword[durability=1]`. This will also change if they enchant the sword, or rename it at an anvil, or...
+Polecenie if w powyższym przykładzie przestanie działać, gdy tylko gracz użyje trochę swojego miecza, ponieważ zmieni się wartość wytrzymałości (durability) i teraz będzie on miał `i@diamond_sword[durability=1]`. Zmieni się to również, jeśli zaklęje miecz, zmieni mu nazwę w kowadle lub...
 
-#### Identifier Style Changes In Denizen
+#### Zmiany stylu identyfikatorów w Denizen
 
-The second problem with this is that what's valid now might not be valid in the future. Denizen changes often, and the way objects identify change between versions. For example, `<player>` used to return `p@name`, but now returns `p@uuid`. Many other changes to identify format have happened over the years.
+Drugim problemem jest to, że to, co jest poprawne teraz, może nie być poprawne w przyszłości. Denizen często się zmienia, a sposób identyfikacji obiektów zmienia się między wersjami. Na przykład `<player>` kiedyś zwracał `p@imie`, a teraz zwraca `p@uuid`. Przez lata nastąpiło wiele innych zmian formatu identyfikacji.
 
-For the example given above, a sword that today is `i@diamond_sword`, might someday be `i@diamond_sword[durability=0]` or `item@diamond_sword` or `i@item[material=diamond_sword]` or `diamond_sword[future_minecraft_shininess_statistic=0]` or any number of other possibilities.
+Dla powyższego przykładu, miecz, który dziś jest `i@diamond_sword`, może pewnego dnia być `i@diamond_sword[durability=0]` lub `item@diamond_sword` lub `i@item[material=diamond_sword]` lub `diamond_sword[przyszla_statystyka_swiecenia_minecraft=0]` lub dowolną inną możliwością.
 
-#### So What Do I Do?
+#### Więc co mam zrobić?
 
-Option one: where possible, use a dedicated matcher tool. The object type `ItemTag` defines a matchable of the material name, so you can use it with the `matches` operator:
+Opcja pierwsza: tam gdzie to możliwe, używaj dedykowanego narzędzia dopasowującego (matcher). Typ obiektu `ItemTag` definiuje cechę dopasowywalną po nazwie materiału, więc możesz użyć jej z operatorem `matches`:
 
 ```dscript_blue
 - if <player.item_in_hand> matches diamond_sword:
-    - narrate "You have a diamond sword!"
+    - narrate "Masz diamentowy miecz!"
 ```
 
-Option two: compare objects based on reasonably-guaranteed-format tags. That is: tags that return a plaintext element of a clearly specified format, not an object.
-The tag `.material.name` is guaranteed to always return *just* the material name, so the below comparison is safe from any item-detail-changes or future Denizen changes.
+Opcja druga: porównuj obiekty w oparciu o tagi o rozsądnie gwarantowanym formacie. Chodzi o tagi, które zwracają element tekstowy o jasno określonym formacie, a nie obiekt. Tag `.material.name` gwarantuje, że zawsze zwróci *tylko* nazwę materiału, więc poniższe porównanie jest bezpieczne przed wszelkimi zmianami szczegółów przedmiotu czy przyszłymi zmianami w Denizen.
 
 ```dscript_blue
 - if <player.item_in_hand.material.name> == diamond_sword:
-    - narrate "You have a diamond sword!"
+    - narrate "Masz diamentowy miecz!"
 ```
 
-With either of these options, the only risk is that the name of the material might change in a future Minecraft version <span class="parens">(this would be harder to avoid - luckily, this happens very rarely and usually you'll know it's coming when it does. If you really want to protect against it, you could do `== <item[diamond_sword].material.name>:` to rely on the autoconversion that would be added in Denizen when a rename happens, but you don't really need to)</span>.
+Przy obu tych opcjach jedynym ryzykiem jest zmiana nazwy materiału w przyszłej wersji Minecrafta <span class="parens">(tego trudniej uniknąć – na szczęście dzieje się to rzadko i zwykle wiadomo o tym wcześniej. Jeśli naprawdę chcesz się przed tym zabezpieczyć, możesz użyć `== <item[diamond_sword].material.name>:`, aby polegać na autokonwersji dodanej w Denizen przy zmianie nazwy, ale zazwyczaj nie jest to konieczne)</span>.
 
-For other object types, find the relevant unique comparison point. For materials, worlds, scripts, plugins, ... you can use `.name`.
+Dla innych typów obiektów znajdź odpowiedni unikalny punkt porównania. Dla materiałów, światów, skryptów, wtyczek... możesz użyć `.name`.
 
-For notable object types <span class="parens">(locations, cuboids, ellipsoids, ...)</span>, you should never compare them directly. Instead, note the object and check `.note_name` - or use more specific syntaxes, like the `in:<area>` switch on events.
+Dla zanotowalnych typów obiektów <span class="parens">(lokalizacje, prostopadłościany, elipsoidy...)</span> nigdy nie powinieneś porównywać ich bezpośrednio. Zamiast tego zanotuj obiekt i sprawdzaj `.note_name` – lub używaj bardziej specyficznych składni, takich jak przełącznik `in:<area>` w zdarzeniach.
 
-#### Note On Exact-Same Objects
+#### Uwaga o dokładnie tych samych obiektach
 
-When you want to compare exactly-the-same-object <span class="parens">(usually for unique objects like entities, or in list-handling tags, or similar)</span>, and you have a tag for both <span class="parens">(instead of typing one as plaintext)</span>, you can be relatively safe doing direct comparisons.
+Gdy chcesz porównać dokładnie ten sam obiekt <span class="parens">(zazwyczaj dla unikalnych obiektów, takich jak encje, lub w tagach obsługujących listy itp.)</span> i posiadasz tag dla obu <span class="parens">(zamiast wpisywania jednego jako czysty tekst)</span>, możesz stosunkowo bezpiecznie stosować bezpośrednie porównania.
 
-For example, you might add `- if <[target]> == <player>:` to [the `/pay` command example](#don-t-trust-players) to prevent players trying to pay themselves. This would be acceptable, as the two values do literally refer to exactly the same object in theory, and thus they will not have any different details, and any identifier changes will automatically apply to both, not only one.
+Na przykład możesz dodać `- if <[target]> == <player>:` do [przykładu polecenia `/pay`](#nie-ufaj-graczom), aby uniemożliwić graczom płacenie samym sobie. Byłoby to akceptowalne, ponieważ obie wartości dosłownie odnoszą się teoretycznie do dokładnie tego samego obiektu, więc nie będą miały żadnych różnic w szczegółach, a wszelkie zmiany identyfikatora zostaną automatycznie zastosowane do obu, a nie tylko do jednego.
 
-Note, however, that a stored copy of the object <span class="parens">(such as a player object stored in a flag)</span> could potentially in some cases retain an outdated format later on, thus breaking comparisons. Exact-Same object comparison is only safe when both objects are grabbed from a valid source tag.
+Pamiętaj jednak, że zapisana kopia obiektu <span class="parens">(np. obiekt gracza zapisany we fladze)</span> może w pewnych przypadkach zachować nieaktualny format w przyszłości, psując porównania. Porównywanie dokładnie tych samych obiektów jest bezpieczne tylko wtedy, gdy oba obiekty są pobierane z prawidłowego tagu źródłowego.
 
-### Don't Overuse Fallbacks
+### Nie nadużywaj fallbacków (wartości zapasowych)
 
-Fallbacks are an incredibly handy tool in Denizen. They're one of the primary tools you can use to handle uncertain situations edge-cases in your scripts. They are, like most things, best in moderation. Excessive use of fallbacks can cause more harm than good.
+Fallbacki są niesamowicie poręcznym narzędziem w Denizen. Są jednym z głównych narzędzi do obsługi niepewnych sytuacji i przypadków granicznych w Twoich skryptach. Jednak, jak większość rzeczy, najlepiej sprawdzają się z umiarem. Nadmierne używanie fallbacków może przynieść więcej szkody niż pożytku.
 
-#### Errors Are Scary
+#### Błędy są straszne
 
 ![](images/somanyerrors.png)
 
-The mindset that tends to lead to fallback overuse is one where errors are scary. An error is a problem, so you have to get rid of errors by any means necessary!
+Nastawienie, które często prowadzi do nadużywania fallbacków, to przekonanie, że błędy są straszne. Błąd to problem, więc trzeba się go pozbyć wszelkimi możliwymi sposobami!
 
-In reality, errors are just another tool that Denizen provides. The error message itself is not the problem, the error is merely there to tell you that there is a problem somewhere in your script. If you put a fallback on every tag, you'll end up hiding errors without fixing the actual problem. Your script won't show any scary red text in the console, but it also won't do what it's supposed to be doing!
+W rzeczywistości błędy to po prostu kolejne narzędzie dostarczane przez Denizen. Komunikat o błędzie sam w sobie nie jest problemem; błąd jest po to, aby poinformować Cię, że gdzieś w Twoim skrypcie występuje problem. Jeśli dasz fallback do każdego tagu, skończysz na ukrywaniu błędów bez naprawiania rzeczywistego problemu. Twój skrypt nie wyświetli przerażającego czerwonego tekstu w konsoli, ale nie będzie też robił tego, co powinien!
 
-#### When To Use Fallbacks
+#### Kiedy używać fallbacków
 
-A fallback should only be placed onto a tag when you're *expecting* that tag to fail.
+Fallback powinien być umieszczony przy tagu tylko wtedy, gdy *spodziewasz się*, że ten tag może się nie udać.
 
-Consider for example the `server.match_player` tag, which is used to convert user-input names into a player object. You can quite reasonably expect that sometimes a player will input something that isn't a valid player name, and the tag will fail. That's a case where you should absolutely add a fallback like `.if_null[null]` or the older style `||null`.
+Rozważmy na przykład tag `server.match_player`, który służy do konwersji wpisanych przez użytkownika imion na obiekt gracza. Możesz całkiem rozsądnie oczekiwać, że czasem gracz wpisze coś, co nie jest poprawnym imieniem gracza i tag zawiedzie. To jest przypadek, w którym zdecydowanie powinieneś dodać fallback typu `.if_null[null]` lub starszy styl `||null`.
 
-When you add a fallback, you often will also need to check for the fallback value, like for a definition defined as `<server.match_player[<input>].if_null[null]>`, you might do `- if <[target]> == null:` and inside that block handle the case of an invalid player input. In some cases, where you *only* need the check and don't to use the value after, you can simply use `.exists`, like `- if <player.item_in_hand.script.exists>:` <span class="parens">(to check if the player's held item is a scripted item at all)</span>.
+Gdy dodajesz fallback, często będziesz też musiał sprawdzić tę wartość zapasową. Dla definicji określonej jako `<server.match_player[<input>].if_null[null]>`, mógłbyś napisać `- if <[target]> == null:` i wewnątrz tego bloku obsłużyć przypadek nieprawidłowego wejścia. W niektórych sytuacjach, gdy potrzebujesz *tylko* sprawdzenia i nie używasz wartości później, możesz po prostu użyć `.exists`, np. `- if <player.item_in_hand.script.exists>:` <span class="parens">(aby sprawdzić, czy trzymany przedmiot jest w ogóle przedmiotem ze skryptu)</span>.
 
-In other situations, the fallback can simply be a reasonable default value, like `<player.flag[coins].if_null[0]>`, which you won't need to specifically account for with any extra `if` commands.
+W innych sytuacjach fallback może być po prostu rozsądną wartością domyślną, np. `<player.flag[coins].if_null[0]>`, której nie będziesz musiał specjalnie obsługiwać dodatkowymi poleceniami `if`.
 
-#### When To Not Use Fallbacks
+#### Kiedy nie używać fallbacków
 
-Fallbacks should not be used when the tag doesn't have a very good reason it might fail.
+Fallbacków nie należy używać, gdy tag nie ma bardzo dobrego powodu, dla którego mógłby zawieść.
 
-For example, the tag `<player.name>` should probably not have a fallback in most scripts <span class="parens">(unless it's a reusable script that doesn't specifically require a player to work)</span>.
+Na przykład tag `<player.name>` prawdopodobnie nie powinien mieć fallbacka w większości skryptów <span class="parens">(chyba że jest to skrypt wielokrotnego użytku, który nie wymaga gracza do działania)</span>.
 
-If a script that uses `<player.name>` runs, and there isn't a player available, it will show an error message. This is good! This lets you know that something went wrong, and the script was ran without a player, which means you can from there look into why there was no player, and fix whatever caused it.
+Jeśli skrypt używający `<player.name>` zostanie uruchomiony, a gracz nie będzie dostępny, wyświetli się komunikat o błędzie. To dobrze! Pozwala Ci to dowiedzieć się, że coś poszło nie tak i skrypt został uruchomiony bez gracza, co oznacza, że możesz zbadać przyczynę braku gracza i naprawić to, co go wywołało.
 
-### "Quotes Go Around The Whole Argument"
+### „Cudzysłów otacza cały argument”
 
-Many users tend to misunderstand where quotes go in Denizen commands.
+Wielu użytkowników błędnie rozumie, gdzie w poleceniach Denizen stawia się cudzysłowy.
 
-Denizen syntax is structured such that a line starting with `-` indicates that that line is a command line. A command line is then made up of the command name and the command arguments. The command name goes first, then each argument is added, separated by spaces (and not by anything other than spaces). So, for example, `- commandname arg1 arg2 arg3` is a line containing a command with three arguments.
+Składnia Denizen jest tak skonstruowana, że linia zaczynająca się od `-` oznacza linię polecenia. Linia polecenia składa się z nazwy polecenia i argumentów. Nazwa polecenia jest pierwsza, a następnie dodawany jest każdy argument, oddzielony spacjami (i niczym innym niż spacje). Zatem np. `- nazwa_polecenia arg1 arg2 arg3` to linia zawierająca polecenie z trzema argumentami.
 
-When you need to use a space within an argument, you must put quotes around whole the argument, to indicate that it is a single argument. For example, `- narrate "this is one big argument"` is a `narrate` command with only one argument.
+Gdy musisz użyć spacji wewnątrz argumentu, musisz otoczyć cały ten argument cudzysłowem, aby wskazać, że jest to jeden pojedynczy argument. Na przykład `- narrate "to jest jeden duży argument"` to polecenie `narrate` z tylko jednym argumentem.
 
-As another example, `- flag player "my_flag:my value"`. This is a `flag` command with two arguments: `player`, and `"my_flag:my value"`. Notice that `my value` is not a separate argument from `my_flag`. The colon (`:`) symbol is not a symbol that separates arguments, it instead merely indicates a prefix to an argument (which is still part of that argument!).
+Jako inny przykład: `- flag player "my_flag:moja wartosc"`. Jest to polecenie `flag` z dwoma argumentami: `player` oraz `"my_flag:moja wartosc"`. Zauważ, że `moja wartosc` nie jest oddzielnym argumentem od `my_flag`. Dwukropek (`:`) nie jest znakiem oddzielającym argumenty, lecz jedynie wskazuje prefiks do argumentu (który wciąż jest częścią tego argumentu!).
 
-It is **NEVER** correct to put quotes *inside* an argument. `- flag player my_flag:"my value"` is entirely invalid and considered an error.
+**NIGDY** nie jest poprawne umieszczanie cudzysłowu *wewnątrz* argumentu. `- flag player my_flag:"moja wartosc"` jest całkowicie niepoprawne i uważane za błąd.
 
-Also, you should not put quotes around an argument that does not contain a space. For example, `- flag "player" "flag:value"` is full of redundant pointless quotes.
+Nie należy również stawiać cudzysłowów wokół argumentu, który nie zawiera spacji. Na przykład `- flag "player" "flag:wartosc"` jest pełne zbędnych, bezsensownych cudzysłowów.
 
-You should also never use quotes around a command name, or script key. In the following example, every single quote is bad and should be removed.
+Nigdy nie należy też używać cudzysłowów wokół nazwy polecenia czy klucza skryptu. W poniższym przykładzie każdy cudzysłów jest błędny i powinien zostać usunięty.
 
 ```dscript_red
-"This is wrong":
+"To jest zle":
     "type": "task"
     "script":
-    - "flag" player flag:value
+    - "flag" player flag:wartosc
 ```
 
-Here's how that should look:
+Oto jak powinno to wyglądać:
 
 ```dscript_blue
-This is right:
+To jest dobrze:
     type: task
     script:
-    - flag player flag:value
+    - flag player flag:wartosc
 ```
 
-### Watch Your Debug Console
+### Obserwuj konsolę debugowania
 
 ![](images/debugconsole.png)
 
-When you're writing scripts, you should always have your server debug console open and ready. When you run a script, keep that console in your corner of your eye and look over it when applicable. If an error message appears in your console, that will both tell you that you need to fix something, and tell you *what* you need to fix far faster than trying to review your script to find what you might have screwed up.
+Kiedy piszesz skrypty, powinieneś zawsze mieć otwartą i gotową konsolę debugowania serwera. Kiedy uruchamiasz skrypt, miej tę konsolę na oku. Jeśli pojawi się tam komunikat o błędzie, poinformuje Cię on zarówno o potrzebie poprawki, jak i o tym, *co* dokładnie trzeba naprawić – znacznie szybciej niż próba samodzielnego przeglądania skryptu w poszukiwaniu błędu.
 
-When users come to the support Discord to ask for help with a problem, we usually ask for a debug recording. Far too often, they'll post a debug recording with a bright red visible error message that says exactly what went wrong. Had the user simply been watching their debug console and saw the error message, they could have resolved the issue quickly on their own, without having to ask for help.
+Kiedy użytkownicy przychodzą na Discord wsparcia prosić o pomoc, zwykle prosimy o nagranie debuga (debug recording). Zbyt często wklejają nagranie z jaskrawoczerwonym komunikatem o błędzie, który mówi dokładnie, co poszło nie tak. Gdyby użytkownik po prostu obserwował swoją konsolę i zobaczył ten komunikat, mógłby szybko rozwiązać problem samodzielnie, bez proszenia o pomoc.
 
-Debug output also shows a lot of non-error information, which tends to be very useful when working on a script. Your custom-drops script is dropping too many items - why is that? The debug logs will show you a repeat loop going too long, or a quantity value being set different than you expected, or whatever else happened. You're not sure what that event context of an enum value might be when the event fires... the debug logs will show you what it is!
+Wyjście debugowania pokazuje też wiele informacji niebędących błędami, które są bardzo przydatne podczas pracy nad skryptem. Twój skrypt na wypadanie przedmiotów wyrzuca ich zbyt wiele – dlaczego? Logi debugowania pokażą Ci, że pętla repeat trwa zbyt długo, lub że wartość ilości (quantity) została ustawiona inaczej niż myślałeś, lub cokolwiek innego, co się wydarzyło. Nie jesteś pewien, jaką wartość przyjmie kontekst zdarzenia przy jego wyzwoleniu... logi debugowania Ci to pokażą!
 
-### Toggle Debug Settings With Care
+### Zmieniaj ustawienia debugowania z rozwagą
 
-First of all: **NEVER** disable the global debug output. Debug information is extremely important to have. A global disable will hide everything, even error messages! Instead, simply set `debug: false` on scripts you want to stop showing debug output.
+Przede wszystkim: **NIGDY** nie wyłączaj globalnego wyjścia debugowania. Informacje z debuga są niezwykle ważne. Globalne wyłączenie ukryje wszystko, nawet komunikaty o błędach! Zamiast tego po prostu ustaw `debug: false` w skryptach, dla których chcesz przestać wyświetlać debug.
 
-Here's where you fit a `debug: false` onto a script:
+Oto gdzie umieścić `debug: false` w skrypcie:
 
 ```dscript_blue
-No debug script:
+Skrypt bez debuga:
     type: task
     debug: false
     script:
     - define a b
-    - (commands here)
+    - (polecenia tutaj)
 ```
 
-It should always be right after the `type:` line, at the same level of indentation.
+Powinien on znajdować się zawsze tuż pod linią `type:`, na tym samym poziomie wcięcia.
 
-When `debug: false` is set, the only debug information from that script that will show will be error messages. When it is not set, all debug information will show.
+Gdy ustawione jest `debug: false`, jedyne informacje debugowania z tego skryptu, jakie się pojawią, to komunikaty o błędach. Gdy nie jest ustawione, pokazują się wszystkie informacje.
 
-As a general rule of thumb:
-- When you are editing a script / working on it, in any way, you should never have debug disabled.
-- When you are FULLY DONE with a script, it works, it's tested, you're happy with it - THEN you can disable debug on it.
+Ogólna zasada:
+- Podczas edycji skryptu / pracy nad nim w jakikolwiek sposób, nigdy nie powinieneś mieć wyłączonego debugowania.
+- Kiedy skrypt jest W PEŁNI GOTOWY, działa, jest przetestowany i jesteś z niego zadowolony – WTEDY możesz wyłączyć w nim debugowanie.
 
-### Live Servers Are Not Test Servers
+### Serwery produkcyjne to nie serwery testowe
 
-When helping people on our Discord, we sometimes hear things like "I can't restart the server right now, players are on" or "oh woops a player accidentally triggered the event".
+Pomagając ludziom na Discordzie, czasem słyszymy rzeczy typu „nie mogę teraz zrestartować serwera, gracze są online” lub „o rany, gracz przypadkowo wyzwolił to zdarzenie”.
 
-If you have a LIVE server, with ACTUAL PLAYERS online, you should NOT be writing scripts on it. ALWAYS [set up a local test server](/guides/first-steps/local-test-server) for script writing, and move the scripts to the live server later, after the script fully works.
+Jeśli masz AKTYWNY serwer (LIVE) z PRAWDZIWYMI GRACZAMI online, NIE powinieneś pisać na nim skryptów. ZAWSZE [skonfiguruj lokalny serwer testowy](/guides/first-steps/local-test-server) do pisania skryptów i przenoś je na serwer produkcyjny dopiero wtedy, gdy skrypt w pełni działa.
 
-It's simply too easy to cause a lot of problems for a lot of people when you're editing a live server. Don't do it.
+Zbyt łatwo jest spowodować mnóstwo problemów wielu osobom, edytując aktywny serwer. Nie rób tego.
 
-### If True Is True Equal To Truly True Is The Truth
+### Jeśli prawda jest prawdą równą prawdziwej prawdzie, to jest to prawda
 
-The way the `if` command in Denizen works is it processes the arguments using logical comparison techniques, then runs the code inside if the result is `true`, and does not if the result is anything else.
+Sposób działania polecenia `if` w Denizen polega na przetwarzaniu argumentów przy użyciu technik porównania logicznego, a następnie uruchamianiu kodu wewnątrz, jeśli wynik to `true` (prawda), i nieuruchamianiu go, jeśli wynik jest jakikolwiek inny.
 
-So, if a script does `- if <sometag> == true:`, you're essentially saying `if ( true == true ) == true:` ... which is pretty silly, right?
+Zatem jeśli skrypt robi `- if <jakistag> == true:`, mówisz zasadniczo `jeśli ( prawda == prawda ) == prawda:` ... co jest dość niedorzeczne, prawda?
 
-**NEVER** input `== true` into an `if` command <span class="parens">(or `while` or anything like it)</span>. It is always redundant.
+**NIGDY** nie wpisuj `== true` do polecenia `if` <span class="parens">(ani `while`, ani żadnego podobnego)</span>. Jest to zawsze zbędne.
 
-Also, do not input `== false`. Instead, to negate a check, use `!`. So for example, `- if !<some tag>:` or `- if <some tag> != somevalue:`.
+Nie wpisuj też `== false`. Zamiast tego, aby zanegować sprawdzenie, użyj `!`. Na przykład `- if !<jakis tag>:` lub `- if <jakis tag> != jakaswartosc:`.
 
-### Text Isn't A Tag
+### Tekst to nie tag
 
-Users who are new to Denizen often misread documentation like `<#>` in a command syntax as meaning that `<3>` is valid input.
+Użytkownicy nowi w Denizen często błędnie odczytują dokumentację, np. widząc `<#>` w składni polecenia, myślą, że `<3>` jest poprawnym wejściem.
 
-This is not correct, as the [command syntax explanation](https://meta.denizenscript.com/Docs/Languages/command%20syntax) writeup explains, in that context the `<>` means "insert a value here". The `<>` are not meant to be literally included.
+Nie jest to poprawne. Jak wyjaśnia [opis składni poleceń](https://meta.denizenscript.com/Docs/Languages/command%20syntax), w tym kontekście `<>` oznacza „wstaw tutaj wartość”. Znaki `<>` nie mają być dołączane dosłownie.
 
-So, if a command says its syntax is `- heal [<#>]`, correct input might look like `- heal 3`.
+Zatem jeśli polecenie mówi, że jego składnia to `- heal [<#>]`, poprawne wejście mogłoby wyglądać tak: `- heal 3`.
 
-A key reason for this confusion stems from the fact that `<>` is often actually used in Denizen scripts to form a tag. The thing to remember is that tags are never literal - they are an instruction to the script engine to go find some other value. The tag `<player.money>` for example does not mean to insert the plain text "player.money" into a command, it means to find the amount of money the player has, and put that value in. So, `- heal <player.money>` in a script would process the tag's value and end up processing the command like `- heal 3` <span class="parens">(if the player happened to have $3 at the time)</span>.
+Głównym powodem tego nieporozumienia jest fakt, że `<>` jest faktycznie często używane w skryptach Denizen do tworzenia tagów. Należy pamiętać, że tagi nigdy nie są dosłowne – są instrukcją dla silnika skryptowego, aby poszedł i znalazł jakąś inną wartość. Tag `<player.money>` na przykład nie oznacza wstawienia czystego tekstu „player.money” do polecenia, lecz znalezienie kwoty pieniędzy, jaką posiada gracz, i wstawienie tej wartości. Zatem `- heal <player.money>` w skrypcie przetworzyłoby wartość tagu i ostatecznie wykonało polecenie typu `- heal 3` <span class="parens">(jeśli gracz miałby wtedy akurat $3)</span>.
 
-If at any time you want to insert literal text: just insert literal text, will nothing more to it. `- heal 3` or `- narrate mytexthere` are perfectly valid ways to write arguments, with no need for any special symbols <span class="parens">(except when quotes are required to contain a space within an argument)</span>.
+Jeśli w dowolnym momencie chcesz wstawić dosłowny tekst: po prostu go wstaw, bez niczego więcej. `- heal 3` lub `- narrate mojtekst` to całkowicie poprawne sposoby zapisu argumentów, bez potrzeby używania specjalnych symboli <span class="parens">(z wyjątkiem cudzysłowów wymaganych do zawarcia spacji w argumencie)</span>.
 
-As an additional note, if you need literal text in the form of a tag <span class="parens">(to use some element sub-tag on it)</span>, you can use the `element` base tag, like: `<element[3].div[5]>` <span class="parens">(this takes the plain value "3", forms it into an ElementTag, then uses the `ElementTag.div` sub-tag to divide it by 5)</span>.
+Dodatkowo, jeśli potrzebujesz dosłownego tekstu w formie tagu <span class="parens">(aby użyć na nim jakiegoś sub-tagu elementu)</span>, możesz użyć tagu bazowego `element`, np.: `<element[3].div[5]>` <span class="parens">(bierze to surową wartość „3”, tworzy z niej ElementTag, a następnie używa sub-tagu `ElementTag.div`, aby podzielić ją przez 5)</span>.
 
-### The Adjust Command Is Not For Items/Materials/Etc.
+### Polecenie Adjust nie służy do przedmiotów/materiałów/itp.
 
-Many users, when first trying to adjust a mechanism on an item, material, or similar type, will try to use the `adjust` command to achieve this, like `- adjust <[inventory].slot[5]> "lore:My new lore!"` or `- adjust <[location].material> lit:true`.
+Wielu użytkowników, próbując po raz pierwszy zmienić mechanizm na przedmiocie, materiale lub podobnym typie, próbuje użyć do tego polecenia `adjust`, np. `- adjust <[inventory].slot[5]> "lore:Mój nowy opis!"` lub `- adjust <[location].material> lit:true`.
 
-While this does seem to make sense initially, it unfortunately will not work out, due to an important distinction between object types: [unique vs. generic objects](https://meta.denizenscript.com/Docs/Languages/Unique%20Objects%20vs%20Generic%20Objects). It is recommended that you read and understand that explanation page to properly understand why you cannot `adjust` an `item`, but the short summary is: ItemTags look like `stick`, which is a *description* of an item, not a single unique item. As a result, the system has no way to track down *which* stick you're trying to adjust.
+Choć początkowo wydaje się to mieć sens, niestety nie zadziała ze względu na ważne rozróżnienie między typami obiektów: [obiekty unikalne vs generyczne](https://meta.denizenscript.com/Docs/Languages/Unique%20Objects%20vs%20Generic%20Objects). Zaleca się przeczytanie i zrozumienie tamtej strony wyjaśniającej, aby pojąć, dlaczego nie można użyć `adjust` na „przedmiocie” (item), ale krótki opis brzmi: ItemTagi wyglądają jak `stick` (patyk), co jest *opisem* przedmiotu, a nie pojedynczym unikalnym przedmiotem. W rezultacie system nie ma możliwości ustalenia, *który* patyk próbujesz zmienić.
 
-If you do use `adjust` on an item, it will apply the modification to the description of the item, and store the modified description into a save entry. A similar result happens with a MaterialTag object. While this may be useful in some cases, this isn't useful when you want to change an actual specific item in the world.
+Jeśli użyjesz `adjust` na przedmiocie, nałoży on modyfikację na opis tego przedmiotu i zapisze zmodyfikowany opis do zapisu (save entry). Podobny efekt występuje z obiektem MaterialTag. Choć może to być przydatne w niektórych przypadkach, nie jest pomocne, gdy chcesz zmienić konkretny przedmiot istniejący w świecie.
 
-#### So, How Do I Adjust A Specific Item?
+#### Więc jak mam zmienić konkretny przedmiot?
 
-The way to properly adjust a specific item changes depending on where that item is. If the item is inside an inventory, the best way is to use the `inventory` command with the `adjust` and `slot:<#>` arguments <span class="parens">(like `- inventory adjust slot:5 "lore:My new lore!"`)</span>. In other cases, the tag `ItemTag.with[...]` is useful. This tag returns a copy of an item with a mechanism applied. So if, for example, you have a `dropped_item` entity, you can adjust the `item` mechanism on that entity to be the result of a `with` tag, like: `- adjust <[entity]> "item:<[entity].item.with[lore=my new lore!]>"`. To change the item in an event, you might also be able to use `determine` with the `ItemTag.with` tag.
+Sposób poprawnej zmiany konkretnego przedmiotu zależy od tego, gdzie ten przedmiot się znajduje. Jeśli jest w ekwipunku, najlepiej użyć polecenia `inventory` z argumentami `adjust` oraz `slot:<#>` <span class="parens">(np. `- inventory adjust slot:5 "lore:Mój nowy opis!"`)</span>. W innych przypadkach przydatny jest tag `ItemTag.with[...]`. Zwraca on kopię przedmiotu z nałożonym mechanizmem. Jeśli więc np. masz encję `dropped_item`, możesz zmienić mechanizm `item` na tej encji na wynik tagu `with`, np.: `- adjust <[entity]> "item:<[entity].item.with[lore=mój nowy opis!]>"`. Aby zmienić przedmiot w zdarzeniu, możesz również użyć `determine` wraz z tagiem `ItemTag.with`.
 
-To adjust a `MaterialTag`, there is a `MaterialTag.with[...]` tag that matches the `ItemTag` version. Most likely, however, you want to adjust the material of a block, so the `adjustblock` command is what you need. It takes the location of a block, and applies MaterialTag mechanisms to that specific block <span class="parens">(like `- adjustblock <[location]> lit:true`)</span>.
+Do zmiany `MaterialTag` służy tag `MaterialTag.with[...]`, który działa analogicznie do wersji dla przedmiotów. Najprawdopodobniej jednak chcesz zmienić materiał bloku w świecie – wtedy potrzebujesz polecenia `adjustblock`. Przyjmuje ono lokalizację bloku i nakłada mechanizmy MaterialTag na ten konkretny blok <span class="parens">(np. `- adjustblock <[location]> lit:true`)</span>.
 
-The same logic applies to flagging items - don't use the `flag` command, use `inventory flag` <span class="parens">(like `- inventory flag slot:5 myflag:value`)</span> or the `with_flag` tag.
+Ta sama logika dotyczy flagowania przedmiotów – nie używaj polecenia `flag`, lecz `inventory flag` <span class="parens">(np. `- inventory flag slot:5 mojaflaga:wartosc`)</span> lub tagu `with_flag`.
 
-### Don't Script Raw Locations
+### Nie wpisuj surowych lokalizacji w skryptach
 
-On the Denizen Discord, we often get questions like "how do I put in the coordinates for a location" or "how do I make the NPC walk to x,y,z 1,5,7" or something like that. Sometimes it even gets phrased like "how do I give raw coordinate values instead of using a LocationTag".
+Na Discordzie Denizen często padają pytania typu „jak wpisać współrzędne dla lokalizacji” lub „jak sprawić, by NPC szedł do x,y,z 1,5,7”. Czasem formułowane jest to jako „jak podać surowe wartości współrzędnych zamiast używać LocationTag”.
 
-The short answer: You don't do that.
+Krótka odpowiedź: nie rób tego.
 
-As a general matter of clean and proper scripting, it never makes sense to type world coordinate values directly into a script instead of using a tag to get the location.
+Z punktu widzenia czystego i poprawnego skryptowania, nigdy nie ma sensu wpisywanie współrzędnych świata bezpośrednio do skryptu zamiast użycia tagu do pobrania lokalizacji.
 
-#### But What If There Isn't A Tag For The Location I Want?
+#### Ale co, jeśli nie ma tagu dla lokalizacji, której chcę?
 
-Then make one! Denizen tags are not unmovable boulders. They are tools, and they work for you, not against you.
+To go stwórz! Tagi Denizen nie są nieruchomymi głazami. Są narzędziami i pracują dla Ciebie, nie przeciwko Tobie.
 
-If, for example, you have a fancy pillar of obsidian at the center of your arena build, and you need scripts to use the location of the pillar... simply stand on top of the pillar, and type `/ex note <player.location.below> as:arena1_pillar`. Now that you've done that, any script that needs the location can literally type in `arena1_pillar` as a location. Need an NPC to look at the pillar? `- look arena1_pillar`. Need to get the exact Y height value of the pillar? `<location[arena1_pillar].y>`. Clean, descriptive, and easy!
+Jeśli na przykład masz ozdobny filar z obsydianu w centrum swojej areny i potrzebujesz, aby skrypty korzystały z jego lokalizacji... po prostu stań na szczycie filaru i wpisz `/ex note <player.location.below> as:filar_arena1`. Skoro to zrobiłeś, każdy skrypt potrzebujący tej lokalizacji może dosłownie wpisać `filar_arena1` jako lokalizację. Potrzebujesz, by NPC spojrzał na filar? `- look filar_arena1`. Potrzebujesz pobrać dokładną wysokość Y filaru? `<location[filar_arena1].y>`. Czysto, opisowo i łatwo!
 
-If, for example, you have an NPC that needs to walk towards specific points on a path, you might at that point use anchors. Select the NPC, then stand at each point on the path and type `/npc anchor --save point1` <span class="parens">(then `point2`, then `3`, etc)</span>. Then, the script can do `- ~walk <npc.anchor[point1]>` <span class="parens">(and then `point2`, `3`, etc)</span>.
+Jeśli na przykład masz NPC, który musi chodzić do konkretnych punktów na ścieżce, możesz wtedy użyć punktów zakotwiczenia (anchors). Zaznacz NPC, następnie stań w każdym punkcie ścieżki i wpisz `/npc anchor --save punkt1` <span class="parens">(potem `punkt2`, `3` itd.)</span>. Wtedy skrypt może zrobić `- ~walk <npc.anchor[punkt1]>` <span class="parens">(i potem `punkt2`, `3` itd.)</span>.
 
-If you need a location that changes from time to time, or is selected from a list of possibilities, or is attached to a player instead of an NPC, or... you might in that case store the location into a flag.
+Jeśli potrzebujesz lokalizacji, która zmienia się od czasu do czasu, lub jest wybierana z listy możliwości, albo jest przypisana do gracza zamiast do NPC... w takim przypadku zapisz lokalizację we fladze.
 
-### Don't Type Raw Object Notation
+### Nie wpisuj surowej notacji obiektów
 
-Denizen uses object notation internally to track object types. For example, `l@` indicates a value is a location, `p@` indicates a player, etc.
+Denizen używa notacji obiektów wewnętrznie do śledzenia typów. Na przykład `l@` wskazuje, że wartość to lokalizacja, `p@` wskazuje gracza itp.
 
-This is exclusively intended for internal tracking of generated values. A script should NEVER contain these object notation values typed out.
+Jest to przeznaczone wyłącznie do wewnętrznego śledzenia generowanych wartości. Skrypt NIGDY nie powinien zawierać tych wpisanych ręcznie wartości notacji.
 
-Instead of typing the object notation out, use one of these three options:
-- Just leave it off. Often, you can input a value without in any way specifying the type, and it will just work <span class="parens">(refer to [Don't Overuse Constructor Tags](#don-t-overuse-constructor-tags) for related information)</span>.
-- Use a tag that returns a relevant value, rather than trying to specify a raw value in the first place <span class="parens">(refer to [Don't Script Raw Locations](#don-t-script-raw-locations) for related information)</span>.
-- Use a constructor tag when needed <span class="parens">(refer to [Don't Overuse Constructor Tags](#don-t-overuse-constructor-tags) for related information)</span>.
+Zamiast wpisywać notację obiektu, użyj jednej z tych trzech opcji:
+- Po prostu ją pomiń. Często możesz podać wartość bez określania typu w jakikolwiek sposób i to po prostu zadziała <span class="parens">(sprawdź [Nie nadużywaj tagów konstruktorów](#nie-naduzywaj-tagow-konstruktorow))</span>.
+- Użyj tagu, który zwraca odpowiednią wartość, zamiast próbować podawać surową wartość <span class="parens">(sprawdź [Nie wpisuj surowych lokalizacji w skryptach](#nie-wpisuj-surowych-lokalizacji-w-skryptach))</span>.
+- Użyj tagu konstruktora, gdy jest to wymagane <span class="parens">(sprawdź [Nie nadużywaj tagów konstruktorów](#nie-naduzywaj-tagow-konstruktorow))</span>.
 
-### Don't Overuse Constructor Tags
+### Nie nadużywaj tagów konstruktorów
 
-Constructor tags are tag-bases that exist to automatically convert a raw value to the applicable object type. For example, `<cuboid[some value here]>` is the constructor tag base for CuboidTags.
+Tagi konstruktorów to bazy tagów, które służą do automatycznej konwersji surowej wartości na odpowiedni typ obiektu. Na przykład `<cuboid[jakas wartosc tutaj]>` to baza tagu konstruktora dla CuboidTags.
 
-These can be handy for cases where you have a raw value that doesn't know its own type for whichever reason, and need to use a tag on it. For example, if the definition `ent_id` has an entity's UUID in it, and you want to get the entity type for that entity, you could use `<entity[<[ent_id]>].entity_type>`.
+Mogą być one przydatne w przypadkach, gdy masz surową wartość, która z jakiegoś powodu nie zna swojego typu, a musisz użyć na niej tagu. Na przykład, jeśli definicja `ent_id` zawiera UUID encji, a chcesz pobrać typ tej encji, możesz użyć `<entity[<[ent_id]>].entity_type>`.
 
-These can also be useful for some cases where exact object type specificity is required but not automatically available, such as in the `note` command. For example, if you have an inventory script named `my_inv_script` and want to note an inventory to save as a player's personal copy of that inventory, you might use `- note <inventory[my_inv_script]> as:my_inv_<player.uuid>`.
+Mogą być też przydatne, gdy wymagana jest dokładna specyfika typu obiektu, a nie jest ona automatycznie dostępna, np. w poleceniu `note`. Na przykład, jeśli masz skrypt ekwipunku o nazwie `moj_skrypt_ekw` i chcesz zanotować ekwipunek jako osobistą kopię gracza, możesz użyć `- note <inventory[moj_skrypt_ekw]> as:moj_ekw_<player.uuid>`.
 
-Constructor tags are, however, mostly not needed, and tend to make scripts messier and more complicated for little good reason when overused.
+Tagi konstruktorów są jednak w większości niepotrzebne i nadużywane czynią skrypty mniej czytelnymi i bardziej skomplikowanymi bez dobrego powodu.
 
-We often see unnecessary overuse of the tags, for example in lines like `- give <item[stick]>`, which of course should just be `- give stick`. The Denizen script parser is pretty clever, and in most cases knows what type of object is involved. The `give` command in this example of course knows that you're trying to give an item <span class="parens">(what else could you be giving, without matching a different argument's specifier?)</span>, so you don't need to tell it that.
+Często widzimy niepotrzebne nadużywanie tych tagów, na przykład w liniach takich jak `- give <item[stick]>`, co oczywiście powinno brzmieć po prostu `- give stick`. Parser skryptów Denizen jest dość sprytny i w większości przypadków wie, o jaki typ obiektu chodzi. Polecenie `give` w tym przykładzie oczywiście wie, że próbujesz dać przedmiot <span class="parens">(co innego mógłbyś dawać, nie pasując do specyfikatora innego argumentu?)</span>, więc nie musisz mu o tym mówić.
 
-### Object Hacking Is A Bad Idea
+### Object Hacking (hakowanie obiektów) to zły pomysł
 
-Denizen has standard formats for most object types. For example, ItemTags look like `i@stick[lore=Fancy stick]`.
+Denizen posiada standardowe formaty dla większości typów obiektów. Na przykład ItemTagi wyglądają jak `i@stick[lore=Fajny patyk]`.
 
-These formats are used for internal tracking purposes, and should be kept that way. They are generated internal values, not meant to be manipulated via scripts.
+Formaty te służą do celów śledzenia wewnętrznego i tak powinny być traktowane. Są to generowane wartości wewnętrzne, nieprzeznaczone do manipulacji poprzez skrypty.
 
-We sometimes see users try things like `<player.item_in_hand>[lore=Fancy stick]`. This example, if the player is holding a stick, will create a new item that is a stick with that lore, just like the user wanted. However, if the player's held item already has any additional data on it, it will end up processing into something more like `i@stick[display_name=Best stick][lore=Fancy stick]`, and that no longer matches the standard format, and thus will not work. <span class="parens">(The correct non-object-hacking way, for reference, to get a copy of an item with additional mechanisms, would be `<player.item_in_hand.with[lore=Fancy stick]>`)</span>.
+Czasami widzimy użytkowników próbujących rzeczy typu `<player.item_in_hand>[lore=Fajny patyk]`. Ten przykład, jeśli gracz trzyma patyk, stworzy nowy przedmiot będący patykiem z takim opisem, dokładnie tak, jak chciał użytkownik. Jeśli jednak trzymany przez gracza przedmiot posiada już jakiekolwiek dodatkowe dane, skończy się to przetworzeniem na coś w stylu `i@stick[display_name=Najlepszy patyk][lore=Fajny patyk]`, co nie pasuje już do standardowego formatu i w rezultacie nie zadziała. <span class="parens">(Dla odniesienia: poprawnym sposobem – bez hakowania obiektów – na uzyskanie kopii przedmiotu z dodatkowymi mechanizmami byłoby `<player.item_in_hand.with[lore=Fajny patyk]>`)</span>.
 
-Something to bear in mind as well is that standard formats *change* as the underlying object needs to hold different forms of internal data. For example, MaterialTag was originally formed like `m@chest` or `m@chest,2`, but now has a format more like `m@chest[direction=north]`. While old data that was stored using an older format will generally still be parsed in correctly <span class="parens">(at least for a period of time after the initial change)</span>, any scripts expecting the format to be a certain way will instantly stop working.
+Warto też pamiętać, że standardowe formaty *zmieniają się*, gdy obiekt bazowy potrzebuje przechowywać inne formy danych wewnętrznych. Na przykład MaterialTag był pierwotnie tworzony jako `m@chest` lub `m@chest,2`, ale teraz ma format bardziej zbliżony do `m@chest[direction=north]`. Choć stare dane zapisane w starym formacie będą zazwyczaj wciąż poprawnie przetwarzane <span class="parens">(przynajmniej przez pewien czas po zmianie)</span>, wszelkie skrypty oczekujące konkretnego formatu natychmiast przestaną działać.
 
-The most common recent example of object hacking biting people in recent times is ListTag object hacking. The original ListTag format was `li@one|two|three`, which still works perfectly fine as input, but no longer is the standard output format. Several users had scripts with lines akin to `<some_list>|additional|value|here` which worked with the old format. However, the format was changed to allow for things like sub-lists via built-in escaping logic, and distinguished itself with an additional `|` on the end. This format change also allowed for empty entries to exist in ListTags. This resulted in those object-hacking scripts having escaped data in the list, but looking like old-list-format to the parser, and thus not having the escaping parsed, and thus suddenly the hacked lists had corrupted data. <span class="parens">(The correct non-object-hacking way, for reference, to add entries to a list is `<some_list.include[additional|value|here]>`)</span>.
+Najczęstszym ostatnio przykładem „hakowania obiektów”, który mści się na użytkownikach, jest hakowanie ListTagów. Oryginalny format ListTag to `li@jeden|dwa|trzy`, który wciąż działa idealnie jako wejście, ale nie jest już standardowym formatem wyjściowym. Wielu użytkowników miało skrypty z liniami w rodzaju `<jakas_lista>|dodatkowa|wartosc|tutaj`, co działało przy starym formacie. Format został jednak zmieniony, aby pozwolić na rzeczy takie jak sub-listy poprzez wbudowaną logikę ucieczki (escaping), i wyróżnia się dodatkowym znakiem `|` na końcu. Zmiana ta pozwoliła też na istnienie pustych wpisów w ListTagach. Skutkowało to tym, że skrypty „hakujące obiekty” miały w liście dane z ucieczką, ale dla parsera wyglądały jak stary format listy, przez co ucieczka nie była przetwarzana i nagle zhakowane listy miały uszkodzone dane. <span class="parens">(Dla odniesienia: poprawnym sposobem – bez hakowania obiektów – na dodanie wpisów do listy jest `<jakas_lista.include[dodatkowa|wartosc|tutaj]>`)</span>.
 
-The lesson here is: never assume that the full object format for an object is going to be a certain way. There's always a tag to read or change any data within an object in a better way.
+Lekcja z tego płynąca: nigdy nie zakładaj, że pełny format obiektu będzie zawsze taki sam. Zawsze istnieje tag do odczytu lub zmiany dowolnych danych wewnątrz obiektu w lepszy sposób.
 
-### Creative Gamemode Inventories Are Clientside
+### Ekwipunki w trybie kreatywnym (Creative) są po stronie klienta
 
-Many server admins tend to leave themselves in creative mode while working and even while testing things meant for survival-mode players to interact with. While this usually works out fine, there are some cases where the differences between gamemodes can bite you. Some are obvious <span class="parens">(for example, you can't test a script that damages you if you can't take damage)</span>, some aren't obvious at all. The non-obvious case that most often confuses scripters is **inventories.**
+Wielu administratorów serwerów zostaje w trybie kreatywnym podczas pracy, a nawet podczas testowania rzeczy przeznaczonych dla graczy w trybie przetrwania (survival). Choć zwykle nie ma z tym problemów, istnieją przypadki, w których różnice między trybami mogą Ci zaszkodzić. Niektóre są oczywiste <span class="parens">(np. nie możesz przetestować skryptu, który zadaje Ci obrażenia, jeśli nie możesz ich otrzymywać)</span>, inne wcale takie nie są. Nieoczywistym przypadkiem, który najczęściej dezorientuje skrypciarzy, są **ekwipunki.**
 
-Normally, in gamemode survival <span class="parens">(or adventure)</span>, inventories are *serverside*. This means that the server has the final say on which items are where, and further means that any serverside scripts or plugins can modify and control any inventory or interaction with an inventory, and trust that it will work.
+Normalnie, w trybie przetrwania <span class="parens">(lub przygodowym)</span>, ekwipunki są *po stronie serwera* (serverside). Oznacza to, że serwer ma ostateczny głos w kwestii tego, które przedmioty gdzie się znajdują, a to dalej oznacza, że wszelkie skrypty lub wtyczki po stronie serwera mogą modyfikować i kontrolować każdy ekwipunek czy interakcję z nim i ufać, że to zadziała.
 
-However, while in gamemode **creative**, inventories are *clientside*. This means that the client <span class="parens">(the code running on the player's own PC, whether it's a vanilla minecraft client or a modded one)</span> has final say on the details of an inventory. While servers can still make their own changes to inventories or interactions, the client can overrule those changes. This leads to things like trying to cancel a click event duplicating the item <span class="parens">(the server said "no, A: you don't pick up the item, and B: that item is still in its original slot" ... the client decides "I deny A, I did in fact pick up the item, it's mine now, but I'm okay with B, that item can still be in its original slot" ie there's now two copies of the same item)</span>.
+Jednak będąc w trybie **kreatywnym**, ekwipunki są *po stronie klienta* (clientside). Oznacza to, że klient <span class="parens">(kod działający na komputerze gracza, czy to czysty klient Minecraft, czy modowany)</span> ma ostateczny głos w kwestii szczegółów ekwipunku. Choć serwery wciąż mogą wprowadzać własne zmiany w ekwipunkach czy interakcjach, klient może te zmiany odrzucić. Prowadzi to do sytuacji takich jak próba anulowania zdarzenia kliknięcia, która skutkuje zduplikowaniem przedmiotu <span class="parens">(serwer powiedział: „nie, A: nie podnosisz przedmiotu i B: ten przedmiot wciąż jest w swoim pierwotnym slocie”... klient decyduje: „odrzucam A, faktycznie podniosłem przedmiot, jest mój, ale zgadzam się na B, ten przedmiot może wciąż być w swoim slocie” – czyli mamy teraz dwie kopie tego samego przedmiotu)</span>.
 
-A related part of this system that is worth thinking about, is that players in creative gamemode have the ability to spawn any item they want. On a vanilla minecraft client, that means they can either A: grab any new core item or stack of items from the creative item list at any time, or B: produce a perfect copy of any item they see by way of middle-clicking on that item <span class="parens">(this might for example be used to get a GUI-only special scripted item into their own inventory)</span>. A modded client, however, could potentially spawn *any* item, even ones with custom NBT data on them. This is worth thinking about any time you link some power or system to data on an item. Consider the following script:
+Powiązaną częścią tego systemu, o której warto pomyśleć, jest to, że gracze w trybie kreatywnym mają możliwość przywołania dowolnego przedmiotu. Na czystym kliencie Minecraft oznacza to, że mogą albo A: wziąć dowolny nowy podstawowy przedmiot lub ich stos z listy przedmiotów kreatywnych w dowolnym momencie, albo B: stworzyć idealną kopię dowolnego przedmiotu, który widzą, poprzez kliknięcie na niego środkowym przyciskiem myszy <span class="parens">(może to być np. użyte do zdobycia specjalnego przedmiotu ze skryptu GUI do własnego ekwipunku)</span>. Modowany klient mógłby jednak potencjalnie przywołać *dowolny* przedmiot, nawet taki z własnymi danymi NBT. Warto o tym pamiętać za każdym razem, gdy wiążesz jakąś moc lub system z danymi na przedmiocie. Rozważ poniższy skrypt:
 
 ```dscript_red
-dangerous_powertools:
+niebezpieczne_narzedzia:
     type: world
     events:
         after player right clicks block with:powertool_item:
@@ -414,15 +413,15 @@ powertool_item:
     type: item
     material: stick
     flags:
-        powertool_command: broadcast It Works!
+        powertool_command: broadcast To Dziala!
 ```
 
-At first glance, this script enables the creation of simple 'powertool' items that execute custom commands... however, because 'as_server' is used with per-item data, that means a creative player could generate an item with any command and bypass any permission requirements <span class="parens">(an ill-intentioned creative-mode player might make use of this to op themselves, or ban the server owner, or...)</span>.
+Na pierwszy rzut oka skrypt ten pozwala na tworzenie prostych „powertoolów” wykonujących własne polecenia... jednak ponieważ użyto 'as_server' z danymi przypisanymi do przedmiotu, oznacza to, że gracz w trybie kreatywnym mógłby wygenerować przedmiot z dowolnym poleceniem i ominąć wszelkie wymagania uprawnień <span class="parens">(źle nastawiony gracz w trybie kreatywnym mógłby to wykorzystać, by nadać sobie opa, zbanować właściciela serwera itp.)</span>.
 
-### The Ex Command Is For Testing Only
+### Polecenie Ex służy wyłącznie do testów
 
-Some users have tried using `/ex` as a general purpose scripting tool - but that's not quite right. It is designed to be used for testing/debugging only.
+Niektórzy użytkownicy próbowali używać `/ex` jako ogólnego narzędzia skryptowego – ale to nie tak. Jest ono zaprojektowane wyłącznie do testowania i debugowania.
 
-In other words: the only place `/ex` should ever appear is in your in-game chat bar. It should never be placed into a script, into a command block, into another plugin's command, etc.
+Innymi słowy: jedynym miejscem, w którym powinno pojawiać się `/ex`, jest Twój pasek czatu w grze. Nigdy nie powinno być umieszczane w skrypcie, bloku poleceń, poleceniu innej wtyczki itp.
 
-One of the most common ways `/ex` gets misused, is getting placed inside some other plugin's configuration as a triggerable command, such as a shop plugin that is configured to trigger `/ex run mytaskname player:%player%` when an item is bought. This is a bad way of going about things - it's firing up the full parsing engine and preparing debug output and all that, every single time a player triggers that option. What should you do instead? Simple: make a `command` script! Have the command script do whatever is needed, and then add the command name into that external plugin as the command to trigger. <span class="parens">(Or, of course, you can also just replace the external plugin entirely with a Denizen script, if you're up for it!)</span>
+Jednym z najczęstszych sposobów nadużywania `/ex` jest umieszczanie go w konfiguracji innej wtyczki jako polecenia wyzwalanego, np. wtyczki do sklepów skonfigurowanej tak, by wyzwalała `/ex run nazwa_mojego_zadania player:%player%` przy zakupie przedmiotu. Jest to zły sposób postępowania – za każdym razem, gdy gracz wyzwoli tę opcję, uruchamiany jest cały silnik parsowania, przygotowywane jest wyjście debugowania i tak dalej. Co powinieneś zrobić zamiast tego? To proste: stwórz skrypt typu `command`! Niech skrypt polecenia robi wszystko, co trzeba, a następnie dodaj nazwę tego polecenia do tamtej zewnętrznej wtyczki jako polecenie do wyzwolenia. <span class="parens">(Albo, oczywiście, możesz też po prostu całkowicie zastąpić tę zewnętrzną wtyczkę skryptem Denizen, jeśli masz na to ochotę!)</span>

@@ -1,14 +1,14 @@
-Somebody Else Did That: The Player and NPC Arguments (PLACEHOLDER ONLY)
-----------------------------------------------------
+Ktoś inny to zrobił: Argumenty Player i NPC (TYLKO PLACEHOLDER)
+------------------------------------------------------------
 
-**TODO: Write-up that explains the `player` and `npc` arguments and when you'd use them.**
+**TODO: Opis wyjaśniający argumenty `player` i `npc` oraz kiedy należy ich używać.**
 
-### Placeholder
+### Placeholder (Miejsce na treść)
 
-Here's [the old version of this documentation from before the guide was started.](https://meta.denizenscript.com/Docs/Languages/the%20player%20and%20npc%20arguments)
+Oto [stara wersja tej dokumentacji sprzed powstania tego przewodnika.](https://meta.denizenscript.com/Docs/Languages/the%20player%20and%20npc%20arguments)
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read some more about the player and npc arguments, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się więcej o argumentach player i npc, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-- ['the player and npc arguments' lang doc](https://meta.denizenscript.com/Docs/Languages/the%20player%20and%20npc%20arguments)
+- [Dokumentacja języka 'the player and npc arguments'](https://meta.denizenscript.com/Docs/Languages/the%20player%20and%20npc%20arguments)

@@ -1,5 +1,5 @@
-Putting It Together
--------------------
+Składanie wszystkiego w całość
+-------------------------------
 
 ``` toctree::
     :maxdepth: 1

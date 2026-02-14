@@ -1,21 +1,21 @@
-Mechanisms And Properties
--------------------------
+Mechanizmy i Właściwości (Mechanisms and Properties)
+--------------------------------------------------
 
 ```eval_rst
-.. contents:: Table of Contents
+.. contents:: Spis treści
     :local:
 ```
 
-### What's a Mechanism?
+### Czym jest mechanizm?
 
-**Mechanisms** are a way to directly change a single value on an object. They're kind of like mini-commands, designed to work as part of the property system.
+**Mechanizmy** (mechanisms) to sposób na bezpośrednią zmianę pojedynczej wartości obiektu. Są one czymś w rodzaju mini-poleceń, zaprojektowanych do pracy jako część systemu właściwości (properties).
 
-Here are a few examples of simple mechanisms, used in script containers:
+Oto kilka przykładów prostych mechanizmów użytych w kontenerach skryptów:
 
 ```dscript_green
 ultra_sword:
     type: item
-    display name: Ultra Sword
+    display name: Ultra Miecz
     material: diamond_sword
     mechanisms:
         unbreakable: true
@@ -23,7 +23,7 @@ ultra_sword:
 
 ![](images/ultra_sword.png)
 
-This script, using the `mechanisms` key of `item` script containers, has the mechanism named `unbreakable` set to the value `true`, which makes the item never take durability damage.
+Ten skrypt, używając klucza `mechanisms` w kontenerze skryptu typu `item`, ustawia mechanizm o nazwie `unbreakable` (niezniszczalny) na wartość `true`, co sprawia, że przedmiot nigdy nie traci wytrzymałości.
 
 ```dscript_green
 undead_golden_swordsman:
@@ -37,13 +37,13 @@ undead_golden_swordsman:
 
 ![](images/undead_golden_swordsman.png)
 
-This `entity` script creates a zombie and uses the `item_in_hand` and `item_in_offhand` mechanisms to put golden swords in both hands. It also spawns with 80 health, and has 80 health at maximum, using the `health_data` mechanism.
+Ten skrypt typu `entity` tworzy zombie i używa mechanizmów `item_in_hand` oraz `item_in_offhand`, aby włożyć mu złote miecze do obu rąk. Zombie odradza się również z 80 punktami życia (i taką samą wartością maksymalną) dzięki mechanizmowi `health_data`.
 
-### The Adjust Command
+### Polecenie Adjust
 
-Mechanisms can be used in more than just script containers! If you need to alter the value of a mechanism, the `adjust` command is the way to go.
+Mechanizmy mogą być używane nie tylko w kontenerach skryptów! Jeśli potrzebujesz zmienić wartość mechanizmu w trakcie działania skryptu, służy do tego polecenie `adjust`.
 
-For example, if we want to write a script that changes the color of a sheep when right-clicked:
+Na przykład, jeśli chcemy napisać skrypt, który zmienia kolor owcy po kliknięciu jej prawym przyciskiem myszy:
 
 ```dscript_green
 random_sheep_colors:
@@ -55,15 +55,15 @@ random_sheep_colors:
 
 ![](images/rainbow_sheep.gif)
 
-Using this script, when a player right-clicks any sheep mob with a stick in hand, the sheep mob will change to a random color.
+Dzięki temu skryptowi, gdy gracz kliknie prawym przyciskiem myszy dowolną owcę trzymając patyk w dłoni, owca zmieni kolor na losowy.
 
-The `adjust` command can be used to adjust mechanisms on most object types <span class="parens">(players, entities, the server, ...)</span> but some situations call for different ways of applying mechanisms.
+Polecenie `adjust` może być używane do dostosowywania mechanizmów większości typów obiektów <span class="parens">(graczy, encji, serwera...)</span>, ale niektóre sytuacje wymagają innych sposobów nakładania mechanizmów.
 
-### The AdjustBlock command
+### Polecenie AdjustBlock
 
-The `adjustblock` command is a variant of the normal `adjust` command. It's built specifically to adjust `material` mechanisms on blocks <span class="parens">([a list of which can be found here](https://meta.denizenscript.com/Docs/Mechanisms/materialtag))</span>.
+Polecenie `adjustblock` to wariant normalnego polecenia `adjust`. Jest zbudowane specjalnie do dostosowywania mechanizmów `material` na blokach <span class="parens">([listę których znajdziesz tutaj](https://meta.denizenscript.com/Docs/Mechanisms/materialtag))</span>.
 
-While the applicability of `adjustblock` is more niche, it can still be quite useful. For a quick usage example, you can use this script to force a plant block to immediately change to its maximum age <span class="parens">(eg. to cause newly-planted wheat to fully grow)</span>:
+Chociaż zastosowanie `adjustblock` jest bardziej niszowe, wciąż może być bardzo przydatne. Jako szybki przykład: możesz użyć tego skryptu, aby wymusić natychmiastowe osiągnięcie maksymalnego wieku przez blok rośliny <span class="parens">(np. aby świeżo posadzona pszenica w pełni wyrosła)</span>:
 
 ```dscript_green
 plant_grower:
@@ -76,45 +76,45 @@ plant_grower:
 
 ![](images/crop_growth.png)
 
-### How To Adjust Items
+### Jak dostosowywać przedmioty
 
-You can also adjust the properties of items in inventories. Doing so uses the `inventory` command with the `adjust` argument.
+Możesz również dostosowywać właściwości przedmiotów znajdujących się w ekwipunkach. Służy do tego polecenie `inventory` z argumentem `adjust`.
 
-You might assume that the way to modify an item held by a player is by adjusting the item itself:
+Mógłbyś założyć, że sposobem na zmodyfikowanie przedmiotu trzymanego przez gracza jest dostosowanie samego przedmiotu:
 
 ```dscript_red
 flint_fancifier_bad:
     type: world
     events:
         after player right clicks block with:flint:
-        - adjust <player.item_in_hand> "display:Fancy Flint"
-        - adjust <player.item_in_hand> "lore:Built with Denizen!"
+        - adjust <player.item_in_hand> "display:Ozdobny Krzemień"
+        - adjust <player.item_in_hand> "lore:Stworzone w Denizen!"
 ```
 
-However, the tag `<player.item_in_hand>` will just return "flint", with no indication of *which* flint item. In effect, the above script is attempting to modify the abstract concept of flint items, rather than the specific flint in the player's hand. If you're not adjusting a specific item that exists in the world somehow, nothing is going to change in the world!
+Jednak tag `<player.item_in_hand>` zwróci po prostu „flint” (krzemień), bez wskazania, o *który* konkretnie krzemień chodzi. W efekcie powyższy skrypt próbuje zmodyfikować abstrakcyjne pojęcie krzemienia, a nie ten konkretny krzemień w dłoni gracza. Jeśli nie dostosowujesz konkretnego obiektu, który w jakiś sposób istnieje w świecie, nic się w tym świecie nie zmieni!
 
-So instead, the usual way to adjust an item is to use the `inventory` command's `adjust` argument to adjust the specific item that you want to change.
+Dlatego zwykle przedmioty dostosowuje się za pomocą polecenia `inventory adjust`, aby zmodyfikować konkretny przedmiot, który chcesz zmienić.
 
-The below example will *correctly* modify a player's held item when they right click with it:
+Poniższy przykład *poprawnie* zmodyfikuje przedmiot trzymany przez gracza, gdy kliknie on prawym przyciskiem myszy:
 
 ```dscript_green
 flint_fancifier:
     type: world
     events:
         after player right clicks block with:flint:
-        - inventory adjust slot:hand "display:Fancy Flint"
-        - inventory adjust slot:hand "lore:Built with Denizen!"
+        - inventory adjust slot:hand "display:Ozdobny Krzemień"
+        - inventory adjust slot:hand "lore:Stworzone w Denizen!"
 ```
 
 ![](images/fancy_flint.png)
 
-The `inventory adjust` command will specifically change the item at issue, because that's what it is designed to do! Because you identify the unique object of the item as it exists in the player's inventory <span class="parens">(as a reference a specific slot within an inventory)</span>, the `inventory adjust` command is therefore able to modify it as desired.
+Polecenie `inventory adjust` zmieni konkretnie ten przedmiot, ponieważ do tego właśnie zostało zaprojektowane! Ponieważ identyfikujesz unikalny obiekt przedmiotu tak, jak istnieje on w ekwipunku gracza <span class="parens">(jako odniesienie do konkretnego slotu w ekwipunku)</span>, polecenie `inventory adjust` jest w stanie go zmodyfikować zgodnie z życzeniem.
 
-#### The With Tag
+#### Tag With
 
-In some cases, the `.with` tag is convenient for adjusting mechanisms on an item. Unlike the `inventory adjust` command, which has to operate on a real pre-existing item, the `with` tag takes any conceptual item, and returns a copy of that conceptual item with the mechanisms applied, which can then be put into any command that accepts items as normal.
+W niektórych przypadkach tag `.with` jest wygodniejszy do dostosowywania mechanizmów na przedmiocie. W przeciwieństwie do polecenia `inventory adjust`, które musi operować na realnie istniejącym przedmiocie, tag `with` bierze dowolny koncepcyjny przedmiot i zwraca jego kopię z nałożonymi mechanizmami. Taka kopia może być następnie użyta w dowolnym poleceniu, które przyjmuje przedmioty.
 
-Say for example that rather than changing the name of the player's held item, you instead want to give them a new copy of that item with a different name or with repairs.
+Załóżmy na przykład, że zamiast zmieniać nazwę przedmiotu trzymanego przez gracza, chcesz mu dać nową kopię tego przedmiotu z inną nazwą lub po naprawie.
 
 ```dscript_green
 sword_duplicator:
@@ -122,25 +122,25 @@ sword_duplicator:
     events:
         after player right clicks bedrock with:diamond_sword:
         - ratelimit <player> 1h
-        - give <player.item_in_hand.with[display=Your Free Duplicate Sword].with[durability=0]>
-        - narrate "<&b>Sword duplicated!"
+        - give <player.item_in_hand.with[display=Twój Darmowy Zduplikowany Miecz].with[durability=0]>
+        - narrate "<&b>Miecz został zduplikowany!"
 ```
 
 ![](images/dup_sword.png)
 
-The above script example allows players to take a diamond sword down to bedrock level to get a repaired duplicate made, no more than once per hour.
+Powyższy przykładowy skrypt pozwala graczom zabrać diamentowy miecz na poziom bedrocka, aby otrzymać naprawiony duplikat, nie częściej niż raz na godzinę.
 
-As you can see in the example above, like any tag, the `with` tag can simply be placed on the end of any `ItemTag`, and because it returns an `ItemTag`, you can also chain multiple `with` tags in a row.
+Jak widać w powyższym przykładzie, podobnie jak każdy inny tag, tag `with` może zostać umieszczony na końcu dowolnego `ItemTag`. Ponieważ zwraca on `ItemTag`, możesz również łączyć wiele tagów `with` pod rząd.
 
-Note also that there is also a `with` tag available for `MaterialTag` objects, to achieve similar logic with blocks.
+Pamiętaj również, że dostępny jest tag `with` dla obiektów `MaterialTag`, aby osiągnąć podobną logikę z blokami.
 
-### Adjusting Definitions
+### Dostosowywanie definicji
 
-The `adjust` command can also be used to modify an object stored in a definition and automatically apply the resultant object back into the definition.
+Polecenie `adjust` może być również używane do modyfikowania obiektu przechowywanego w definicji i automatycznego zapisywania wynikowego obiektu z powrotem do tej definicji.
 
-This is a relatively niche use case, but it can come in handy at times. In particular, this allows for `if` commands to be used to choose which mechanisms need to be applied to an object prior to actually performing changes.
+Jest to stosunkowo niszowy przypadek użycia, ale czasem się przydaje. W szczególności pozwala to na użycie poleceń `if` do wybrania, jakie mechanizmy mają zostać nałożone na obiekt przed faktycznym wykonaniem zmian.
 
-For example:
+Przykład:
 
 ```dscript_green
 sword_duplicator:
@@ -149,57 +149,57 @@ sword_duplicator:
         after player right clicks bedrock with:diamond_sword:
         - ratelimit <player> 1h
         - define sword <player.item_in_hand>
-        - adjust def:sword "display:Your Free Duplicate Sword"
+        - adjust def:sword "display:Twój Darmowy Zduplikowany Miecz"
         - if <player.location> matches lava:
-            - adjust def:sword "lore:<&c>Forged in lava."
+            - adjust def:sword "lore:<&c>Wykuty w lawie."
             - adjust def:sword durability:0
         - give <[sword]>
-        - narrate "<&b>Sword duplicated!"
+        - narrate "<&b>Miecz został zduplikowany!"
 ```
 
 ![](images/lava_sword.png)
 
-This script is similar to the sword duplicator in the `with` tag example, but now only repairs the duplicate sword if the player is daring enough to jump into lava before clicking bedrock. <span class="parens">(You can comment out the `ratelimit` by putting a `#` symbol before the `-`, to be able to test the script without having to wait.)</span>
+Ten skrypt jest podobny do duplikatora mieczy z przykładu o tagu `with`, ale teraz naprawia zduplikowany miecz tylko wtedy, gdy gracz jest na tyle odważny, by wskoczyć do lawy przed kliknięciem w bedrock. <span class="parens">(Możesz wykomentować `ratelimit`, stawiając znak `#` przed `-`, aby móc przetestować skrypt bez czekania)</span>.
 
-This way of adjusting items also has the advantage of being slightly cleaner when changing many mechanisms at once, thanks to the more linear format.
+Ten sposób dostosowywania przedmiotów ma również tę zaletę, że jest nieco czytelniejszy przy zmianie wielu mechanizmów naraz, dzięki bardziej liniowemu formatowi.
 
-### Properties
+### Właściwości (Properties)
 
-"Properties" are a system to track the details of an object that doesn't have a unique identity of its own.
+„Właściwości” (properties) to system śledzenia szczegółów obiektu, który nie posiada własnej unikalnej tożsamości.
 
-Generally, every properties consist of one tag and one mechanism. The tag reads the current value, and the mechanism applies a new value. In many cases, they will also be associated with additional helpful tags and/or mechanisms to make things easier when trying to interact with a property through a script. Note that while every property has a tag and mechanism, not every tag or mechanism is related to a property.
+Zazwyczaj każda właściwość składa się z jednego tagu i jednego mechanizmu. Tag odczytuje aktualną wartość, a mechanizm nakłada nową wartość. W wielu przypadkach będą one również powiązane z dodatkowymi pomocnymi tagami i/lub mechanizmami, aby ułatwić interakcję z właściwością przez skrypt. Pamiętaj, że choć każda właściwość ma tag i mechanizm, nie każdy tag lub mechanizm jest powiązany z właściwością.
 
-Properties are most noticeable from their usage in Denizen internal object descriptions. Object descriptions are the full reusable description of any object, generally marked with object notation <span class="parens">(like `i@`)</span> in front of it. This is primarily for internal data tracking, and you will most often only see it in your debug console.
+Właściwości są najbardziej widoczne dzięki ich użyciu w wewnętrznych opisach obiektów Denizen. Opisy obiektów to pełne, wielokrotnego użytku opisy dowolnego obiektu, zazwyczaj oznaczone notacją obiektu <span class="parens">(jak `i@`)</span> na początku. Służy to głównie wewnętrznemu śledzeniu danych i najczęściej będziesz to widzieć tylko w konsoli debugowania.
 
-#### Item Properties
+#### Właściwości przedmiotu
 
-The most common place that properties are seen in use is with items. In Denizen, an item is a material and a series of properties. For example, if you hit an entity with a freshly-crafted diamond sword in survival mode and then run `/ex narrate <player.item_in_hand>` to view the Denizen internal description of that item, you'll see it return `i@diamond_sword[durability=1]`. In this case, `durability` is the only property of the item, and its value is `1`, the amount of durability the item has lost thus far. Multiple properties are separated by semicolons. For example, `i@diamond_sword[durability=1;display_name=Skullbuster]`. <span class="parens">(Remember, [don't type raw object notation](/guides/troubleshooting/common-mistakes#don-t-type-raw-object-notation) into a script - these are examples of internal data formats, not anything that can be put in a script directly)</span>
+Najczęstszym miejscem, w którym widać właściwości, są przedmioty. W Denizen przedmiot to materiał oraz seria właściwości. Na przykład, jeśli uderzysz encję świeżo wytworzonym diamentowym mieczem w trybie przetrwania, a następnie uruchomisz `/ex narrate <player.item_in_hand>` aby zobaczyć wewnętrzny opis Denizen dla tego przedmiotu, zobaczysz, że zwróci on `i@diamond_sword[durability=1]`. W tym przypadku `durability` (wytrzymałość) jest jedyną właściwością przedmiotu, a jej wartość wynosi `1` – tyle wytrzymałości przedmiot stracił do tej pory. Wiele właściwości jest oddzielonych średnikami. Na przykład: `i@diamond_sword[durability=1;display_name=Pogromca Czaszek]`. <span class="parens">(Pamiętaj: [nie wpisuj surowej notacji obiektu](/guides/troubleshooting/common-mistakes#don-t-type-raw-object-notation) do skryptu – to są przykłady wewnętrznych formatów danych, a nie coś, co można wstawić bezpośrednio do skryptu)</span>.
 
-Items are, fundamentally, their material and their properties. Any item a player has in their inventory can be parsed in this manner, and any item's properties can be read or modified as desired.
+Przedmioty to, fundamentalnie, ich materiał i ich właściwości. Każdy przedmiot, który gracz ma w ekwipunku, może zostać przetworzony w ten sposób, a właściwości każdego przedmiotu mogą być odczytywane lub modyfikowane według uznania.
 
-#### Material Properties
+#### Właściwości materiału
 
-Materials, like items, lack unique identities. A stone block is just a material at a location. A wheat block is only slightly more complicated - it's a material at a location with an `age` property. As you saw above in the `adjustblock` example, using the `age` mechanism allows you to modify that property for a block in the world. When you read block materials from locations, they will return any associated properties. This could be used, for example, to check whether a campfire is sending up smoke signals, or various redstone properties, or even the faces of a mushroom block.
+Materiały, podobnie jak przedmioty, nie posiadają unikalnej tożsamości. Blok kamienia to po prostu materiał w danej lokalizacji. Blok pszenicy jest tylko nieco bardziej skomplikowany – to materiał w lokalizacji z właściwością `age` (wiek). Jak widziałeś powyżej w przykładzie z `adjustblock`, użycie mechanizmu `age` pozwala na modyfikację tej właściwości dla bloku w świecie. Kiedy odczytujesz materiały bloków z lokalizacji, zwrócą one wszelkie powiązane właściwości. Można to wykorzystać na przykład do sprawdzenia, czy ognisko wysyła sygnały dymne, do sprawdzenia różnych właściwości redstone'a, a nawet ścianek bloku grzyba.
 
-Materials with properties, when parsed by a tag like `<player.cursor_on.material>`, will return an output like `m@wheat[age=7]` for a fully-grown wheat block. In this case, the `age` of the wheat is `7`.
+Materiały z właściwościami, po przetworzeniu przez tag taki jak `<player.cursor_on.material>`, zwrócą wynik w stylu `m@wheat[age=7]` dla w pełni wyrośniętej pszenicy. W tym przypadku `age` pszenicy wynosi `7`.
 
-#### Entity Properties
+#### Właściwości encji
 
-Entities have properties too! Entity properties can be read and modified just like material properties, and you can see a list of all of an entity's properties with the `<EntityTag.describe>` tag. For example, here's a sample output of `/ex narrate <player.target.describe>` when targeting a sheep modified by our color script:
+Encje również mają właściwości! Właściwości encji mogą być odczytywane i modyfikowane tak samo jak właściwości materiałów, a listę wszystkich właściwości encji możesz zobaczyć za pomocą tagu `<EntityTag.describe>`. Oto przykładowy wynik `/ex narrate <player.target.describe>` po wycelowaniu w owcę zmodyfikowaną przez nasz skrypt koloru:
 
 ```
 e@sheep[age=0;has_ai=true;is_aware=true;color=orange;equipment=li@i@air|i@air|i@air|i@air|;health_data=8/8;speed=0.23]
 ```
 
-As you can see above, all of the data about the sheep is captured by Denizen and output in the format of an EntityTag with various properties. Each property is separated by a semicolon, and the data stored in each property varies based on the nature of the property. 
+Jak widać powyżej, wszystkie dane o owcy są przechwytywane przez Denizen i wyświetlane w formacie EntityTag z różnymi właściwościami. Każda właściwość jest oddzielona średnikiem, a dane w nich zawarte różnią się w zależności od natury właściwości.
 
-These properties can be adjusted using the `adjust` command or read by using their corresponding tags. As the property is named `color`, we can assume that there is both a mechanism and a tag named `color` for EntityTag objects. `/ex narrate "The <player.target.entity_type> you're looking at is colored <player.target.color>"` will narrate, for example, `The SHEEP you're looking at is colored orange` based on the data above.
+Właściwości te można regulować za pomocą polecenia `adjust` lub odczytywać za pomocą odpowiadających im tagów. Ponieważ właściwość nazywa się `color`, możemy założyć, że dla obiektów EntityTag istnieje zarówno mechanizm, jak i tag o nazwie `color`. Polecenie `/ex narrate "Encja <player.target.entity_type>, na którą patrzysz, ma kolor <player.target.color>"` wyświetli na przykład `Encja SHEEP, na którą patrzysz, ma kolor orange` na podstawie powyższych danych.
 
-#### Using Properties In A Script
+#### Używanie właściwości w skrypcie
 
-It can sometimes be helpful to use properties directly in a script. When you just need an object with a few properties, it can be more convenient to type them in-line rather than building an entire script container for it.
+Czasami pomocne może być użycie właściwości bezpośrednio w skrypcie. Gdy potrzebujesz tylko obiektu z kilkoma właściwościami, wygodniej może być wpisać je bezpośrednio w linii, zamiast budować dla nich cały kontener skryptu.
 
-Consider the following examples:
+Rozważ poniższe przykłady:
 
 ```dscript_green
 sand_cannon:
@@ -209,7 +209,7 @@ sand_cannon:
         - shoot falling_block[fallingblock_type=sand] origin:<player> speed:1
 ```
 
-The above script, when a player clicks open air while holding sand, launches `falling_block` entities, and specifies that they should use the `sand` material via property syntax.
+Powyższy skrypt, gdy gracz kliknie w powietrze trzymając piasek, wystrzeliwuje encje `falling_block` i określa przy użyciu składni właściwości, że mają one używać materiału `sand`.
 
 ```dscript_green
 pumpkin_meloner:
@@ -219,19 +219,19 @@ pumpkin_meloner:
         - modifyblock <context.location> melon_stem[age=7]
 ```
 
-The above script lets players click on a pumpkin stem with a golden hoe to turn it into a melon stem, and uses property syntax to specify that the melon stem should be fully grown.
+Powyższy skrypt pozwala graczom kliknąć łodygę dyni złotą motyką, aby zmienić ją w łodygę melona, i używa składni właściwości, aby określić, że łodyga melona powinna być w pełni wyrośnięta.
 
-Note that this style of inline property specification doesn't work when you need tags for the values - at which point, use the relevant tags like `with`.
+Zauważ, że ten styl bezpośredniego określania właściwości nie działa, gdy potrzebujesz tagów dla wartości – w takim przypadku użyj odpowiednich tagów, takich jak `with`.
 
-### Related Technical Docs
+### Powiązana dokumentacja techniczna
 
-If you want to read a lot more about mechanisms and properties, here are a few technical guides you might consider...
+Jeśli chcesz dowiedzieć się znacznie więcej o mechanizmach i właściwościach, oto kilka przewodników technicznych, które możesz wziąć pod uwagę...
 
-Note: most users, especially those learning from the Denizen for the first time, should just continue on to the next guides page. These references might be of interest to later come back to after you've learned Denizen as far as this guide teaches.
+Uwaga: większość użytkowników, zwłaszcza tych uczących się Denizen po raz pierwszy, powinna po prostu przejść do następnej strony przewodnika. Referencje te mogą być interesujące do późniejszego powrotu, gdy już nauczysz się Denizen w stopniu, jaki przewiduje ten przewodnik.
 
-- [Adjust command meta docs](https://meta.denizenscript.com/Docs/Commands/adjust)
-- [AdjustBlock command meta docs](https://meta.denizenscript.com/Docs/Commands/adjustblock)
-- [Inventory command meta docs](https://meta.denizenscript.com/Docs/Commands/inventory)
-- [PropertyHolderObject tag meta docs](https://meta.denizenscript.com/Docs/Tags/propertyholderobject)
-- [EntityTag.describe meta docs](https://meta.denizenscript.com/Docs/Tags/entitytag.describe)
-- [List of all mechanisms](https://meta.denizenscript.com/Docs/Mechanisms/)
+- [Meta-dokumentacja polecenia Adjust](https://meta.denizenscript.com/Docs/Commands/adjust)
+- [Meta-dokumentacja polecenia AdjustBlock](https://meta.denizenscript.com/Docs/Commands/adjustblock)
+- [Meta-dokumentacja polecenia Inventory](https://meta.denizenscript.com/Docs/Commands/inventory)
+- [Meta-dokumentacja tagu PropertyHolderObject](https://meta.denizenscript.com/Docs/Tags/propertyholderobject)
+- [Meta-dokumentacja EntityTag.describe](https://meta.denizenscript.com/Docs/Tags/entitytag.describe)
+- [Lista wszystkich mechanizmów](https://meta.denizenscript.com/Docs/Mechanisms/)
